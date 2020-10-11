@@ -137,7 +137,7 @@ Page({
     this.setData({
       editable: true,
     });
-    showToast("长按拖动排序")
+    wx.showToast({title: "长按拖动排序",icon:"none"})
     let i = 0;
     let { listData } = this.data;
     for (i = 0; i < listData.length; i++) {

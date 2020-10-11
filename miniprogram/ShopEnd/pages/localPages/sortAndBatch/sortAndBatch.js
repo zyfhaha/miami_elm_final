@@ -191,7 +191,7 @@ Page({
       return;
 	}
 	
-	showToast("长按拖动排序")
+	wx.showToast({title: "长按拖动排序",icon:"none"})
 
     this.setData({
       sortAble: true,

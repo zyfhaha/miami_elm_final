@@ -1,4 +1,5 @@
 import {showLoading,hideLoading} from "../../utils/asyncWX.js"
+import { CanI } from "../accessControl/operation.js";
 let app=getApp()
 const db = wx.cloud.database({
   env: "env-miamielm-p3buy",
@@ -47,6 +48,10 @@ export async function getUncompleteOrderCloud(shopId) {
 
 //取消订单
 export async function cancelOrderCloud(orderId,cancelReason){
+  if (!(await CanI("order"))) {
+    console.log("无操作权限");
+    return;
+  }
   let updateInfo = {
     orderId: orderId,
     updateType: -1,
@@ -63,6 +68,10 @@ export async function cancelOrderCloud(orderId,cancelReason){
 
 //商家接单
 export async function acceptOrderCloud(orderId, openid){
+  if (!(await CanI("order"))) {
+    console.log("无操作权限");
+    return;
+  }
   console.log(app.globalData.shopInfo);
   
   let updateInfo = {
@@ -95,6 +104,10 @@ export async function acceptOrderCloud(orderId, openid){
 
 //商家完成捡货并开始配送
 export async function deliverOrderCloud(orderId, openid){
+  if (!(await CanI("order"))) {
+    console.log("无操作权限");
+    return;
+  }
   let updateInfo = {
     orderId: orderId,
     updateType: 2,
@@ -121,6 +134,10 @@ export async function deliverOrderCloud(orderId, openid){
 
 //订单已送达
 export async function completeOrderCloud(orderId, openid){
+  if (!(await CanI("order"))) {
+    console.log("无操作权限");
+    return;
+  }
   let updateInfo = {
     orderId: orderId,
     updateType: 3,

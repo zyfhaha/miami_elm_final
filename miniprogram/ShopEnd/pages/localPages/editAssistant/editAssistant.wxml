@@ -10,7 +10,7 @@
     <view wx:elif="{{finishLoading && slideButtons.length !== 0}}" wx: class="page__bd">
         <view wx:for="{{slideButtons}}" wx:key="loopId" class="assist_item" bindtap="handleTapAssist" data-index = "{{index}}" hover-class="view_hover" hover-stay-time="100">
             <mp-slideview buttons="{{item.button}}" bindbuttontap="slideButtonTap" data-index="{{index}}">
-                <mp-cell value="{{item.assistName}}" footer="说明文字"></mp-cell>
+                <mp-cell value="{{item.assistName}}" footer="店员"></mp-cell>
             </mp-slideview>
         </view>
         <view class="add_assist_btn" bindtap="handleAddAssist">
@@ -30,7 +30,7 @@
     <checkbox-group bindchange="handleAuthChange">
         <label class="weui-cell weui-check__label" wx:for="{{assistAuthItem}}" wx:key="value">
             <view class="item_warp">
-                <checkbox checked="{{false}}" value="{{item.value}}">{{item.text}}</checkbox>
+                <checkbox disabled="{{isAssist}}" checked="{{checkList[index]}}" value="{{item.value}}">{{item.text}}</checkbox>
             </view>
         </label>
     </checkbox-group>

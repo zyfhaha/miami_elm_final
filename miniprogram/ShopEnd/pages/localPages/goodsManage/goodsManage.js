@@ -32,7 +32,7 @@ Page({
   onTapCategoryManage: function () {
     wx.navigateTo({
       url:
-        "/pages/localPages/categoryManage/categoryManage"
+        "../categoryManage/categoryManage"
     });
   },
 
@@ -42,7 +42,7 @@ Page({
       return
     }
     wx.navigateTo({
-      url: "/pages/localPages/sortAndBatch/sortAndBatch",
+      url: "../sortAndBatch/sortAndBatch",
     });
   },
   onTapAddGoods: function () {
