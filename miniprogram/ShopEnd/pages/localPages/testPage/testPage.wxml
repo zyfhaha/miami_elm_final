@@ -1,0 +1,3 @@
+<InputDialog show="{{show}}" binddialogEvent="handleDialogRes"  title="请输入取消订单理由" placeholder="请输入取消订单理由" ></InputDialog>
+<view class="c" bind:tap="onTap">打开对话框</view>
+<view class="c">{{text}}</view> 

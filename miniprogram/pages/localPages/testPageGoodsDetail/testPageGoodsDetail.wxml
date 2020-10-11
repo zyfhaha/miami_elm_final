@@ -1,0 +1,29 @@
+<wxs module="filters" src="../../../lib/calculate/calculate.wxs"></wxs>
+<view class="goods_info_warp">
+    <view class="goods_pic_warp">
+        <image class="goods_pic" src="{{detail.goodsPicUrl}}" mode="widthFix"></image>
+        <view wx:if="{{!detail.goodsAvailable}}" class="mask">已下架</view>
+    </view>
+    <view class="goods_basic_info_warp">
+        <view class="goods_name">{{detail.goodsName}}</view>
+        <view class="goods_buy_limit">每单限购: {{detail.goodsBuyLimit}}</view>
+        <view class="bottom_warp">
+            <view class="goods_price">$ {{detail.goodsPrice}}</view>
+            <view wx:if="{{detail.goodsAvailable}}" class="operation_warp">
+                <view bindtap="handleReduceGoodsNum" hidden="{{!qbuyGoods[detail.goodsId]}}" data-goods-info="{{detail}}" class="reduce_btn">
+                    -
+                </view>
+                <view hidden="{{!qbuyGoods[detail.goodsId]}}" class="goodsNum">
+                    {{qbuyGoods[detail.goodsId]}}
+                </view>
+                <view bindtap="handleAddGoodsNum" data-goods-info="{{detail}}" class="add_btn">
+                    +
+                </view>
+            </view>
+        </view>
+        <view class="goods_detail_warp">
+            <view class="goods_detail_title">商品详情</view>
+            <view class="goods_detail">{{detail.goodsDetail}}</view>
+        </view>
+    </view>
+</view>

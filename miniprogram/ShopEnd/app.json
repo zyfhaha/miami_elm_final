@@ -1,0 +1,36 @@
+{
+  "pages": [
+    "pages/localPages/orderProcess/orderProcess",
+    "pages/localPages/setting/setting",
+    "pages/localPages/shopManage/shopManage",
+    "pages/localPages/goodsManage/goodsManage",
+    "pages/localPages/categoryManage/categoryManage",
+    "pages/localPages/sortAndBatch/sortAndBatch",
+    "pages/localPages/addGoods/addGoods",
+    "pages/localPages/goodsInfo/goodsInfo",
+    "pages/localPages/testPage/testPage",
+    "pages/localPages/shopDelivery/shopDelivery",
+    "pages/localPages/editShopOpenTime/editShopOpenTime",
+    "pages/localPages/editShopBasicInfo/editShopBasicInfo",
+    "pages/localPages/shopOpenTime/shopOpenTime",
+    "pages/localPages/testPage2/testPage2",
+    "pages/localPages/editGoodsPic/editGoodsPic",
+    "pages/localPages/login/login",
+    "pages/localPages/initialShop/initialShop",
+    "pages/localPages/editCategory/editCategory",
+    "pages/localPages/editAssistant/editAssistant",
+    "pages/localPages/getUserInfo/getUserInfo",
+    "pages/localPages/censorUgGoods/censorUgGoods",
+    "pages/localPages/editDeliver/editDeliver",
+    "pages/localPages/checkOrder/checkOrder"
+  ],
+  "window": {
+    "backgroundColor": "#F6F6F6",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#32acad",
+    "navigationBarTitleText": "小鳄鱼跑腿商家端",
+    "navigationBarTextStyle": "white"
+  },
+
+  "sitemapLocation": "sitemap.json"
+}

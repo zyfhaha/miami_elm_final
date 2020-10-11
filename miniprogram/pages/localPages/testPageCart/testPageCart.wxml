@@ -1,0 +1,31 @@
+<view class="total_price">总价格：{{totalPrice}}</view>
+<view class="total_num">总数量：{{totalNum}}</view>
+<button bindtap="handlePay">支付</button>
+<view class="goods_list">
+    <view url="../testPageGoodsDetail/testPageGoodsDetail?id={{item._id}}" class="goods_item" wx:for="{{cart}}" wx:key="goodsId">
+        <view class="goods_info_warp">
+            <view class="goods_pic_warp" bind:tap="handleTapGoodsPic" data-index="{{index}}">
+                <image class="goods_pic" src="{{item.goodsPicUrl}}" mode="widthFix"></image>
+                <view wx:if="{{!item.goodsAvailable}}" class="mask">已下架</view>
+            </view>
+            <view class="goods_basic_info_warp">
+                <view class="goods_name">{{item.goodsName}}</view>
+                <view class="goods_buy_limit">购买量: {{item.num}}</view>
+                <view class="bottom_warp">
+                    <view class="goods_price">$ {{filters.toFix(item.goodsPrice)}}</view>
+                    <view wx:if="{{item.goodsAvailable}}" class="operation_warp">
+                        <view bindtap="handleReduceGoodsNum" hidden="{{!qbuyGoods[item.goodsId]}}" data-goods-info="{{item}}" class="reduce_btn">
+                            -
+                        </view>
+                        <view hidden="{{!qbuyGoods[item.goodsId]}}" class="goodsNum">
+                            {{qbuyGoods[item.goodsId]}}
+                        </view>
+                        <view catchtap="handleAddGoodsNum" data-goods-info="{{item}}" class="add_btn">
+                            +
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
