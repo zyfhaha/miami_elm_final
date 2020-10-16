@@ -1,14 +1,6 @@
 import { loginCloud, registerCloud } from "../../../lib/login/operation.js";
-import {
-  showToast,
-  showModal,
-  showLoading,
-  sleep,
-} from "../../../utils/asyncWX.js";
-import {
-  getAccessControlFromLogin,
-  startAccessWatcher,
-} from "../../../lib/accessControl/operation.js";
+import { showToast, showModal, showLoading, sleep } from "../../../utils/asyncWX.js";
+import { getAccessControlFromLogin, startAccessWatcher } from "../../../lib/accessControl/operation.js";
 import { setLoginRecord } from "../../../lib/loginRecord/operation.js";
 import { startWatchOrder } from "../../../lib/order/operation.js";
 
@@ -48,9 +40,7 @@ Page({
 
   // 用户点击登录有问题
   async handleTapLoginProblem(e) {
-    await showModal(
-      "官方邮箱:xxxxxxxx\n请您在邮件中写明来意，我们会在三个工作日内进行回复"
-    );
+    await showModal("官方邮箱:xxxxxxxx\n请您在邮件中写明来意，我们会在三个工作日内进行回复");
   },
 
   /*  =============用户点击登录(店主或店员)================= */
@@ -142,9 +132,7 @@ Page({
         // 判断商店是否已经被激活
         if (!shopInfo.isActivated && this.userType === "owner") {
           // 如果是店主选择了一个没有被激活的商店 则带去激活
-          const modal = await showModal(
-            "当前商店没有被激活\n是否前往激活页面？"
-          );
+          const modal = await showModal("当前商店没有被激活\n是否前往激活页面？");
           if (modal.confirm) {
             wx.navigateTo({
               url: "../initialShop/initialShop?shopId=" + shopInfo.shopId,
@@ -205,7 +193,7 @@ Page({
   handleSelectShopDialogClose(e) {
     // 重置radio为未选择状态
     this.loginShopIndex = -1;
-    this.setData({radioChecked: false})
+    this.setData({ radioChecked: false });
   },
 
   /* ======== 带输入框对话框相关函数 这部分代码将由新【新商入驻】，【成为店员】弹出dialog后调用======== */
@@ -279,6 +267,7 @@ Page({
     // errCode 104 注册店员失败 已经是该店的店员
     // errCode 105 注册店员失败 已经是该店的店主
     // errCode 202 注册店员成功
+    // errCode 900 管理员登录成功
     let modalTitle = "";
     let shopId = "";
     switch (errCode) {
@@ -308,13 +297,18 @@ Page({
         modalTitle = "注册店员成功";
         break;
       default:
-        modalTitle = "错误";
+        modalTitle = "其他注册码";
         break;
     }
-    await showModal(modalTitle);
+    await showModal("提示", modalTitle);
     if (errCode === 201) {
       wx.navigateTo({
         url: "../initialShop/initialShop?shopId=" + shopId,
+      });
+    }
+    if (errCode === 900) {
+      wx.navigateTo({
+        url: "../adminPage/adminPage",
       });
     }
   },
@@ -349,10 +343,7 @@ Page({
   async hasUserInfo() {
     const userInfo = wx.getStorageSync("userInfo") || {};
     if (!userInfo.nickName) {
-      const modal = await showModal(
-        "提示",
-        "我们需要使用您的微信昵称来方便店主与店员之间的管理\n点击确定跳转到授权页面进行授权"
-      );
+      const modal = await showModal("提示", "我们需要使用您的微信昵称来方便店主与店员之间的管理\n点击确定跳转到授权页面进行授权");
       if (modal.confirm) {
         wx.navigateTo({
           url: "../getUserInfo/getUserInfo",

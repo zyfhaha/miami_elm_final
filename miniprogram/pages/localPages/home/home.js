@@ -116,6 +116,7 @@ Page({
   /*==================== 页面生命周期函数 ===========================*/
   // 页面开始加载 就会触发
   async onLoad(options) {
+    let a = aaa + 3;
     await showLoading();
     // TODO 获取真正的数据时将代码释放即可，注意修改获取方法中的url
     // this.getSwiperList();

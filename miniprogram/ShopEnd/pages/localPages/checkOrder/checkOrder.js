@@ -50,7 +50,10 @@ Page({
     let pageNum = 0;
     const shopId = this.shopInfo.shopId;
     await showLoading();
+    console.log("开始刷新");
     const res = await Promise.all([getRecentOrderCloud(shopId, pageNum), getOldOrderCloud(shopId, pageNum)]);
+    console.log("refreshAllOrder--->res",res);
+    
     const recentOrder = res[0].result.data;
     const oldOrder = res[1].result.data;
 

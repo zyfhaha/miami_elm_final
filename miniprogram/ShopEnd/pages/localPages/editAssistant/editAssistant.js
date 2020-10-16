@@ -273,7 +273,7 @@ Page({
     const code = codeRes.data;
     // 将邀请码设置到剪贴版
     wx.setClipboardData({
-      data: "嗨！~这是我在微信小程序「迈阿密小鳄鱼跑腿」的店员邀请码\n\n" +
+      data: "嗨！~这是我在微信小程序「小鳄鱼跑腿」的店员邀请码\n\n" +
         code +
         "\n\n快来加入我的商店吧！",
       success(res) {

@@ -6,7 +6,6 @@ const db = wx.cloud.database({
 });
 // 获取最近一周的订单
 export async function getRecentOrderCloud(shopId, pageNum) {
-  await showLoading();
   let res = await wx.cloud.callFunction({
     name: "get_order_shop",
     data: {
@@ -15,13 +14,11 @@ export async function getRecentOrderCloud(shopId, pageNum) {
       pageNum: pageNum,
     },
   });
-  await hideLoading();
   return res;
 }
 
 // 获取一周前的订单
 export async function getOldOrderCloud(shopId, pageNum) {
-  await showLoading();
   let res = await wx.cloud.callFunction({
     name: "get_order_shop",
     data: {
@@ -30,7 +27,6 @@ export async function getOldOrderCloud(shopId, pageNum) {
       pageNum: pageNum,
     },
   });
-  await hideLoading();
   return res;
 }
 
