@@ -1,5 +1,23 @@
+let app = getApp()
 
 Component({
+  attached: function () {
+    // 组件被创建时读取app.globalData.refreshFlag.showDot的值并setData
+    let tabbarList = this.data.tabbarList;
+    tabbarList[0].dot = app.globalData.refreshFlag.showDot;
+    this.setData({ tabbarList });
+    
+    // 这段代码用来监听getApp().globalData.refreshFlag.showDot的值
+    let _this = this;
+    app.watch((showDot) => {
+      let tabbarList = _this.data.tabbarList;
+      console.log("tabbarList",tabbarList);
+      tabbarList[0].dot = showDot;
+      console.log("组件修改红点为",showDot);
+      _this.setData({ tabbarList });
+    });
+  },
+
   /**
    * 组件的属性列表
    */
@@ -15,13 +33,12 @@ Component({
   data: {
     // 底部tabbar内容
     // 注意：iconPath如果写相对路径要相对于mp-tabbar组件所在目录的。
-
     tabbarList: [
       {
         text: "订单处理",
         iconPath: "../../icons/order_o.png",
         selectedIconPath: "../../icons/order.png",
-        // dot: true,
+        dot: false,
       },
       {
         text: "商店管理",

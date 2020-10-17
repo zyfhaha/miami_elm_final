@@ -43,6 +43,7 @@
         </view>
     </block>
 </mp-tabs>
-<myTabbar current="{{0}}"></myTabbar>
+<!-- <myTabbar current="{{0}}" showDot="{{showDot}}"></myTabbar> -->
+<myTabbar current="{{0}}" ></myTabbar>
 <!-- 取消订单理由输入框 -->
 <InputDialog show="{{showCancelReasonDialog}}" type="text" binddialogEvent="handleCancelReasonResult" title="请输入取消订单理由" placeholder="请输入取消订单理由"></InputDialog>

@@ -1,24 +1,48 @@
 import { createGlobalCart } from "./lib/cart/operation.js";
 import { createGlobalAddress } from "./lib/address/operation.js";
 App({
+  globalData: {
+    refreshFlag: {
+      myGoods: true,
+      orderProcess: true,
+      _showDot: false,  //不要直接访问或修改这个属性而是通过globalData.refreshFlag.showDot来访问或赋值这个属性，否则下面写的watch函数不会被触发
+    },
+  },
+
+  watch:function(method){ //method是一个函数
+    var obj = this.globalData.refreshFlag;
+    Object.defineProperty(obj,"showDot", { // 给this.globalData.refreshFlag添加一个名为showDot的“虚拟属性”
+      configurable: true,
+      enumerable: true,
+      get:function(){
+        // 每次this.globalData.refreshFlag.showDot被访问时 执行这里
+        console.log("showDot get");
+
+        return this._showDot
+      },
+      set: function (value) {
+        // 每次this.globalData.refreshFlag.showDot被赋值时 执行这里
+        console.log("showDot 被set");
+        
+        this._showDot = value;
+        method(value);  //this.globalData.refreshFlag.showDot被修改时的回调函数
+      }
+    })
+  },
   onLaunch() {
     wx.cloud.init({
       env: "env-miamielm-p3buy",
       traceUer: true,
     });
     // 监听网络状态变化
-    (this.globalData = {}),
-      wx.getNetworkType({
-        success: (res) => {
-          this.globalData.isConnected = res.networkType !== "none";
-        },
-      });
+    wx.getNetworkType({
+      success: (res) => {
+        this.globalData.isConnected = res.networkType !== "none";
+      },
+    });
     wx.onNetworkStatusChange((res) => {
       this.globalData.isConnected = res.isConnected;
     });
-    this.globalData.refreshFlag = {
-      myGoods: true,
-    };
   },
 
   onShow() {

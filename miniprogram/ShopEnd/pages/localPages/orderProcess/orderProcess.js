@@ -74,6 +74,10 @@ Page({
       refreshHandlingOrderFlag: false,
       refreshDeliverOrderFlag: false,
     });
+
+    console.log("newOrder.length !== 0",newOrder.length !== 0);
+    app.globalData.refreshFlag.showDot = newOrder.length !== 0
+
   },
 
   async handleRefreshNewOrder() {

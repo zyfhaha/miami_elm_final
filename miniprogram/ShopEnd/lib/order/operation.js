@@ -181,7 +181,8 @@ export async function startWatchOrder(user2shop){
         //TODO新订单来的时候的具体操作
         let pages = getCurrentPages(); // 获取页面栈
         let curPage = pages[pages.length - 1];//获取当前页面
-        if (curPage.data.newOrder != undefined){        
+        if (!!curPage.data.newOrder){        
+          // 用户当前在orderProcess页面
           let newOrder= curPage.data.newOrder
           console.log("neworder",orderChange.doc);
           newOrder.push(orderChange.doc)
@@ -193,12 +194,12 @@ export async function startWatchOrder(user2shop){
               return v1.payTime - v2.payTime
             }
           })
+          app.globalData.refreshFlag.showDot = true
           curPage.setData({newOrder:newOrder})
-          //curPage.refreshOrder()
-        }
-        else{
+        }else{
+          // 用户当前不在orderProcess页面
           app.globalData.refreshFlag.orderProcess = true
-          //TODO加上小红点
+          app.globalData.refreshFlag.showDot = true
         }
       }
     },
