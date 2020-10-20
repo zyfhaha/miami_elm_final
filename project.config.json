@@ -203,7 +203,7 @@
         {
           "id": -1,
           "name": "管理员操作界面",
-          "pathName": "ShopEnd/pages/localPages/adminPage/adminPage",
+          "pathName": "adminEnd/pages/localPages/adminPage/adminPage",
           "query": "",
           "scene": null
         }

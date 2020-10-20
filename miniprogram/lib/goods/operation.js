@@ -1,9 +1,4 @@
-import {
-  showToast,
-  showModal,
-  showLoading,
-  hideLoading,
-} from "../../utils/asyncWX.js";
+import { showToast, showModal, showLoading, hideLoading } from "../../utils/asyncWX.js";
 
 // 商品的状态
 const UNDER_CENSOR = 0; // 审核中
@@ -28,15 +23,7 @@ const _ = db.command;
 async function uploadGoodsPicCloud(goodsInfo) {
   // 将商品图片上传到云端并拿到云端的地址 云端的图片的命名为当前毫秒时间戳的字符串
   const res = await wx.cloud.uploadFile({
-    cloudPath:
-      "shopId_" +
-      goodsInfo.shopId +
-      "/" +
-      "cateId_" +
-      goodsInfo.cateId +
-      "/" +
-      Date.now().toString() +
-      ".jpg",
+    cloudPath: "shopId_" + goodsInfo.shopId + "/" + "cateId_" + goodsInfo.cateId + "/" + Date.now().toString() + ".jpg",
     filePath: goodsInfo.goodsPicUrl, // 文件路径
   });
   return res;
@@ -102,10 +89,7 @@ async function verifyGoodsInfo(goodsInfo) {
     return;
   }
 
-  if (
-    String(goodsPrice).indexOf(".") + 1 > 0 &&
-    goodsPrice.toString().split(".")[1].length > 2
-  ) {
+  if (String(goodsPrice).indexOf(".") + 1 > 0 && goodsPrice.toString().split(".")[1].length > 2) {
     await showToast("商品价格最多两位小数");
     return;
   }
@@ -290,8 +274,7 @@ async function updateGoodsCloud(goodsInfoNew, goodsInfoOld) {
   await showLoading("保存中");
 
   // 检查是否更换了商品图片。如果是则需要重新上传图片到云端
-  const isGoodsPicChange =
-    goodsInfoNew.goodsPicUrl !== goodsInfoOld.goodsPicUrl;
+  const isGoodsPicChange = goodsInfoNew.goodsPicUrl !== goodsInfoOld.goodsPicUrl;
   if (isGoodsPicChange) {
     // TODO 删除和上传新的图片要做成一个事务
     console.log("检测到商品图片发生改变");
@@ -300,12 +283,7 @@ async function updateGoodsCloud(goodsInfoNew, goodsInfoOld) {
     // 遇到一个天坑:这里之所以没有直接对旧图进行覆盖写是因为覆盖写之后重新拉取数据依旧展示的是旧图片
     // 然而图片其实确实被覆盖了，但是有缓存，要一段时间才能改过来。用自己服务器这样上传的话，也有这问题，所以只好重新上传新图片然后再删掉旧图，才可以做到改了以后马上生效
     const upLoadGoodsPicRes = await wx.cloud.uploadFile({
-      cloudPath:
-        goodsInfoOld.shopId +
-        "/" +
-        goodsInfoOld.cateId +
-        "/" +
-        Date.now().toString(),
+      cloudPath: "shopId_" + goodsInfoOld.shopId + "/" + "cateId_" + goodsInfoOld.cateId + "/" + Date.now().toString(),
       filePath: goodsInfoNew.goodsPicUrl, // 文件路径
     });
 
@@ -318,7 +296,7 @@ async function updateGoodsCloud(goodsInfoNew, goodsInfoOld) {
   // TODO 将商品信息上传到云端  也是需要解决事务问题
   console.log("正在上传商品信息");
   goodsInfoNew["status"] = 0;
-  goodsInfoNew["watermark"] = (new Date()).getTime();
+  goodsInfoNew["watermark"] = new Date().getTime();
   console.log("goodsInfoNew", goodsInfoNew);
   const upLoadNewGoodsInfoRes = await ugGoodsRef
     .where({
@@ -449,12 +427,4 @@ async function updateGoodsOrder(goodsList) {
   return updateRes;
 }
 
-export {
-  addGoodsCloud,
-  removeManyGoodsCloud,
-  updateGoodsCloud,
-  enableSaleCloud,
-  disableSaleCloud,
-  verifyGoodsInfo,
-  updateGoodsOrder,
-};
+export { addGoodsCloud, removeManyGoodsCloud, updateGoodsCloud, enableSaleCloud, disableSaleCloud, verifyGoodsInfo, updateGoodsOrder };

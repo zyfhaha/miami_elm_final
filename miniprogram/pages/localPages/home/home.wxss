@@ -1,9 +1,22 @@
 .index_swiper swiper {
+  position: relative;
   width: 750rpx;
   height: 570rpx;
 }
 .index_swiper swiper image {
   width: 100%;
+}
+.index_swiper swiper .detail {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 15%;
+  position: absolute;
+  text-indent: 15rpx;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
 }
 .shop_cate {
   display: flex;

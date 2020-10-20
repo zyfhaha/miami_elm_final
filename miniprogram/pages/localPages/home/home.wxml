@@ -4,10 +4,9 @@
 <!-- 轮播图 开始 -->
 <view class="index_swiper">
 	<swiper autoplay indicator-dots circular interval="{{2000}}">
-			<swiper-item wx:for="{{swiperList}}" wx:key="goods_id">
-					<navigator url="{{item.navigator_url}}">
-						<image mode="widthFix" src="{{item.image_src}}"></image>
-					</navigator>
+			<swiper-item wx:for="{{swiperList}}" wx:key="_id" bindtap="handleTapSwiper" data-index="{{index}}">
+				<view wx:if="{{item.detail}}" class="detail">{{item.detail}}</view>
+				<image mode="widthFix" src="{{item.picUrl}}"></image>
 			</swiper-item>
 	</swiper>
 </view>

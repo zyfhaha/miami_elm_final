@@ -308,7 +308,7 @@ Page({
     }
     if (errCode === 900) {
       wx.navigateTo({
-        url: "../adminPage/adminPage",
+        url: "../../../../adminEnd/pages/localPages/adminPage/adminPage",
       });
     }
   },

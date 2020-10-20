@@ -85,10 +85,18 @@
         "pages/localPages/editCategory/editCategory",
         "pages/localPages/editAssistant/editAssistant",
         "pages/localPages/getUserInfo/getUserInfo",
-        "pages/localPages/censorUgGoods/censorUgGoods",
         "pages/localPages/editDeliver/editDeliver",
-        "pages/localPages/checkOrder/checkOrder",
-        "pages/localPages/adminPage/adminPage"
+        "pages/localPages/checkOrder/checkOrder"
+      ]
+    },
+    {
+      "root": "adminEnd/",
+      "pages": [
+        "pages/localPages/censorUgGoods/censorUgGoods",
+        "pages/localPages/adminPage/adminPage",
+        "pages/localPages/editSwiper/editSwiper",
+        "pages/localPages/editGoodsPic/editGoodsPic",
+        "pages/localPages/editRecommendShop/editRecommendShop"
       ]
     }
   ],

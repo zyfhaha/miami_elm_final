@@ -273,7 +273,8 @@ Page({
   async onLoad(options) {
     // 从购物车页面转来需要获取shopId
     const { shopId } = options;
-
+    console.log("shopId",shopId);
+    
     // 获取商店及其商品的数据
     try {
       await showLoading();

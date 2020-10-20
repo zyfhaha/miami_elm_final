@@ -1,4 +1,0 @@
-<mp-cells>
-  <mp-cell hover value="生成商店注册码" bindtap="handleGenerateOwnerRegistCode"></mp-cell>
-  <mp-cell link hover url="../censorUgGoods/censorUgGoods" value="审核用户上传商品"></mp-cell>
-</mp-cells>
