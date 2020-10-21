@@ -5,7 +5,7 @@ const shopRef = db.collection("shop");
 
 // 获取首页顶端swiper数据
 export async function getSwiperListCloud() {
-  const swiperRes = await advertiseSwiperRef.get();
+    const swiperRes = await advertiseSwiperRef.orderBy("order", "asc").get();
   return swiperRes.data;
 }
 
@@ -36,6 +36,7 @@ export async function getRecommendShopListCloud() {
       shopStatus: true,
       minConsumption: true,
     })
+    .orderBy("order", "asc")
     .get();
   return recommendShopRes.data;
 }

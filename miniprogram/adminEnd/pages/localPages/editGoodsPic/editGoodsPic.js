@@ -16,9 +16,9 @@ Page({
     // ====== 最初设置结束 ========
 
     width: 300, //宽度
-    height: 300, //高度
+    height: 228, //高度
     max_width: 300,
-    max_height: 300,
+    max_height: 228,
     disable_rotate: true, //是否禁用旋转
     disable_ratio: true, //锁定比例
     limit_move: true, // 是否限制裁剪框只能在图片范围内移动

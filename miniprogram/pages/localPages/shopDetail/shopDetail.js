@@ -1,18 +1,6 @@
-import {
-  add,
-  subtract,
-  times,
-  divide,
-} from "../../../lib/calculate/calculate.js";
-import {
-  hasShopCart,
-  addShopCart,
-  getShopCart,
-  addGoods,
-  reduceGoods,
-  clearShopCart,
-} from "../../../lib/cart/operation.js";
-import { showLoading, hideLoading, showModal, showToast } from "../../../utils/asyncWX.js";
+import { add, subtract, times, divide } from "../../../lib/calculate/calculate.js";
+import { hasShopCart, addShopCart, getShopCart, addGoods, reduceGoods, clearShopCart } from "../../../lib/cart/operation.js";
+import { showLoading, hideLoading, showModal, showToast, sleep } from "../../../utils/asyncWX.js";
 
 // 初始化云环境
 const db = wx.cloud.database();
@@ -41,7 +29,8 @@ Page({
     isCheckOutActive: false,
     // 要结算还需消费
     checkOutConsumption: "  ",
-
+    // 需要滚动到的目标商品的goodsId
+    targetGoods: "",
     // 刷新的flag
     refreshFlag: false,
   },
@@ -54,8 +43,8 @@ Page({
   async handleRefresh() {
     this.setData({ refreshFlag: true });
     await this.getShopDetail(this.shopInfo.shopId);
-    this.setData({ refreshFlag: false ,rightContent: this.cates[this.data.currentIndex].goods});
-    showToast("已刷新")
+    this.setData({ refreshFlag: false, rightContent: this.cates[this.data.currentIndex].goods });
+    showToast("已刷新");
   },
 
   async getShopDetail(shopId) {
@@ -70,10 +59,8 @@ Page({
         minConsumption: true,
       })
       .get();
-    // console.log("res1",res1);
 
     this.shopInfo = res1.data[0]; //小程序端调用数据库返回的数据即便只有一条也是封装在数组中的
-    // console.log("shopInfo",this.shopInfo);
 
     // 获取商店的商品数据
     let res2 = await wx.cloud.callFunction({
@@ -83,10 +70,11 @@ Page({
       },
     });
     const { allGoods } = res2.result;
-    console.log("allGoods", allGoods);
 
     let cates = allGoods;
     this.cates = cates;
+    console.log("cates", cates);
+
     // 检查是否有针对该商店的购物车缓存 没有的话就加一个购物车
     if (hasShopCart(this.shopInfo.shopId) === -1) {
       addShopCart(this.shopInfo);
@@ -108,7 +96,7 @@ Page({
     this.setPageData();
   },
 
-  //   // 左侧菜单的点击事件
+  // 左侧菜单的点击事件
   handleItemTap(e) {
     /* 
     1 获取被点击的标题身上的索引
@@ -142,11 +130,7 @@ Page({
       })
     );
     wx.navigateTo({
-      url:
-        "../goodsDetail/goodsDetail?shopInfo=" +
-        shopInfo +
-        "&goodsInfo=" +
-        goodsInfo,
+      url: "../goodsDetail/goodsDetail?shopInfo=" + shopInfo + "&goodsInfo=" + goodsInfo,
 
       success: (result) => {
         // TODO
@@ -228,9 +212,9 @@ Page({
 
     // =========计算还差多少钱允许结算  ======
     let minConsumption = this.shopInfo.minConsumption;
-    console.log("minConsumption",minConsumption);
-    console.log("totalPrice",totalPrice);
-    
+    console.log("minConsumption", minConsumption);
+    console.log("totalPrice", totalPrice);
+
     let checkOutConsumption = subtract(minConsumption, totalPrice);
 
     // =============== 计算是否允许结算 ===========
@@ -268,13 +252,37 @@ Page({
     });
   },
 
+  // 如果用户是通过轮播图跳转过来 则滚到广告的对应位置
+  async scrollToAdvertise(cateId, goodsId) {
+    console.log("开始根据广告跳转");
+
+    let cateIdx = this.cates.findIndex((v) => v.cateId === cateId);
+    if (cateIdx == -1) {
+      return;
+    }
+
+    let rightContent = this.cates[cateIdx].goods;
+    this.setData({
+      currentIndex: cateIdx,
+      rightContent,
+      // 重新设置 右侧内容的scroll-view标签的距离顶部的距离
+      scrollTop: 0,
+    });
+
+    if (goodsId) {
+      await sleep(500);
+      this.setData({ targetGoods: goodsId });
+    }
+  },
+
   /* ===================== 页面生命周期函数 ================== */
 
   async onLoad(options) {
     // 从购物车页面转来需要获取shopId
-    const { shopId } = options;
-    console.log("shopId",shopId);
-    
+    const shopId = options.shopId;
+    const cateId = options.cateId || "";
+    const goodsId = options.goodsId || "";
+
     // 获取商店及其商品的数据
     try {
       await showLoading();
@@ -288,6 +296,10 @@ Page({
       showModal("网络错误");
     } finally {
       await hideLoading();
+    }
+
+    if (cateId) {
+      this.scrollToAdvertise(cateId, goodsId);
     }
   },
 

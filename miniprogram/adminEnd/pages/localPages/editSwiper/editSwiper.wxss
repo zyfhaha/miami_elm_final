@@ -39,7 +39,7 @@
   display: flex;
 }
 .swiper_warp_operation .delete_swiper {
-  width: 50%;
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,7 +48,7 @@
   padding: 15rpx 0;
 }
 .swiper_warp_operation .add_swiper {
-  width: 50%;
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;

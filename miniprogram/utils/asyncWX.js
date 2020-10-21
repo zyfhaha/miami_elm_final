@@ -26,6 +26,15 @@ export const openSetting = () => {
   });
 };
 
+// 延时函数
+export const sleep = (time) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve();
+    }, time);
+  });
+};
+
 /**
  * promise 形式  getSetting
  */

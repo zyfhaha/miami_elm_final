@@ -1,5 +1,5 @@
-import { showActionSheet } from "../../../utils/asyncWX.js";
-import { getSwiperCloud,getEmptySwiper, verifySwiperList } from "../../../lib/editSwiper/operation.js";
+import { showActionSheet, showModal, showLoading, hideLoading } from "../../../utils/asyncWX.js";
+import { getSwiperCloud,getEmptySwiper, verifySwiperList, updateSwiperListCloud } from "../../../lib/editSwiper/operation.js";
 Page({
   /**
    * 页面的初始数据
@@ -8,35 +8,7 @@ Page({
     // 图片
     _img: "",
     // 轮播图数组
-    swiperList: [
-      {
-        swiperId: "fahwifjhoi",
-        shopName: "测试商品名字1",
-        order: 0,
-        goodsCate: "测试类别",
-        goodsName: "测试名字",
-        detail: "测试详情",
-        picUrl: "https://hannatiger.com/wp-content/uploads/2020/06/bourbon-every-buger-cookies.jpg",
-      },
-      {
-        swiperId: "fahwi2fjhoi",
-        shopName: "测试商品名字2",
-        order: 1,
-        goodsCate: "测试类别",
-        goodsName: "测试名字",
-        detail: "测试详情",
-        picUrl: "cloud://env-miamielm-p3buy.656e-env-miamielm-p3buy-1302562420/scj2R7eL6r2Oi/logo1601681870420.jpg",
-      },
-      {
-        swiperId: "fahwi3fjhoi",
-        shopName: "测试商品名字3",
-        order: 2,
-        goodsCate: "测试类别",
-        goodsName: "测试名字",
-        detail: "测试详情",
-        picUrl: "https://hannatiger.com/wp-content/uploads/2020/06/Edit-香菇拌饭酱1.jpg",
-      },
-    ],
+    swiperList: [],
   },
 
   // 点击预览商品大图
@@ -181,7 +153,11 @@ Page({
 
   // 保存轮播图数据
   async handleSaveSwiper(e) {
-    const newSwiperList = this.data.swiperList;
+    const modalRes = await showModal("提示","确定保存？")
+    if(modalRes.cancel){
+      return
+    }
+    const newSwiperList = JSON.parse(JSON.stringify(this.data.swiperList));
 
     // 检查swiperList合法性
     if(!verifySwiperList(newSwiperList)){
@@ -191,14 +167,18 @@ Page({
     const oldSwiperList = this.swiperList
 
     // 更新swiperList
-    await updateSwiperListCloud(newSwiperList, oldSwiperList)
+    const updateRes = await updateSwiperListCloud(newSwiperList, oldSwiperList)
+    if(updateRes === undefined){
+      return 
+    }
     await this.refreshEditSwiper()
   },
 
   async refreshEditSwiper(){
     const swiperList = await getSwiperCloud()
-    this.swiperList = swiperList
+    this.swiperList = JSON.parse(JSON.stringify(swiperList));
     this.setData({swiperList})
+    hideLoading()
   },
 
   // =========  监听img是否被修改 ==============

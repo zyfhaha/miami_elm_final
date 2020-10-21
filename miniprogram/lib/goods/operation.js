@@ -283,7 +283,7 @@ async function updateGoodsCloud(goodsInfoNew, goodsInfoOld) {
     // 遇到一个天坑:这里之所以没有直接对旧图进行覆盖写是因为覆盖写之后重新拉取数据依旧展示的是旧图片
     // 然而图片其实确实被覆盖了，但是有缓存，要一段时间才能改过来。用自己服务器这样上传的话，也有这问题，所以只好重新上传新图片然后再删掉旧图，才可以做到改了以后马上生效
     const upLoadGoodsPicRes = await wx.cloud.uploadFile({
-      cloudPath: "shopId_" + goodsInfoOld.shopId + "/" + "cateId_" + goodsInfoOld.cateId + "/" + Date.now().toString(),
+      cloudPath: "shopId_" + goodsInfoOld.shopId + "/" + "cateId_" + goodsInfoOld.cateId + "/" + Date.now().toString() + ".jpg",
       filePath: goodsInfoNew.goodsPicUrl, // 文件路径
     });
 
