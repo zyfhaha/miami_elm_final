@@ -1,4 +1,4 @@
-import {showLoading,hideLoading} from "../../utils/asyncWX.js"
+import {showLoading,hideLoading, showModal} from "../../utils/asyncWX.js"
 import { CanI } from "../accessControl/operation.js";
 let app=getApp()
 const db = wx.cloud.database({
@@ -74,14 +74,19 @@ export async function acceptOrderCloud(orderId, openid){
     orderId: orderId,
     updateType: 1,
   };
+
+
   const res = await wx.cloud.callFunction({
     name: "update_shop_order_status",
     data: {
       updateInfo: updateInfo,
     },
   });
-  if(res){
+  console.log("云函数返回",res);
+  
+  if(res.result){
     console.log("accept res",res);
+    
     
     await wx.cloud.callFunction({
       name: "send_user_message",
@@ -94,6 +99,9 @@ export async function acceptOrderCloud(orderId, openid){
         action: "sendAcceptMessage",
       },
     });
+  }
+  else{
+    showModal("操作失败", "该订单已被顾客取消")
   }
   return res
 }
@@ -114,7 +122,7 @@ export async function deliverOrderCloud(orderId, openid){
       updateInfo: updateInfo,
     },
   });
-  if(res){
+  if(res.result){
     await wx.cloud.callFunction({
       name: "send_user_message",
       data: {
@@ -144,7 +152,7 @@ export async function completeOrderCloud(orderId, openid){
       updateInfo: updateInfo,
     },
   });
-  if(res){
+  if(res.result){
     await wx.cloud.callFunction({
       name: "send_user_message",
       data: {

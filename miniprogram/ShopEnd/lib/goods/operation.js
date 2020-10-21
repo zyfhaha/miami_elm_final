@@ -365,12 +365,46 @@ async function enableSaleCloud(goodsInfo) {
     await showModal("库存为0 无法上架");
     return;
   }
-  await showLoading("上架中");
-  const res = await goodsRef.where({ goodsId: goodsInfo.goodsId }).update({
-    data: { goodsAvailable: true },
-  });
-  await hideLoading();
-  return res;
+
+  try {
+    showLoading("上架中");
+    const res = await goodsRef.where({ goodsId: goodsInfo.goodsId }).update({
+      data: { goodsAvailable: true },
+    });
+    console.log("await res",res);
+    
+    return res;
+  } catch (error) {
+    console.log("error",error);
+    showModal("错误","请检查网络状态后重试");
+    return false
+  }
+  finally{
+      hideLoading();
+  }
+
+
+  // await showLoading("上架中");
+  // console.log("update开始");
+  
+  // const res = goodsRef.where({ goodsId: goodsInfo.goodsId }).update({
+  //     data: { goodsAvailable: true },
+  //   })
+  //   .then(res => {
+  //     console.log("then的res",res)
+  //     return res
+  //   })
+  //   .catch(res => {
+  //     console.log("catch",res)
+  //     showModal("错误","请检查网络状态后重试");
+  //   })
+  //   .finally(() => {
+  //     console.log("finally")
+  //     hideLoading();
+  //   });
+  //   console.log("外部res",res);
+    
+  //   return res
 }
 
 // 将商品下架

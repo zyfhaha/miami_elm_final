@@ -23,6 +23,7 @@ export async function getSelfRunShopListCloud() {
 
 // 获取推荐商店数据
 export async function getRecommendShopListCloud() {
+  //TODO
   const recommendShopRes = await shopRef
     .where({
       isActivated: true,
