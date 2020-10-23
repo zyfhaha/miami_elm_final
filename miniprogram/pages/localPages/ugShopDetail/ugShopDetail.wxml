@@ -8,7 +8,7 @@
             </view>
         </scroll-view>
         <!-- 右侧商品内容 -->
-        <scroll-view scroll-top="{{scrollTop}}" scroll-y="{{true}}" class="right_content" refresher-triggered="{{refreshFlag}}" refresher-enabled bindrefresherrefresh="handleRefresh">
+        <scroll-view scroll-into-view="{{targetGoods}}" scroll-with-animation scroll-top="{{scrollTop}}" scroll-y="{{true}}" class="right_content" refresher-triggered="{{refreshFlag}}" refresher-enabled bindrefresherrefresh="handleRefresh">
             <view class="goods_list">
                 <block wx:if="{{rightContent.length === 0}}">
                     <view style="background-color: ##e4e4e4; height:90vh;width:100%; display:flex;justify-content: center;align-items: center;">
@@ -16,7 +16,7 @@
                     </view>
                 </block>
                 <block wx:else>
-                    <view class="goods_item" wx:for="{{rightContent}}" wx:key="goodsId" bindtap="handleTapGoods" data-index="{{index}}" hover-class="view_hover" hover-stay-time="150">
+                    <view id="{{item.goodsId}}" class="goods_item" wx:for="{{rightContent}}" wx:key="goodsId" bindtap="handleTapGoods" data-index="{{index}}" hover-class="view_hover" hover-stay-time="150">
                         <view class="goods_info_warp">
                             <view class="goods_pic_warp">
                                 <image class="goods_pic" src="{{item.goodsPicUrl}}" mode="widthFix"></image>

@@ -18,7 +18,7 @@
     "pages/localPages/testPageGoodsDetail/testPageGoodsDetail",
     "pages/localPages/testPageCart/testPageCart",
     "pages/localPages/map/map",
-    "pages/localPages/publicShop/publicShop",
+    "pages/localPages/ugShopDetail/ugShopDetail",
     "pages/localPages/myGoods/myGoods",
     "pages/localPages/addGoods/addGoods",
     "pages/localPages/editNote/editNote",

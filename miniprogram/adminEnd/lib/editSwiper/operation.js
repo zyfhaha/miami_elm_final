@@ -3,10 +3,12 @@ import { getId } from "../id/operation";
 
 const db = wx.cloud.database();
 const advertiseSwiperRef = db.collection("advertiseSwiper");
+const shopRef = db.collection("shop");
 const goodsCateRef = db.collection("goodsCate");
 const goodsRef = db.collection("goods");
-const shopRef = db.collection("shop");
 const ugShopRef = db.collection("ugShop");
+const ugGoodsCateRef = db.collection("ugGoodsCate");
+const ugGoodsRef = db.collection("ugGoods");
 
 // 获取轮播图数据
 export async function getSwiperCloud() {
@@ -83,25 +85,28 @@ async function uploadSwiperPicCloud(swipter) {
 function constructNavigatorUrl(swiper) {
   let navigatorUrl = "";
 
-  if(!swiper.isUgShop){
-    navigatorUrl = "/pages/localPages/shopDetail/shopDetail?shopId=_shopId&cateId=_cateId&goodsId=_goodsId"
+  if (!swiper.isUgShop) {
+    navigatorUrl = "/pages/localPages/shopDetail/shopDetail?shopId=_shopId&cateId=_cateId&goodsId=_goodsId";
   }
 
-  if(swiper.isUgShop){
-    navigatorUrl = "/pages/localPages/ugShopDetail/ugShopDetail?shopId=_shopId&cateId=_cateId&goodsId=_goodsId"
+  if (swiper.isUgShop) {
+    navigatorUrl = "/pages/localPages/ugShopDetail/ugShopDetail?shopId=_shopId&cateId=_cateId&goodsId=_goodsId";
   }
 
-  navigatorUrl=navigatorUrl.replace("_shopId",swiper.shopId)
-  navigatorUrl=navigatorUrl.replace("_cateId",swiper.cateId)
-  navigatorUrl=navigatorUrl.replace("_goodsId",swiper.goodsId)
+  navigatorUrl = navigatorUrl.replace("_shopId", swiper.shopId);
+  navigatorUrl = navigatorUrl.replace("_cateId", swiper.cateId);
+  navigatorUrl = navigatorUrl.replace("_goodsId", swiper.goodsId);
 
-  return navigatorUrl
+  return navigatorUrl;
 }
 
 // 向swiper中添加相关的ID 并修改图片地址为云端ID
 async function addRelevantInfo(swiper) {
+  console.log("addRelevantInfo", swiper);
+
   const shopRes = await shopRef.where({ shopId: swiper.shopId }).get();
   const ugShopRes = await ugShopRef.where({ shopId: swiper.shopId }).get();
+
   if (shopRes.data.length !== 1 && ugShopRes.data.length !== 1) {
     showModal("错误", swiper.shopId + "\n找不到对应的商店ID");
     return;
@@ -111,8 +116,18 @@ async function addRelevantInfo(swiper) {
     swiper.isUgShop = true;
   }
 
+  let _goodsCateRef;
+  let _goodsRef;
+  if (swiper.isUgShop) {
+    _goodsCateRef = ugGoodsCateRef;
+    _goodsRef = ugGoodsRef
+  }else{
+    _goodsCateRef = goodsCateRef;
+    _goodsRef = goodsRef
+  }
+
   if (swiper.cateName !== "" && swiper.cateId == "") {
-    const cateIdRef = await goodsCateRef
+    const cateIdRef = await _goodsCateRef
       .where({
         shopId: swiper.shopId,
         cateName: swiper.cateName,
@@ -128,7 +143,7 @@ async function addRelevantInfo(swiper) {
   }
 
   if (swiper.goodsName !== "" && swiper.goodsId == "") {
-    const goodsIdRef = await goodsRef
+    const goodsIdRef = await _goodsRef
       .where({
         shopId: swiper.shopId,
         cateId: swiper.cateId,

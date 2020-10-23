@@ -1,6 +1,9 @@
 import { getShopCart, removeShopCart, removeGoods, clearShopCart, changeGoodsNum } from "../../../lib/cart/operation.js";
 import { showLoading, hideLoading, showModal, showToast, requestSubscribeMessage, openSetting, isConnected } from "../../../utils/asyncWX.js";
 import { isReceiveTimeValid, getReceiveTimeGroup, verifyOrderInfo, placeOrderCloud } from "../../../lib/pay/operation.js";
+
+let app = getApp();
+
 Page({
   /**
    * 页面的初始数据
@@ -37,9 +40,6 @@ Page({
   // 生成预定收货时间选项
   setReceiveTimeGroup(shopInfo) {
     let { cutOrderTime, deliverTimeList } = shopInfo;
-
-    // TODO 测试完后可以删
-    // deliverTimeList = ["00:00","01:03","05:06","06:07","08:09"]
 
     let nowTimeStamp = new Date().getTime();
     let tomorrTimeStamp = nowTimeStamp + 1 * 24 * 60 * 60 * 1000;
@@ -130,6 +130,7 @@ Page({
       showModal("下单失败", "请检查网络后重试");
       return;
     }
+
     const reqSubMsgRes = await requestSubscribeMessage("order");
     orderInfo.allowNotifyOrderComplete = reqSubMsgRes.COMPLETE_ORDER;
 
@@ -139,7 +140,6 @@ Page({
       return;
     }
     console.log("下单成功");
-    
 
     // 用户对订阅消息进行设置后需要再次检查一下网络
     if (!isConnected()) {
@@ -154,6 +154,7 @@ Page({
         url: "../confirmOrder/confirmOrder?reqSubMsgRes=" + JSON.stringify(reqSubMsgRes),
         success: () => {
           clearShopCart(this.preOrderInfo.shopId);
+          app.globalData.refreshFlag.shopDetail = true;
         },
       });
     }

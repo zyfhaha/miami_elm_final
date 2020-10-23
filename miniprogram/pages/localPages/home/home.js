@@ -37,17 +37,32 @@ Page({
   },
 
   async onPullDownRefresh() {
-    await showLoading();
-    await this.refreshHomePage();
-    await showToast("已刷新");
-    wx.stopPullDownRefresh();
+    try {
+      await showLoading();
+      await this.refreshHomePage();
+      await showToast("已刷新");
+    } catch (error) {
+      console.log("error", error);
+      showModal("错误", "请检查网络状态后重试");
+      return false;
+    } finally {
+      await hideLoading();
+      wx.stopPullDownRefresh();
+    }
   },
 
   /*==================== 页面生命周期函数 ===========================*/
   // 页面开始加载 就会触发
   async onLoad(options) {
-    await showLoading();
-    await this.refreshHomePage();
-    await hideLoading();
+    try {
+      await showLoading();
+      await this.refreshHomePage();
+    } catch (error) {
+      console.log("error", error);
+      showModal("错误", "请检查网络状态后重试");
+      return false;
+    } finally {
+      await hideLoading();
+    }
   },
 });

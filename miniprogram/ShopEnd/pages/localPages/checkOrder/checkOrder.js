@@ -41,12 +41,6 @@ Page({
 
   async refreshAllOrder() {
     console.log("刷新所有订单");
-    // TODO 释放这部分代码
-    // if (!isConnected()) {
-    //   showModal("获取数据失败", "请连接网络后重试下拉刷新");
-    //   return;
-    // }
-
     let pageNum = 0;
     const shopId = this.shopInfo.shopId;
     await showLoading();

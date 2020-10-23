@@ -14,7 +14,6 @@ Page({
     refreshHandlingOrderFlag: false,
     refreshDeliverOrderFlag: false,
 
-
     // 未处理订单
     newOrder: [],
 
@@ -39,6 +38,14 @@ Page({
     await showLoading();
     const res = await getUncompleteOrderCloud(this.shopInfo.shopId);
     await hideLoading();
+    if (!res) {
+      this.setData({
+        refreshNewOrderFlag: false,
+        refreshHandlingOrderFlag: false,
+        refreshDeliverOrderFlag: false,
+      });
+      return;
+    }
     const uncompleteOrder = res.result.data;
     if (uncompleteOrder.length === 0) {
       showToast("没有未处理订单");
@@ -66,18 +73,15 @@ Page({
         }
       });
     }
-    this.setData({
-      newOrder,
-      handleOrder,
-      deliverOrder,
-      refreshNewOrderFlag: false,
-      refreshHandlingOrderFlag: false,
-      refreshDeliverOrderFlag: false,
-    });
+    this.setData({ 
+      newOrder, 
+      handleOrder, 
+      deliverOrder, 
+      refreshNewOrderFlag: false, 
+      refreshHandlingOrderFlag: false, 
+      refreshDeliverOrderFlag: false });
 
-    console.log("newOrder.length !== 0",newOrder.length !== 0);
-    app.globalData.refreshFlag.showDot = newOrder.length !== 0
-
+    app.globalData.refreshFlag.showDot = newOrder.length !== 0;
   },
 
   async handleRefreshNewOrder() {
@@ -236,10 +240,10 @@ Page({
     //await this.refreshOrder();
   },
 
-  async onShow(){
-    if(app.globalData.refreshFlag.orderProcess){
+  async onShow() {
+    if (app.globalData.refreshFlag.orderProcess) {
       await this.refreshOrder();
-      app.globalData.refreshFlag.orderProcess = false
+      app.globalData.refreshFlag.orderProcess = false;
     }
-  }
+  },
 });

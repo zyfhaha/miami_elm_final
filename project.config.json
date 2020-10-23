@@ -163,7 +163,7 @@
         {
           "id": 15,
           "name": "自营跳蚤市场",
-          "pathName": "pages/localPages/publicShop/publicShop",
+          "pathName": "pages/localPages/ugShopDetail/ugShopDetail",
           "query": "",
           "scene": null
         },

@@ -210,7 +210,7 @@ async function addGoodsCloud(goodsInfo) {
         ...goodsInfo
       },
     });
-
+    await hideLoading();
     await showModal("保存成功", "您的商品已成功提交\n商品将在审核通过后上架");
     return res2;
   } catch (error) {

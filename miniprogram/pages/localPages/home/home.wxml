@@ -29,7 +29,7 @@
 		<text class="iconfont icon-shop"></text>推荐店铺
 	</view>
 	<block wx:for="{{selfRunShopList}}" wx:key="shopId">
-	<navigator url="/pages/localPages/publicShop/publicShop?shopId={{item.shopId}}">
+	<navigator url="/pages/localPages/ugShopDetail/ugShopDetail?shopId={{item.shopId}}">
 		<ShopCard shopInfo="{{item}}"></ShopCard>
 	</navigator>
 	</block>

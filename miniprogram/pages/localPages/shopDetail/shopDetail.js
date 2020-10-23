@@ -6,6 +6,7 @@ import { showLoading, hideLoading, showModal, showToast, sleep } from "../../../
 const db = wx.cloud.database();
 // 这里只获取shop和goodsCate的索引 goods通过云函数获得
 const shopRef = db.collection("shop");
+let app = getApp();
 
 Page({
   data: {
@@ -28,7 +29,7 @@ Page({
     // 是否可以进行结算
     isCheckOutActive: false,
     // 要结算还需消费
-    checkOutConsumption: "  ",
+    checkOutConsumption: "",
     // 需要滚动到的目标商品的goodsId
     targetGoods: "",
     // 刷新的flag
@@ -42,58 +43,71 @@ Page({
   // 刷新页面
   async handleRefresh() {
     this.setData({ refreshFlag: true });
-    await this.getShopDetail(this.shopInfo.shopId);
-    this.setData({ refreshFlag: false, rightContent: this.cates[this.data.currentIndex].goods });
-    showToast("已刷新");
+    const shopDetailRes = await this.getShopDetail(this.shopInfo.shopId);
+    this.setData({ refreshFlag: false });
+    if (!shopDetailRes) {
+      return;
+    }
+    this.setData({ rightContent: this.cates[this.data.currentIndex].goods });
   },
 
   async getShopDetail(shopId) {
     // 首先获取商店信息详情
-    const res1 = await shopRef
-      .where({
-        shopId: shopId,
-      })
-      .field({
-        shopId: true,
-        shopName: true,
-        minConsumption: true,
-      })
-      .get();
+    try {
+      showLoading();
+      const res1 = await shopRef
+        .where({
+          shopId: shopId,
+        })
+        .field({
+          shopId: true,
+          shopName: true,
+          minConsumption: true,
+        })
+        .get();
 
-    this.shopInfo = res1.data[0]; //小程序端调用数据库返回的数据即便只有一条也是封装在数组中的
+      this.shopInfo = res1.data[0]; //小程序端调用数据库返回的数据即便只有一条也是封装在数组中的
 
-    // 获取商店的商品数据
-    let res2 = await wx.cloud.callFunction({
-      name: "get_shop_goods",
-      data: {
-        shopId: shopId,
-      },
-    });
-    const { allGoods } = res2.result;
+      // 获取商店的商品数据
+      let res2 = await wx.cloud.callFunction({
+        name: "get_shop_goods",
+        data: {
+          shopId: shopId,
+        },
+      });
 
-    let cates = allGoods;
-    this.cates = cates;
-    console.log("cates", cates);
+      const { allGoods } = res2.result;
 
-    // 检查是否有针对该商店的购物车缓存 没有的话就加一个购物车
-    if (hasShopCart(this.shopInfo.shopId) === -1) {
-      addShopCart(this.shopInfo);
+      let cates = allGoods;
+      this.cates = cates;
+
+      // 检查是否有针对该商店的购物车缓存 没有的话就加一个购物车
+      if (hasShopCart(this.shopInfo.shopId) === -1) {
+        addShopCart(this.shopInfo);
+      }
+      //======================
+
+      // 构造左侧的大菜单数据
+      let leftMenuList = cates.map((v) => v.cateName);
+      // 构造右侧的商品数据
+      let rightContent = cates[0].goods;
+      // 给页面数据赋值
+      this.setData({
+        leftMenuList,
+        rightContent,
+        checkOutConsumption: this.shopInfo.minConsumption,
+      });
+
+      // 同步页面数据
+      this.setPageData();
+      return true
+    } catch (error) {
+      console.log("error", error);
+      showModal("错误", "请检查网络状态后重试");
+      return false;
+    } finally {
+      hideLoading();
     }
-    //======================
-
-    // 构造左侧的大菜单数据
-    let leftMenuList = cates.map((v) => v.cateName);
-    // 构造右侧的商品数据
-    let rightContent = cates[0].goods;
-    // 给页面数据赋值
-    this.setData({
-      leftMenuList,
-      rightContent,
-      checkOutConsumption: this.shopInfo.minConsumption,
-    });
-
-    // 同步页面数据
-    this.setPageData();
   },
 
   // 左侧菜单的点击事件
@@ -254,8 +268,11 @@ Page({
 
   // 如果用户是通过轮播图跳转过来 则滚到广告的对应位置
   async scrollToAdvertise(cateId, goodsId) {
-    console.log("开始根据广告跳转");
+    if (!cateId) {
+      return;
+    }
 
+    console.log("开始根据广告跳转");
     let cateIdx = this.cates.findIndex((v) => v.cateId === cateId);
     if (cateIdx == -1) {
       return;
@@ -269,42 +286,49 @@ Page({
       scrollTop: 0,
     });
 
-    if (goodsId) {
-      await sleep(500);
-      this.setData({ targetGoods: goodsId });
+    if (!goodsId) {
+      return;
     }
+    await sleep(500);
+    this.setData({ targetGoods: goodsId });
   },
 
   /* ===================== 页面生命周期函数 ================== */
 
   async onLoad(options) {
     // 从购物车页面转来需要获取shopId
+    this.watchOnLoadOver((onLoadOver) => {
+      if (!onLoadOver) {
+        return;
+      }
+      this.setPageData();
+    });
+
     const shopId = options.shopId;
     const cateId = options.cateId || "";
     const goodsId = options.goodsId || "";
 
     // 获取商店及其商品的数据
-    try {
-      await showLoading();
-      await this.getShopDetail(shopId);
-      //更改导航栏标题为商店名
-      wx.setNavigationBarTitle({
-        title: this.shopInfo.shopName,
-      });
-    } catch (error) {
-      console.log(error);
-      showModal("网络错误");
-    } finally {
-      await hideLoading();
+    const shopDetailRes = await this.getShopDetail(shopId);
+    if (!shopDetailRes) {
+      return;
     }
-
-    if (cateId) {
-      this.scrollToAdvertise(cateId, goodsId);
-    }
+    //更改导航栏标题为商店名
+    wx.setNavigationBarTitle({
+      title: this.shopInfo.shopName,
+    });
+    this.scrollToAdvertise(cateId, goodsId);
+    this.onLoadOver = true;
   },
 
-  onShow() {
-    this.setPageData();
+  async onShow() {
+
+    if (this.onLoadOver) {
+      this.setPageData();
+    }
+    if (app.globalData.refreshFlag.shopDetail && this.onLoadOver) {
+      await this.getShopDetail(this.shopInfo.shopId);
+    }
   },
 
   onReady() {
@@ -321,8 +345,19 @@ Page({
     this.popupCart.closeCart(); //组件里里面定义的showPopup方法
   },
 
-  // onShow() {
-  //   console.log("onShow");
-  //   this.setPageData();
-  // },
+  watchOnLoadOver(method) {
+    this._onLoadOver = false;
+    let obj = this;
+    Object.defineProperty(obj, "onLoadOver", {
+      configurable: true,
+      enumerable: true,
+      get: function () {
+        return this._onLoadOver;
+      },
+      set: function (value) {
+        this._onLoadOver = value;
+        method(value);
+      },
+    });
+  },
 });
