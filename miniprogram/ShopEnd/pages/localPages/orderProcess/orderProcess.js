@@ -66,6 +66,7 @@ Page({
             break;
           case 1:
             handleOrder.push(v);
+            break;
           case 2:
             deliverOrder.push(v);
           default:
