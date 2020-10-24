@@ -95,7 +95,7 @@ export async function acceptOrderCloud(orderId, openid){
         orderId: orderId,
         shopName: app.globalData.shopInfo.shopName,
         phoneNumber: app.globalData.shopInfo.shopPhoneNumber,
-        handleTime:res.result.handleTime,
+        handleTimeStr:toTimeStr(res.result.handleTime),
         action: "sendAcceptMessage",
       },
     });
@@ -128,7 +128,7 @@ export async function deliverOrderCloud(orderId, openid){
       data: {
         openid: openid,
         orderId: orderId,
-        deliverTime:res.result.deliverTime,
+        deliverTimeStr:toTimeStr(res.result.deliverTime),
         action: "sendFinishPickGoodsMessage",
       },
     });
@@ -158,7 +158,7 @@ export async function completeOrderCloud(orderId, openid){
       data: {
         openid: openid,
         orderId: orderId,
-        completeTime:res.result.completeTime,
+        completeTimeStr:toTimeStr(res.result.completeTime),
         action: "sendArrivedMessage",
       },
     });
@@ -216,3 +216,18 @@ export async function startWatchOrder(user2shop){
     }
   })
 }
+
+function toTimeStr(timestamp) {
+  let date = new Date(timestamp);
+  let year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+  let hour = date.getHours()
+  let minute = date.getMinutes()
+  return [year, month, day].map(formatNumber).join("-") + " " + [hour, minute].map(formatNumber).join(":")
+}
+
+function formatNumber(n) {
+  n = n.toString();
+  return n[1] ? n : "0" + n;
+};

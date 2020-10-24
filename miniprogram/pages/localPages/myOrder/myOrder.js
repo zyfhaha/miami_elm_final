@@ -35,10 +35,7 @@ Page({
   async refreshAllOrder() {
     console.log("刷新所有订单");
     
-    if (!isConnected()) {
-      showModal("获取数据失败", "请连接网络后重试下拉刷新");
-      return;
-    }
+    
     let pageNum = 0;
     await showLoading();
     const res = await Promise.all([getUncompleteOrderCloud(pageNum), getCompleteOrderCloud(pageNum)])
@@ -67,10 +64,7 @@ Page({
       return;
     }
     if (dialogRes.confirm) {
-      if (!isConnected()) {
-        showModal("操作失败", "请检查网络状态后重试");
-        return;
-      }
+      
       const orderId = this.orderId_temp;
       const cancelReason = dialogRes.dialogInput.trim();
       if (!cancelReason) {
@@ -115,10 +109,7 @@ Page({
       showToast("没有更多数据");
       return;
     }
-    if (!isConnected()) {
-      showModal("获取数据失败", "请检查网络状态后重试");
-      return;
-    }
+    
     await showLoading();
     const res = await getCompleteOrderCloud(this.completeOrderPageNum + 1);
     await hideLoading();

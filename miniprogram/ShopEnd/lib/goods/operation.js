@@ -1,6 +1,15 @@
-import { showToast, showModal, showLoading, hideLoading } from "../../utils/asyncWX.js";
-import { CanI } from "../accessControl/operation.js";
-import { getId } from "../id/operation.js";
+import {
+  showToast,
+  showModal,
+  showLoading,
+  hideLoading
+} from "../../utils/asyncWX.js";
+import {
+  CanI
+} from "../accessControl/operation.js";
+import {
+  getId
+} from "../id/operation.js";
 // 初始化云环境
 const db = wx.cloud.database({
   env: "env-miamielm-p3buy",
@@ -171,7 +180,9 @@ async function addGoodsCloud(goodsInfo) {
   // 将商品信息上传到云端
   console.log("正在上传商品信息");
   const res2 = await goodsRef.add({
-    data: { ...goodsInfo },
+    data: {
+      ...goodsInfo
+    },
   });
 
   await hideLoading();
@@ -293,7 +304,9 @@ async function updateGoodsCloud(goodsInfoNew, goodsInfoOld) {
       goodsId: goodsInfoOld.goodsId,
     })
     .update({
-      data: { ...goodsInfoNew },
+      data: {
+        ...goodsInfoNew
+      },
     });
 
   // 如果图片改过了 则将原图删除
@@ -316,14 +329,27 @@ async function removeGoodsCloud(goodsInfo) {
     console.log("无操作权限");
     return;
   }
-  console.log("正在删除商品信息");
-  await showLoading("删除中");
-  const res = await goodsRef.where({ goodsId: goodsInfo.goodsId }).update({
-    data: { isExist: false },
-  });
-  await hideLoading();
-  console.log("删除完成", res);
-  return res;
+
+  try {
+    console.log("正在删除商品信息");
+    await showLoading("删除中");
+    const res = await goodsRef.where({
+      goodsId: goodsInfo.goodsId
+    }).update({
+      data: {
+        isExist: false
+      },
+    });
+    console.log("删除完成", res);
+    return res;
+  } catch (error) {
+    console.log("error", error);
+    showModal("错误", "请检查网络状态后重试");
+    return false
+  } finally {
+    hideLoading();
+  }
+
 }
 
 // 从云端批量删除商品
@@ -339,19 +365,29 @@ async function removeManyGoodsCloud(goodsInfoList) {
     let goodsIdList = goodsInfoList.map((v) => {
       return v.goodsId;
     });
-    console.log("正在批量删除商品信息");
-    await showLoading("删除中");
-    const res = await goodsRef
-      // TODO 在这里加入对shopId的限制可以缩小查找范围
-      .where({
-        goodsId: _.in(goodsIdList),
-      })
-      .update({
-        data: { isExist: false },
-      });
-    console.log("删除完成", res);
-    await hideLoading();
-    return res;
+
+    try {
+      console.log("正在批量删除商品信息");
+      await showLoading("删除中");
+      const res = await goodsRef
+        // TODO 在这里加入对shopId的限制可以缩小查找范围
+        .where({
+          goodsId: _.in(goodsIdList),
+        })
+        .update({
+          data: {
+            isExist: false
+          },
+        });
+      console.log("删除完成", res);
+      return res;
+    } catch (error) {
+      console.log("error", error);
+      showModal("错误", "请检查网络状态后重试");
+      return false
+    } finally {
+      hideLoading();
+    }
   }
 }
 
@@ -362,36 +398,39 @@ async function enableSaleCloud(goodsInfo) {
     return;
   }
   if (goodsInfo.goodsStock === 0) {
-    await showModal("错误","库存为0 无法上架");
+    await showModal("错误", "库存为0 无法上架");
     return;
   }
 
   if (goodsInfo.goodsStock < goodsInfo.goodsBuyLeastLimit) {
-    await showModal("错误","库存少于最少起购量 无法上架");
+    await showModal("错误", "库存少于最少起购量 无法上架");
     return;
   }
 
   try {
     showLoading("上架中");
-    const res = await goodsRef.where({ goodsId: goodsInfo.goodsId }).update({
-      data: { goodsAvailable: true },
+    const res = await goodsRef.where({
+      goodsId: goodsInfo.goodsId
+    }).update({
+      data: {
+        goodsAvailable: true
+      },
     });
-    console.log("await res",res);
-    
+    console.log("await res", res);
+
     return res;
   } catch (error) {
-    console.log("error",error);
-    showModal("错误","请检查网络状态后重试");
+    console.log("error", error);
+    showModal("错误", "请检查网络状态后重试");
     return false
-  }
-  finally{
-      hideLoading();
+  } finally {
+    hideLoading();
   }
 
 
   // await showLoading("上架中");
   // console.log("update开始");
-  
+
   // const res = goodsRef.where({ goodsId: goodsInfo.goodsId }).update({
   //     data: { goodsAvailable: true },
   //   })
@@ -408,7 +447,7 @@ async function enableSaleCloud(goodsInfo) {
   //     hideLoading();
   //   });
   //   console.log("外部res",res);
-    
+
   //   return res
 }
 
@@ -419,8 +458,12 @@ async function disableSaleCloud(goodsInfo) {
     return;
   }
   await showLoading("下架中");
-  const res = await goodsRef.where({ goodsId: goodsInfo.goodsId }).update({
-    data: { goodsAvailable: false },
+  const res = await goodsRef.where({
+    goodsId: goodsInfo.goodsId
+  }).update({
+    data: {
+      goodsAvailable: false
+    },
   });
   await hideLoading();
   return res;
@@ -477,4 +520,12 @@ async function updateGoodsOrder(goodsList) {
   return updateRes;
 }
 
-export { addGoodsCloud, removeManyGoodsCloud, updateGoodsCloud, enableSaleCloud, disableSaleCloud, verifyGoodsInfo, updateGoodsOrder };
+export {
+  addGoodsCloud,
+  removeManyGoodsCloud,
+  updateGoodsCloud,
+  enableSaleCloud,
+  disableSaleCloud,
+  verifyGoodsInfo,
+  updateGoodsOrder
+};

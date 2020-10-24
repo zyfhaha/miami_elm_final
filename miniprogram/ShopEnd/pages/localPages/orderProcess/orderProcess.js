@@ -237,6 +237,8 @@ Page({
   //options(Object)
   async onLoad(options) {
     this.shopInfo = app.globalData.shopInfo;
+    console.log("orderprocess shopinfo",this.shopInfo );
+    
     //await this.refreshOrder();
   },
 
