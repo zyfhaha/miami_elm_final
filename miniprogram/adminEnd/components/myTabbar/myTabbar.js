@@ -11,9 +11,9 @@ Component({
     let _this = this;
     app.watch((showDot) => {
       let tabbarList = _this.data.tabbarList;
-      console.log("tabbarList",tabbarList);
+      // console.log("tabbarList",tabbarList);
       tabbarList[0].dot = showDot;
-      console.log("组件修改红点为",showDot);
+      // console.log("组件修改红点为",showDot);
       _this.setData({ tabbarList });
     });
   },

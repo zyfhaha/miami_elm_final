@@ -39,11 +39,10 @@ async function generateAssistCode(shopInfo, assistList) {
     console.log("无操作权限assist");
     return
   }
-  // TODO 还原本段
-  // if (assistList.length >=6){
-  //     await showModal("添加失败","店员数量不能多于6个")
-  //     return
-  // }
+  if (assistList.length >=6){
+      await showModal("添加失败","店员数量不能多于6个")
+      return
+  }
 
   // 随机生成一个7位邀请码 生成一个小数并捕获小数点后7位
   const codeString = Math.random().toString();

@@ -56,16 +56,10 @@ Page({
   },
 
   // 用户点击结算
-  //TODO 点击结算
   handleCheckOutTap(e) {
     let shopId = this.shopInfo.shopId;
     wx.navigateTo({
       url: "../pay/pay?shopId=" + shopId,
-      success: (result) => {
-        //TODO
-      },
-      fail: () => {}, //TODO
-      complete: () => {}, //TODO
     });
   },
 

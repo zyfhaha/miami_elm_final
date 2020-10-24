@@ -36,11 +36,6 @@ Page({
 
     wx.navigateTo({
       url: "../addGoods/addGoods?catesInfo=" + catesInfo,
-      success: (result) => {
-        // TODO
-      },
-      fail: () => {}, // TODO
-      complete: () => {}, // TODO
     });
   },
 
@@ -72,12 +67,6 @@ Page({
 
     wx.navigateTo({
       url: "../editMyGoods/editMyGoods?goodsInfo="+goodsInfo,
-      success: (result) => {
-        // TODO
-      },
-      fail: (err) => {console.log(err);
-      }, // TODO
-      complete: () => {}, // TODO
     });
   },
 

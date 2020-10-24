@@ -13,7 +13,7 @@ const ugGoodsRef = db.collection("ugGoods");
 // 获取轮播图数据
 export async function getSwiperCloud() {
   showLoading("刷新中");
-  const swiperListRef = await advertiseSwiperRef.where({ location: "home" }).field({ _id: false, _openid: false }).orderBy("order", "asc").get();
+  const swiperListRef = await advertiseSwiperRef.where({ location: "home",isExist:true }).field({ _id: false, _openid: false }).orderBy("order", "asc").get();
   hideLoading();
   return swiperListRef.data;
 }
@@ -34,6 +34,7 @@ export function getEmptySwiper(index) {
     goodsId: "",
     navigatorUrl: "",
     isUgShop: false,
+    isExist:true,
   };
   return emptySwiper;
 }
@@ -254,12 +255,8 @@ export async function updateSwiperListCloud(newSwiperList, oldSwiperList) {
   for (let i = 0; i < oldSwiperList.length; i++) {
     let idx = newSwiperList.findIndex((v) => v.swiperId === oldSwiperList[i].swiperId);
     if (idx === -1) {
-      let deleteSwiperTask = advertiseSwiperRef.where({ swiperId: oldSwiperList[i].swiperId }).remove();
-      let deletePicTask = wx.cloud.deleteFile({
-        fileList: [oldSwiperList[i].picUrl],
-      });
+      let deleteSwiperTask = advertiseSwiperRef.where({ swiperId: oldSwiperList[i].swiperId }).update({data:{isExist:false}});
       taskList.push(deleteSwiperTask);
-      taskList.push(deletePicTask);
     }
   }
 

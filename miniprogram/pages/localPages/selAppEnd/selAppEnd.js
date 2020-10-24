@@ -1,4 +1,6 @@
-//Page Object
+let app =  getApp();
+
+
 Page({
   data: {
     showPage: false,
@@ -18,11 +20,13 @@ Page({
     console.log("用户点击登录", end);
 
     if (end === "customer") {
+      app.globalData.isCustomer = true;
       wx.switchTab({
         url: '../home/home',
       })
     }
     if (end === "shop") {
+      app.globalData.isShop = true;
       wx.navigateTo({
         url: '../../../ShopEnd/pages/localPages/login/login',
       });

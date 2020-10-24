@@ -7,6 +7,8 @@ App({
       orderProcess: true,
       _showDot: false,  //不要直接访问或修改这个属性而是通过globalData.refreshFlag.showDot来访问或赋值这个属性，否则下面写的watch函数不会被触发
     },
+    accessInfo:{},
+    shopInfo: {},
   },
 
   watch:function(method){ //method是一个函数
@@ -16,14 +18,10 @@ App({
       enumerable: true,
       get:function(){
         // 每次this.globalData.refreshFlag.showDot被访问时 执行这里
-        console.log("showDot get");
-
         return this._showDot
       },
       set: function (value) {
         // 每次this.globalData.refreshFlag.showDot被赋值时 执行这里
-        console.log("showDot 被set");
-        
         this._showDot = value;
         method(value);  //this.globalData.refreshFlag.showDot被修改时的回调函数
       }

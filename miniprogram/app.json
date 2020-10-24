@@ -99,7 +99,9 @@
         "pages/localPages/editRecommendShop/editRecommendShop",
         "pages/localPages/ugGoodsManage/ugGoodsManage",
         "pages/localPages/ugGoodsInfo/ugGoodsInfo",
-        "pages/localPages/ugCateManage/ugCateManage"
+        "pages/localPages/ugCateManage/ugCateManage",
+        "pages/localPages/checkOrder/checkOrder",
+        "pages/localPages/deleteShop/deleteShop"
       ]
     }
   ],

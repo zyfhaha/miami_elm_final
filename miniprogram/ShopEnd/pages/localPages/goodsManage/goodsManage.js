@@ -58,11 +58,6 @@ Page({
 
     wx.navigateTo({
       url: "../addGoods/addGoods?catesInfo=" + catesInfo,
-      success: (result) => {
-        // TODO
-      },
-      fail: () => {}, // TODO
-      complete: () => {}, // TODO
     });
 
   },
@@ -158,11 +153,6 @@ Page({
 
     wx.navigateTo({
       url: "../goodsInfo/goodsInfo?goodsInfo=" + goodsInfo,
-      success: (result) => {
-        // TODO
-      },
-      fail: () => {}, // TODO
-      complete: () => {}, // TODO
     });
   },
 

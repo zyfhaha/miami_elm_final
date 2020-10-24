@@ -68,7 +68,6 @@ Page({
   },
 
   async handleDeleteGoods() {
-    // TODO 删除结束以后需要回退一个页面 并重新拉取页面数据
     const modal = await showModal("确定删除?");
     if (modal.confirm) {
       const res = await removeManyGoodsCloud([this.data.goodsInfo]);

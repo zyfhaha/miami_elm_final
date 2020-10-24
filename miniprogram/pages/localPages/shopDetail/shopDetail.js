@@ -45,10 +45,6 @@ Page({
     this.setData({ refreshFlag: true });
     const shopDetailRes = await this.getShopDetail(this.shopInfo.shopId);
     this.setData({ refreshFlag: false });
-    if (!shopDetailRes) {
-      return;
-    }
-    this.setData({ rightContent: this.cates[this.data.currentIndex].goods });
   },
 
   async getShopDetail(shopId) {
@@ -90,7 +86,7 @@ Page({
       // 构造左侧的大菜单数据
       let leftMenuList = cates.map((v) => v.cateName);
       // 构造右侧的商品数据
-      let rightContent = cates[0].goods;
+      let rightContent = cates[this.data.currentIndex].goods;
       // 给页面数据赋值
       this.setData({
         leftMenuList,
@@ -145,12 +141,6 @@ Page({
     );
     wx.navigateTo({
       url: "../goodsDetail/goodsDetail?shopInfo=" + shopInfo + "&goodsInfo=" + goodsInfo,
-
-      success: (result) => {
-        // TODO
-      },
-      fail: () => {}, // TODO
-      complete: () => {}, // TODO
     });
   },
   // 点击增加商品数量

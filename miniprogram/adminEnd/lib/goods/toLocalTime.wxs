@@ -13,6 +13,16 @@ var formatDate = function (datetime) {
   var day = date.getDate();
   return [year, month, day].map(formatNumber).join("-");
 };
+
+var formatTime = function (datetime) {
+  var date = getDate(datetime);
+  var dateString = formatDate(datetime)
+  var hour = date.getHours();
+  var minute = date.getMinutes();
+  var timeString =  [hour, minute].map(formatNumber).join(":");
+  return dateString + "   " + timeString
+};
 module.exports = {
   formatDate: formatDate,
+  formatTime:formatTime
 };

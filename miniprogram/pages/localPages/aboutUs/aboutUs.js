@@ -1,4 +1,5 @@
-// miniprogram/pages/localPages/aboutUs/aboutUs.js
+import { showLoading, hideLoading, showToast, showModal } from "../../../utils/asyncWX.js";
+
 Page({
 
   /**

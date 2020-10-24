@@ -144,10 +144,9 @@ console.log("Shopstatus:",shopInfo.shopStatus);
 
   // 在order数据库中先添加一条预订单 等用户确认下单后 再根据orderNumber更改订单状态即可
   // 在数据库中生成预订单
-  // TODO 确定订单号的生成方法 这里暂时随机生成一个
-  // TODO 现在默认用户点击一次结算就下一个预订单并写入数据库
+  // 现在默认用户点击一次结算就下一个预订单并写入数据库
   // 但假如用户没有买到最低消费 退出结算界面新买东西后再产生预订单 则之前没有买满的订单将永远无法得到修改 成为垃圾记录占据空间
-  const orderId = parseInt(Math.random() * 1000000000000).toString();
+  const orderId = "520" + (new Date()).getTime().toString() + parseInt(Math.random() * 10000).toString();
 
 
   // 生成订单creatTime

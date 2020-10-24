@@ -10,7 +10,7 @@ import {
 } from "../../utils/asyncWX.js";
 export function getAccessControlFromLogin(user2shop) {
   /**  user2shop数据结构
-     *   access: ["小卖部店主权限1", "小卖部店主权限2"]
+     *   access: ["某店主权限1", "某店主权限2"]
      *   shopId: "FbAIRZz5Nc0wax"
      *   shopInfo: {shopId: "FbAIRZz5Nc0wax", shopName: "Hanna&Tiger Asian Mart 小卖部", shopAddress: "7650 NW 42TH ST", state: "FL", zipcode: "33567", …}
      *   role: "owner"

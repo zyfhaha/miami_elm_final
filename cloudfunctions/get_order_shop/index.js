@@ -1,51 +1,99 @@
 // 本云函数用于获取当前商店的订单
-const cloud = require('wx-server-sdk')
+const cloud = require("wx-server-sdk");
 // 初始化 cloud
 cloud.init({
   // API 调用都保持和云函数当前所在环境一致
-  env: cloud.DYNAMIC_CURRENT_ENV
-})
+  env: cloud.DYNAMIC_CURRENT_ENV,
+});
 
-const db = cloud.database({env:"env-miamielm-p3buy"})
-const order_col = db.collection("order");
-const MAX_LIMIT = 100
-const _ = db.command
+const db = cloud.database({ env: "env-miamielm-p3buy" });
+const orderRef = db.collection("order");
+const MAX_LIMIT = 30; // 单次返回最大量
+const _ = db.command;
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-  // TODO 返回从当前开始30天内的所有订单 订单时间以create_time为准
-  // TODO 监听新的订单
-  // const start_date = event.start_date
-  // const end_date = event.end_date
+  const { shopId, type, pageNum,orderId } = event;
 
-  // TODO 这里暂时将shop_id写死用于测试
-  const shopId = "itoy7Q3q2AmzNYckO041FuTasX8f";
-  // const {shop_id} = event.shop_id
+  switch (type) {
+    case "recent":
+      return getRecentOrder(shopId, pageNum);
 
-  // 订单查询语句 "_q"表示这是一个查询(query)
-  let orders_q = order_col.where({
-    shopId:shopId
-    // create_time: TODO 返回从当前开始30天内的所有订单 订单时间以create_time为准
-  })
-  
-  // ===== 分批次获取数据 =========//
+    case "old":
+      return getOldOrder(shopId, pageNum);
 
-  // 先查询有多少条数据需要返回
-  const countResult = await orders_q.count()
-  const total = countResult.total
-  // 计算需分几次取
-  const batchTimes = Math.ceil(total / 100)
-  // 承载所有读操作的 promise 的数组
-  const tasks = []
-  for (let i = 0; i < batchTimes; i++) {
-    const promise = orders_q.skip(i * MAX_LIMIT).limit(MAX_LIMIT).get()
-    tasks.push(promise)
+    case "uncomplete":
+      return getUncompleteOrder(shopId);
+    case "any":
+      return getAnyOrder(orderId);
   }
-  // 等待所有
-  return (await Promise.all(tasks)).reduce((acc, cur) => {
-    return {
-      data: acc.data.concat(cur.data),
-      errMsg: acc.errMsg,
-    }
-  })
+};
+
+// 获取最近一周的订单
+async function getRecentOrder(shopId, pageNum) {
+  let timeCut = new Date().getTime() - 7 * 24 * 60 * 60 * 1000;
+  const res = await orderRef
+    .where({
+      shopId: shopId,
+      completeTime: _.gte(timeCut),
+      status: _.in([-1, 3]),
+      isExist: true,
+    })
+    .orderBy("completeTime", "desc")
+    .skip(MAX_LIMIT * pageNum)
+    .limit(MAX_LIMIT)
+    .field({
+      _id: false,
+      _openid: false,
+    })
+    .get();
+  return res;
+}
+
+// 获取一周前的订单
+async function getOldOrder(shopId, pageNum) {
+  let timeCut = new Date().getTime() - 7 * 24 * 60 * 60 * 1000;
+  const res = await orderRef
+    .where({
+      shopId: shopId,
+      completeTime: _.lte(timeCut),
+      status: _.in([-1, 3]),
+      isExist: true,
+    })
+    .orderBy("completeTime", "desc")
+    .skip(MAX_LIMIT * pageNum)
+    .limit(MAX_LIMIT)
+    .field({
+      _id: false,
+      _openid: false,
+    })
+    .get();
+  return res;
+}
+
+// 获取未完成的订单
+async function getUncompleteOrder(shopId) {
+  const res = await orderRef
+    .where({
+      shopId: shopId,
+      status: _.in([0, 1, 2]),
+      isExist: true,
+    })
+    .orderBy("selDeliverTime", "asc")
+    .orderBy("payTime", "asc")
+    .field({
+      _id: false,
+    })
+    .get();
+  return res;
+}
+
+async function getAnyOrder(orderId) {
+  const res = await orderRef
+    .where({
+      orderId: orderId,
+      isExist: true,
+    })
+    .get();
+  return res;
 }

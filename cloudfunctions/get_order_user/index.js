@@ -8,13 +8,12 @@ cloud.init({
 
 const db = cloud.database({ env: "env-miamielm-p3buy" });
 const orderRef = db.collection("order");
-// TODO MAX_LIMIT改成20
 const MAX_LIMIT = 20;
 const _ = db.command;
 
 exports.main = async (event, context) => {
   const openid = cloud.getWXContext().OPENID;
-  const { type, pageNum } = event;
+  const { type, pageNum, orderId } = event;
 
   switch (type) {
     case "uncomplete":
@@ -22,6 +21,8 @@ exports.main = async (event, context) => {
     default:
     case "complete":
       return getCompleteOrder(openid, pageNum);
+    case "any":
+      return getAnyOrder(orderId);
       break;
   }
 };
@@ -30,7 +31,7 @@ async function getUncompleteOrder(openid) {
   const res = await orderRef
     .where({
       _openid: openid,
-      status: _.or([_.eq(0), _.eq(1),_.eq(2)]),
+      status: _.or([_.eq(0), _.eq(1), _.eq(2)]),
       isExist: true,
     })
     .orderBy("selDeliverTime", "desc")
@@ -56,6 +57,16 @@ async function getCompleteOrder(openid, pageNum) {
     .field({
       _id: false,
       _openid: false,
+    })
+    .get();
+  return res;
+}
+
+async function getAnyOrder(orderId) {
+  const res = await orderRef
+    .where({
+      orderId: orderId,
+      isExist: true,
     })
     .get();
   return res;

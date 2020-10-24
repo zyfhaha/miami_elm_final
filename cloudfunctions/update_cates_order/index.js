@@ -1,4 +1,4 @@
-// TODO 写清楚函数用途
+// 更新goodsCate的顺序
 
 const cloud = require("wx-server-sdk");
 // 初始化 cloud

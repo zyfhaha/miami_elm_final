@@ -255,7 +255,6 @@ Page({
   },
 
   async register(code, type, userInfo) {
-    // TODO 验证用户所在的时区
     const registerRes = await registerCloud(code, type, userInfo);
     console.log("registerRes", registerRes);
     const { data, errCode } = registerRes.result;

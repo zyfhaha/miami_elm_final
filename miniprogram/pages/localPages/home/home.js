@@ -1,4 +1,4 @@
-import { showLoading, hideLoading, showToast } from "../../../utils/asyncWX.js";
+import { showLoading, hideLoading, showToast, showModal } from "../../../utils/asyncWX.js";
 import { getSwiperListCloud, getSelfRunShopListCloud, getRecommendShopListCloud } from "../../../lib/home/operation.js";
 
 Page({

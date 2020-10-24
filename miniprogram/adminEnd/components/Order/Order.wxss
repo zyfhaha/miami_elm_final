@@ -1,48 +1,77 @@
 .order_content {
   border-radius: 30rpx;
   background-color: white;
-  margin: 50rpx 20rpx;
+  margin: 40rpx 20rpx;
   border: 1rpx solid #f0eef4;
   padding: 0 20rpx;
   box-shadow: 10rpx 10rpx 10rpx 3rpx rgba(0, 0, 0, 0.164);
 }
-.order_content .basic_info {
-  position: relative;
+.order_content .shop_name {
+  padding: 10rpx;
   font-size: 35rpx;
+  font-weight: bold;
+}
+.order_content .order_status_info {
+  position: relative;
+}
+.order_content .order_status_info .status_title {
+  font-size: 33rpx;
+  font-weight: bold;
+  padding: 20rpx 0;
+}
+.order_content .order_status_info .order_status {
+  font-size: 30rpx;
+  color: var(--themeColor);
+  font-weight: bold;
+  padding-bottom: 20rpx;
+}
+.order_content .order_status_info .cancel_reason {
+  padding-bottom: 20rpx;
+}
+.order_content .order_status_info .cancel_order_btn {
+  position: absolute;
+  top: 25%;
+  right: 2%;
+  font-size: 28rpx;
+  color: red;
+  padding: 8rpx 15rpx;
+  border: 1rpx solid currentColor;
+  border-radius: 10rpx;
+}
+.order_content .basic_info {
   border-top: 1rpx solid #e9e8ea;
 }
-.order_content .basic_info .customer_name {
-  margin-top: 15rpx;
-  padding: 15rpx 10rpx;
-  font-size: 35rpx;
-  font-weight: bolder;
-}
-.order_content .basic_info .customer_tel {
-  padding: 10rpx;
-  color: var(--themeColor);
-}
-.order_content .basic_info .customer_tel .iconfont.icon-dianhua {
-  color: var(--themeColor);
-}
-.order_content .basic_info .address {
-  padding: 10rpx;
-  padding-bottom: 20rpx;
-  font-weight: bold;
+.order_content .basic_info .user_info_row {
   font-size: 28rpx;
 }
-.order_content .basic_info .order_status {
-  position: absolute;
-  top: 5%;
-  right: 3%;
-  font-size: 50rpx;
-  color: var(--themeColor);
+.order_content .basic_info .user_info_row .user_info_title_warp {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.order_content .basic_info .user_info_row .user_info_title_warp .info_title {
+  font-size: 33rpx;
   font-weight: bold;
+  padding: 20rpx 0;
 }
-.order_content .basic_info .cancel_style {
-  color: red;
+.order_content .basic_info .user_info_row .user_info_title_warp .iconfont {
+  color: #666;
+  font-size: 50rpx;
 }
-.order_content .basic_info .cancel_reason {
-  padding-bottom: 20rpx;
+.order_content .basic_info .user_info_row .user_info_title_warp .up {
+  transform: rotate(180deg);
+}
+.order_content .basic_info .user_info_row .user_info {
+  margin-top: 10rpx;
+  color: #9b9b9b;
+  align-items: center;
+  padding-bottom: 15rpx;
+}
+.order_content .basic_info .user_info_row .user_info .user_phone {
+  margin-left: 15rpx;
+}
+.order_content .goods {
+  border-top: 1rpx solid #e9e8ea;
 }
 .order_content .goods .goods_title_warp {
   display: flex;
@@ -51,7 +80,7 @@
 }
 .order_content .goods .goods_title_warp .goods_title {
   padding: 20rpx 0;
-  font-size: 40rpx;
+  font-size: 33rpx;
   font-weight: bold;
 }
 .order_content .goods .goods_title_warp .iconfont {
@@ -61,46 +90,38 @@
 .order_content .goods .goods_title_warp .up {
   transform: rotate(180deg);
 }
-.order_content .goods .goods_group .goods_item .goods_item_warp {
+.order_content .goods .goods_item_warp {
+  position: relative;
   display: flex;
   align-items: center;
   margin: 15rpx 0;
 }
-.order_content .goods .goods_group .goods_item .goods_item_warp .goods_pic_warp {
+.order_content .goods .goods_item_warp .goods_pic_warp {
   width: 25%;
 }
-.order_content .goods .goods_group .goods_item .goods_item_warp .goods_pic_warp .goods_pic {
+.order_content .goods .goods_item_warp .goods_pic_warp .goods_pic {
   width: 150rpx;
   height: 150rpx;
   flex: none;
 }
-.order_content .goods .goods_group .goods_item .goods_item_warp .goods_name_num {
+.order_content .goods .goods_item_warp .goods_name_num {
   width: 50%;
   word-wrap: break-word;
   padding: 0 20rpx;
 }
-.order_content .goods .goods_group .goods_item .goods_item_warp .goods_name_num .goods_name {
+.order_content .goods .goods_item_warp .goods_name_num .goods_name {
   padding: 5rpx 0;
 }
-.order_content .goods .goods_group .goods_item .goods_item_warp .goods_name_num .goods_num {
+.order_content .goods .goods_item_warp .goods_name_num .goods_num {
   padding: 5rpx 0;
   font-weight: bold;
 }
-.order_content .goods .goods_group .goods_item .goods_item_warp .goods_price {
+.order_content .goods .goods_item_warp .goods_price {
   width: 25%;
   font-weight: bold;
   text-align: end;
 }
-.order_content .goods .goods_group .note .note_title {
-  font-size: 35rpx;
-  font-weight: bold;
-}
-.order_content .goods .goods_group .note .note_content {
-  font-weight: normal;
-  padding: 10rpx;
-}
 .order_content .goods .deliver_fee {
-  margin-top: 20rpx;
   padding: 10rpx;
 }
 .order_content .goods .total_price {
@@ -126,10 +147,21 @@
   font-size: 30rpx;
   padding: 0 25rpx;
 }
+.order_content .contact_warp {
+  display: flex;
+}
+.order_content .contact_warp .contact {
+  margin: 0 auto;
+  padding: 10rpx 0;
+  width: 40%;
+  padding: 10rpx;
+  text-align: center;
+  color: var(--themeColor);
+}
 /* 用view来当button用，此处自定义点击view后产生的阴影反馈效果
 此段代码必须放在css最后 */
 .view_hover {
-  background: #dedede;
+  background: #dedede !important;
 }
 @font-face {
   font-family: "iconfont";
