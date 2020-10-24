@@ -1,4 +1,9 @@
-import { showLoading, hideLoading, showModal, showToast } from "../../../utils/asyncWX.js";
+import {
+  showLoading,
+  hideLoading,
+  showModal,
+  showToast
+} from "../../../utils/asyncWX.js";
 import {
   enableSaleCloud,
   disableSaleCloud,
@@ -41,24 +46,33 @@ Page({
 
   // 获取分类数据
   async getMyGoods(shopId) {
-    await showLoading();
-    let res2 = await wx.cloud.callFunction({
-      name: "get_shop_ugGoods",
-      data: {
-        shopId: shopId,
-        requireType: "my",
-      },
-    });
-    console.log("res2", res2);
-    await hideLoading();
-    this.setData({
-      allGoods: res2.result.allGoods,
-    });
+    try {
+      await showLoading();
+      let res2 = await wx.cloud.callFunction({
+        name: "get_shop_ugGoods",
+        data: {
+          shopId: shopId,
+          requireType: "my",
+        },
+      });
+      console.log("res2", res2);
+      this.setData({
+        allGoods: res2.result.allGoods,
+      });
+    } catch (error) {
+      console.log("error", error);
+      showModal("错误", "请检查网络状态后重试");
+      return false
+    } finally {
+      hideLoading();
+    }
   },
 
   // 点击商品图片跳转到商品详情
   handleTapEdit(e) {
-    let { index } = e.currentTarget.dataset;
+    let {
+      index
+    } = e.currentTarget.dataset;
 
     // 准备要传递给商品详情页面的数据
     let goodsInfo = JSON.stringify({
@@ -77,7 +91,7 @@ Page({
   // ==========================================================
   async onShow() {
     // 根据全局变量判断当前页面是否需要刷新
-    console.log("app.globalData.refreshFlag.myGoods",app.globalData.refreshFlag.myGoods);
+    console.log("app.globalData.refreshFlag.myGoods", app.globalData.refreshFlag.myGoods);
     if (app.globalData.refreshFlag.myGoods) {
       console.log("刷新页面");
       await this.getMyGoods(this.shopId);

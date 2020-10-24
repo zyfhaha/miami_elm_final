@@ -6,40 +6,58 @@ const db = wx.cloud.database({
 });
 // 获取最近一周的订单
 export async function getRecentOrderCloud(shopId, pageNum) {
-  let res = await wx.cloud.callFunction({
-    name: "get_order_shop",
-    data: {
-      shopId: shopId,
-      type: "recent",
-      pageNum: pageNum,
-    },
-  });
-  return res;
+  try {
+    let res = await wx.cloud.callFunction({
+      name: "get_order_shop",
+      data: {
+        shopId: shopId,
+        type: "recent",
+        pageNum: pageNum,
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log("error", error);
+    showModal("错误", "请检查网络状态后重试");
+    return false
+  } finally {}
 }
 
 // 获取一周前的订单
 export async function getOldOrderCloud(shopId, pageNum) {
-  let res = await wx.cloud.callFunction({
-    name: "get_order_shop",
-    data: {
-      shopId: shopId,
-      type: "old",
-      pageNum: pageNum,
-    },
-  });
-  return res;
+  try {
+    let res = await wx.cloud.callFunction({
+      name: "get_order_shop",
+      data: {
+        shopId: shopId,
+        type: "old",
+        pageNum: pageNum,
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log("error", error);
+    showModal("错误", "请检查网络状态后重试");
+    return false
+  } finally {}
 }
 
 // 获取未完成的订单
 export async function getUncompleteOrderCloud(shopId) {
-  let res = await wx.cloud.callFunction({
-    name: "get_order_shop",
-    data: {
-      shopId: shopId,
-      type: "uncomplete",
-    },
-  });
-  return res;
+  try {
+    let res = await wx.cloud.callFunction({
+      name: "get_order_shop",
+      data: {
+        shopId: shopId,
+        type: "uncomplete",
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log("error", error);
+    showModal("错误", "请检查网络状态后重试");
+    return false
+  } finally {}
 }
 
 //取消订单
@@ -51,15 +69,21 @@ export async function cancelOrderCloud(orderId, cancelReason) {
   let updateInfo = {
     orderId: orderId,
     updateType: -1,
-    cancelReason: cancelReason,
+    cancelReason: cancelReason
   };
-  const res = await wx.cloud.callFunction({
-    name: "update_shop_order_status",
-    data: {
-      updateInfo: updateInfo,
-    },
-  });
-  return res;
+  try {
+    const res = await wx.cloud.callFunction({
+      name: "update_shop_order_status",
+      data: {
+        updateInfo: updateInfo,
+      },
+    });
+    return res
+  } catch (error) {
+    console.log("error", error);
+    showModal("错误", "请检查网络状态后重试");
+    return false
+  } finally {}
 }
 
 //商家接单
@@ -75,32 +99,39 @@ export async function acceptOrderCloud(orderId, openid) {
     updateType: 1,
   };
 
-  const res = await wx.cloud.callFunction({
-    name: "update_shop_order_status",
-    data: {
-      updateInfo: updateInfo,
-    },
-  });
-  console.log("云函数返回", res);
-
-  if (res.result) {
-    console.log("accept res", res);
-
-    await wx.cloud.callFunction({
-      name: "send_user_message",
+  try {
+    const res = await wx.cloud.callFunction({
+      name: "update_shop_order_status",
       data: {
-        openid: openid,
-        orderId: orderId,
-        shopName: app.globalData.shopInfo.shopName,
-        phoneNumber: app.globalData.shopInfo.shopPhoneNumber,
-        handleTimeStr: toTimeStr(res.result.handleTime),
-        action: "sendAcceptMessage",
+        updateInfo: updateInfo,
       },
     });
-  } else {
-    showModal("操作失败", "该订单已被顾客取消");
-  }
-  return res;
+    console.log("云函数返回", res);
+
+    if (res.result) {
+      console.log("accept res", res);
+
+
+      await wx.cloud.callFunction({
+        name: "send_user_message",
+        data: {
+          openid: openid,
+          orderId: orderId,
+          shopName: app.globalData.shopInfo.shopName,
+          phoneNumber: app.globalData.shopInfo.shopPhoneNumber,
+          handleTimeStr: toTimeStr(res.result.handleTime),
+          action: "sendAcceptMessage",
+        },
+      });
+    } else {
+      showModal("操作失败", "该订单已被顾客取消")
+    }
+    return res
+  } catch (error) {
+    console.log("error", error);
+    showModal("错误", "请检查网络状态后重试");
+    return false
+  } finally {}
 }
 
 //商家完成捡货并开始配送
@@ -113,24 +144,31 @@ export async function deliverOrderCloud(orderId, openid) {
     orderId: orderId,
     updateType: 2,
   };
-  const res = await wx.cloud.callFunction({
-    name: "update_shop_order_status",
-    data: {
-      updateInfo: updateInfo,
-    },
-  });
-  if (res.result) {
-    await wx.cloud.callFunction({
-      name: "send_user_message",
+
+  try {
+    const res = await wx.cloud.callFunction({
+      name: "update_shop_order_status",
       data: {
-        openid: openid,
-        orderId: orderId,
-        deliverTimeStr: toTimeStr(res.result.deliverTime),
-        action: "sendFinishPickGoodsMessage",
+        updateInfo: updateInfo,
       },
     });
-  }
-  return res;
+    if (res.result) {
+      await wx.cloud.callFunction({
+        name: "send_user_message",
+        data: {
+          openid: openid,
+          orderId: orderId,
+          deliverTimeStr: toTimeStr(res.result.deliverTime),
+          action: "sendFinishPickGoodsMessage",
+        },
+      });
+    }
+    return res
+  } catch (error) {
+    console.log("error", error);
+    showModal("错误", "请检查网络状态后重试");
+    return false
+  } finally {}
 }
 
 //订单已送达
@@ -143,24 +181,30 @@ export async function completeOrderCloud(orderId, openid) {
     orderId: orderId,
     updateType: 3,
   };
-  const res = await wx.cloud.callFunction({
-    name: "update_shop_order_status",
-    data: {
-      updateInfo: updateInfo,
-    },
-  });
-  if (res.result) {
-    await wx.cloud.callFunction({
-      name: "send_user_message",
+  try {
+    const res = await wx.cloud.callFunction({
+      name: "update_shop_order_status",
       data: {
-        openid: openid,
-        orderId: orderId,
-        completeTimeStr: toTimeStr(res.result.completeTime),
-        action: "sendArrivedMessage",
+        updateInfo: updateInfo,
       },
     });
-  }
-  return res;
+    if (res.result) {
+      await wx.cloud.callFunction({
+        name: "send_user_message",
+        data: {
+          openid: openid,
+          orderId: orderId,
+          completeTimeStr: toTimeStr(res.result.completeTime),
+          action: "sendArrivedMessage",
+        },
+      });
+    }
+    return res
+  } catch (error) {
+    console.log("error", error);
+    showModal("错误", "请检查网络状态后重试");
+    return false
+  } finally {}
 }
 
 //开始监听新订单
