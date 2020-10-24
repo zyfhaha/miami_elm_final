@@ -4,7 +4,6 @@ import {
   updateGoodsCateOrder,
   updateGoodsCateInfoCloud,
 } from "../../../lib/category/operation.js";
-import { CanI } from "../../../lib/accessControl/operation.js";
 import {
   showToast,
   showModal,
@@ -130,10 +129,6 @@ Page({
   },
 
   async tabSort() {
-    if (!(await CanI("goods"))) {
-      console.log("无操作权限");
-      return;
-    }
     this.setData({
       editable: true,
     });
@@ -415,7 +410,7 @@ Page({
   onLoad(option) {
     this.drag = this.selectComponent("#drag");
     console.log(option);
-    this.shopInfo.shopId = app.globalData.shopInfo.shopId;
+    this.shopInfo.shopId = option.shopId;
 
 
     // 从上一个页面获取商品类别信息

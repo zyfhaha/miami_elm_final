@@ -32,42 +32,7 @@ Component({
         phoneNumber: "7865412369",
 
         // 购买物品
-        validGoods: [
-          {
-            goodsId: 123456789,
-            goodsName: "短名字商品",
-            num: 1,
-            goodsPrice: 1,
-            goodsPicUrl:
-              "https://hannatiger.com/wp-content/uploads/2020/06/bourbon-every-buger-cookies.jpg",
-          },
-          {
-            goodsId: 123312529,
-            goodsName:
-              "名字中等长名字中等长名字中等长名字中等长名字中等长名字中等长名字中等长",
-            num: 99,
-            goodsPrice: 99,
-            goodsPicUrl:
-              "https://hannatiger.com/wp-content/uploads/2020/06/丰科Finc蟹味菇BrownBeechMushroom150g.jpg",
-          },
-          {
-            goodsId: 123321239,
-            goodsName:
-              "名字超长的商品名字超长的商品名字超长的商品名字超长的商品名字超长的商品名字超长的商品名字超长的商品名字超长的商品名字超长的商品名字超长的商品名字超长的商品",
-            num: 9999,
-            goodsPrice: 9999,
-            goodsPicUrl:
-              "https://hannatiger.com/wp-content/uploads/2020/06/Edit-剁椒排骨袋1.jpg",
-          },
-          {
-            goodsId: 321312529,
-            goodsName: "饭扫光FSG/香脆金针菇/Szchuan Pepper Pickles/380g",
-            num: 3,
-            goodsPrice: 12,
-            goodsPicUrl:
-              "https://hannatiger.com/wp-content/uploads/2020/07/芋头.jpg",
-          },
-        ],
+        validGoods: [],
 
         // 运费
         deliverFee: 2.99,

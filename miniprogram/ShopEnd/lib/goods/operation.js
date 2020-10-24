@@ -362,7 +362,12 @@ async function enableSaleCloud(goodsInfo) {
     return;
   }
   if (goodsInfo.goodsStock === 0) {
-    await showModal("库存为0 无法上架");
+    await showModal("错误","库存为0 无法上架");
+    return;
+  }
+
+  if (goodsInfo.goodsStock < goodsInfo.goodsBuyLeastLimit) {
+    await showModal("错误","库存少于最少起购量 无法上架");
     return;
   }
 

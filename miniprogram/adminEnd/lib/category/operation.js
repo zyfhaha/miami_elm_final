@@ -11,9 +11,9 @@ const db = wx.cloud.database({
   env: "env-miamielm-p3buy",
 });
 // 这里只获取shop和goodsCate的索引 goods通过云函数获得
-const shopRef = db.collection("shop");
-const goodsRef = db.collection("goods");
-const goodsCateRef = db.collection("goodsCate");
+const ugShopRef = db.collection("ugShop");
+const ugGoodsRef = db.collection("ugGoods");
+const ugGoodsCateRef = db.collection("ugGoodsCate");
 let app=getApp();
 
 /**
@@ -22,15 +22,11 @@ let app=getApp();
  * @param {*object} cateInfo 类别信息 至少需要包含cateName以及cateOrder
  */
 async function addGoodsCateCloud(shopInfo, cateInfo) {
-  if(!await CanI("goods")){
-    console.log("无操作权限");
-    return
-  }
   // TODO 判断请求是否成功需要有一个健壮的方法
 
   // 每个商店最多可以建100个类 这里需要检查当前的商店是否有100个类
   await showLoading("保存中");
-  const cateNumRes = await goodsCateRef.where({
+  const cateNumRes = await ugGoodsCateRef.where({
     shopId:shopInfo.shopId,
     isExist:true
   }).count()
@@ -51,7 +47,7 @@ async function addGoodsCateCloud(shopInfo, cateInfo) {
   };
 
   console.log("新建分类中");
-  const res = await goodsCateRef.add({
+  const res = await ugGoodsCateRef.add({
     data: { ...newCate },
   });
   await hideLoading();
@@ -65,12 +61,8 @@ async function addGoodsCateCloud(shopInfo, cateInfo) {
  * @param {*object} cateInfo 要修改的类别信息 必须含有cateId属性
  */
 async function updateGoodsCateInfoCloud(shopInfo, cateInfo){
-  if(!await CanI("goods")){
-    console.log("无操作权限");
-    return
-  }
   await showLoading("保存中");
-  const res = await goodsCateRef.where({
+  const res = await ugGoodsCateRef.where({
     cateId:cateInfo.cateId
   })
   .update({
@@ -88,29 +80,33 @@ async function updateGoodsCateInfoCloud(shopInfo, cateInfo){
  * @param catesList 一个对象数组，包含需要修改的所有分类排序信息
  */
 async function updateGoodsCateOrder(catesList){
-  if(!await CanI("goods")){
-    console.log("无操作权限");
-    return
-  }
   console.log("正在更新排序信息");
   
-  await showLoading("正在保存")
   console.log("更改信息",catesList);
-  // TODO 更新代码
-  /**
-   * TODO 权限识别 有没有权限更新order
-   * 
-   * 对返回结果进行判断 如果修改成功则return updateRes 否则 return （空）
-   */
-  const updateRes = await wx.cloud.callFunction({
-    name:"update_cates_order",
-    data:{
-      catesList: catesList
-    }
-  })
-  await hideLoading()
-  console.log("排序保存完成",updateRes);
-  return updateRes;
+
+  const tasks = []//记录所有的promise到一个数组
+  for(let i=0;i<catesList.length;i++){
+    const promise = ugGoodsCateRef.where({
+      cateId:catesList[i].cateId
+    })
+    .update({
+      data:{
+        ...catesList[i]
+      }
+    })
+    tasks.push(promise)
+  }
+  try {
+    await showLoading("正在保存")
+    const updateRes = await Promise.all(tasks)
+    console.log("排序保存完成",updateRes);
+    return updateRes
+  } catch (error) {
+    console.log(error);
+    return false
+  }finally{
+    await hideLoading()
+  }
   
 }
 
@@ -121,14 +117,10 @@ async function updateGoodsCateOrder(catesList){
  * @param {*object} cateInfo 类别信息 至少需要包含cateId
  */
 async function removeGoodsCateCloud(shopInfo, cateInfo) {
-  if(!await CanI("goods")){
-    console.log("无操作权限");
-    return
-  }
   console.log(cateInfo);
   
   // 第一个任务 虚拟删除商品类
-  const task1 = goodsCateRef
+  const task1 = ugGoodsCateRef
     .where({
       cateId: cateInfo.cateId,
     })
@@ -138,7 +130,7 @@ async function removeGoodsCateCloud(shopInfo, cateInfo) {
     }});
 
   // 第二个任务 虚拟删除该类下的商品
-  const task2 = goodsRef
+  const task2 = ugGoodsRef
     .where({
       cateId: cateInfo.cateId,
     })

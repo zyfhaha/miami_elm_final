@@ -83,7 +83,7 @@ async function reduceGoodsStock(orderInfo) {
   const validGoods = orderInfo.validGoods;
   let tasks = [];
   for (let i = 0; i < validGoods.length; i++) {
-    let goodsAvailable = validGoods[i].goodsStock - validGoods[i].num > 0
+    let goodsAvailable = validGoods[i].goodsStock - validGoods[i].num > validGoods[i].goodsBuyLeastLimit
     let temp = goodsRef
       .where({
         goodsId: validGoods[i].goodsId,

@@ -1,15 +1,15 @@
 import { showLoading, hideLoading, showModal } from "../../../utils/asyncWX.js";
-import {
-  enableSaleCloud,
-  disableSaleCloud,
-} from "../../../lib/goods/operation.js";
+// import {
+//   enableSaleCloud,
+//   disableSaleCloud,
+// } from "../../../lib/goods/operation.js";
 // 初始化云环境
 const db = wx.cloud.database({
   env: "env-miamielm-p3buy",
 });
 // 这里只获取shop和goodsCate的索引 goods通过云函数获得
-const shopRef = db.collection("shop");
-const goodsRef = db.collection("goods");
+const ugShopRef = db.collection("ugShop");
+const ugGoodsRef = db.collection("ugGoods");
 const refreshFlag = false;
 
 let app = getApp();
@@ -32,96 +32,93 @@ Page({
   onTapCategoryManage: function () {
     wx.navigateTo({
       url:
-        "../categoryManage/categoryManage"
+        "../ugCateManage/ugCateManage?shopId="+this.shopId
     });
   },
 
-  async onTapSortAndBatch() {
-    if(this.data.rightContent.length === 0){
-      await showModal("提示","当前分类还没有商品哦~")
-      return
-    }
-    wx.navigateTo({
-      url: "../sortAndBatch/sortAndBatch",
-    });
-  },
+  // async onTapSortAndBatch() {
+  //   if(this.data.rightContent.length === 0){
+  //     await showModal("提示","当前分类还没有商品哦~")
+  //     return
+  //   }
+  //   wx.navigateTo({
+  //     url: "../sortAndBatch/sortAndBatch",
+  //   });
+  // },
   onTapAddGoods: function () {
-    let {cateId,cateName} = this.cates[this.data.currentIndex];
-    let goodsOrder = 65536;
-    if (this.data.rightContent.length != 0) {
-      goodsOrder = this.data.rightContent[0].goodsOrder / 2;
-    }
-    let catesInfo = JSON.stringify({
-      shopId: this.shopId,
-      goodsOrder: goodsOrder,
-    });
 
     wx.navigateTo({
-      url: "../addGoods/addGoods?catesInfo=" + catesInfo,
-      success: (result) => {
-        // TODO
-      },
-      fail: () => {}, // TODO
-      complete: () => {}, // TODO
+      url: "../censorUgGoods/censorUgGoods",
     });
 
   },
 
   // 点击上架商品
-  async tabUpload(e) {
-    let index = e.currentTarget.dataset.index;
-    let rightContent = this.data.rightContent;
+  // async tabUpload(e) {
+  //   let index = e.currentTarget.dataset.index;
+  //   let rightContent = this.data.rightContent;
 
-    const goodsInfo = rightContent[index];
-    const res = await enableSaleCloud(goodsInfo);
+  //   const goodsInfo = rightContent[index];
+  //   const res = await enableSaleCloud(goodsInfo);
 
-    if (res) {
-      rightContent[index].goodsAvailable = true;
-      this.setData({
-        rightContent,
-      });
-    }
-  },
+  //   if (res) {
+  //     rightContent[index].goodsAvailable = true;
+  //     this.setData({
+  //       rightContent,
+  //     });
+  //   }
+  // },
 
   // 点击下架商品
-  async tabRemove(e) {
-    let index = e.currentTarget.dataset.index;
-    let rightContent = this.data.rightContent;
-    const goodsInfo = rightContent[index];
-    const res = await disableSaleCloud(goodsInfo);
+  // async tabRemove(e) {
+  //   let index = e.currentTarget.dataset.index;
+  //   let rightContent = this.data.rightContent;
+  //   const goodsInfo = rightContent[index];
+  //   const res = await disableSaleCloud(goodsInfo);
 
-    if (res) {
-      rightContent[index].goodsAvailable = false;
-      this.setData({
-        rightContent,
-      });
-    }
-  },
+  //   if (res) {
+  //     rightContent[index].goodsAvailable = false;
+  //     this.setData({
+  //       rightContent,
+  //     });
+  //   }
+  // },
 
   // 获取分类数据
-  async getShopDetail() {
+  async getShopDetail(shopId) {
+    // 首先获取商店信息详情
+    const res1 = await ugShopRef
+      .where({
+        shopId: shopId,
+      })
+      .field({
+        shopId: true,
+        shopName: true,
+        minConsumption: true,
+      })
+      .get();
+
+    this.shopInfo = res1.data[0]; //小程序端调用数据库返回的数据即便只有一条也是封装在数组中的
+    
+    // 获取商店的商品数据
     let res2 = await wx.cloud.callFunction({
-      name: "get_shop_goods",
+      name: "get_shop_ugGoods",
       data: {
-        shopId: this.shopId,
+        shopId: shopId,
+        requireType: "all",
       },
     });
     const { allGoods } = res2.result;
-    // console.log("allGoods",allGoods)
+    console.log("allGoods", allGoods);
 
     let cates = allGoods;
     this.cates = cates;
     //======================
 
     // 构造左侧的大菜单数据
-    //console.log('cates:',cates);
-
     let leftMenuList = cates.map((v) => {return {cateId: v.cateId, cateName:v.cateName, cateOrder:v.cateOrder}});
     // 构造右侧的商品数据
-    let index = this.data.currentIndex;
-
-    let rightContent = (cates[index] || []).goods || [];
-
+    let rightContent = cates[0].goods;
     // 给页面数据赋值
     this.setData({
       leftMenuList,
@@ -152,17 +149,14 @@ Page({
     let { index } = e.currentTarget.dataset;
 
     // 准备要传递给商品详情页面的数据
-    let goodsInfo = JSON.stringify({
-      ...this.data.rightContent[index],
-    });
-
+    let shopInfo = encodeURIComponent(JSON.stringify({ ...this.shopInfo }));
+    let goodsInfo = encodeURIComponent(
+      JSON.stringify({
+        ...this.data.rightContent[index],
+      })
+    );
     wx.navigateTo({
-      url: "../goodsInfo/goodsInfo?goodsInfo=" + goodsInfo,
-      success: (result) => {
-        // TODO
-      },
-      fail: () => {}, // TODO
-      complete: () => {}, // TODO
+      url: "../ugGoodsInfo/ugGoodsInfo?shopInfo=" + shopInfo + "&goodsInfo=" + goodsInfo,
     });
   },
 
@@ -190,9 +184,9 @@ Page({
       this.refreshFlag = false;
     }
   },
-  async onLoad() {
+  async onLoad(options) {
     console.log("onload");
-    this.shopId = app.globalData.shopInfo.shopId;
+    this.shopId = options.shopId;
     // await showLoading();
     // await this.getShopDetail();
     // await hideLoading();
