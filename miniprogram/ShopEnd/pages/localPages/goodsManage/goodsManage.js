@@ -1,4 +1,8 @@
-import { showLoading, hideLoading, showModal } from "../../../utils/asyncWX.js";
+import {
+  showLoading,
+  hideLoading,
+  showModal
+} from "../../../utils/asyncWX.js";
 import {
   enableSaleCloud,
   disableSaleCloud,
@@ -28,17 +32,16 @@ Page({
   },
   cates: [],
   shopId: "",
-  
+
   onTapCategoryManage: function () {
     wx.navigateTo({
-      url:
-        "../categoryManage/categoryManage"
+      url: "../categoryManage/categoryManage"
     });
   },
 
   async onTapSortAndBatch() {
-    if(this.data.rightContent.length === 0){
-      await showModal("提示","当前分类还没有商品哦~")
+    if (this.data.rightContent.length === 0) {
+      await showModal("提示", "当前分类还没有商品哦~")
       return
     }
     wx.navigateTo({
@@ -46,7 +49,10 @@ Page({
     });
   },
   onTapAddGoods: function () {
-    let {cateId,cateName} = this.cates[this.data.currentIndex];
+    let {
+      cateId,
+      cateName
+    } = this.cates[this.data.currentIndex];
     let goodsOrder = 65536;
     if (this.data.rightContent.length != 0) {
       goodsOrder = this.data.rightContent[0].goodsOrder / 2;
@@ -100,33 +106,47 @@ Page({
 
   // 获取分类数据
   async getShopDetail() {
-    let res2 = await wx.cloud.callFunction({
-      name: "get_shop_goods",
-      data: {
-        shopId: this.shopId,
-      },
-    });
-    const { allGoods } = res2.result;
-    // console.log("allGoods",allGoods)
+    try {
+      let res2 = await wx.cloud.callFunction({
+        name: "get_shop_goods",
+        data: {
+          shopId: this.shopId,
+        },
+      });
+      const {
+        allGoods
+      } = res2.result;
+      // console.log("allGoods",allGoods)
 
-    let cates = allGoods;
-    this.cates = cates;
-    //======================
+      let cates = allGoods;
+      this.cates = cates;
+      //======================
 
-    // 构造左侧的大菜单数据
-    //console.log('cates:',cates);
+      // 构造左侧的大菜单数据
+      //console.log('cates:',cates);
 
-    let leftMenuList = cates.map((v) => {return {cateId: v.cateId, cateName:v.cateName, cateOrder:v.cateOrder}});
-    // 构造右侧的商品数据
-    let index = this.data.currentIndex;
+      let leftMenuList = cates.map((v) => {
+        return {
+          cateId: v.cateId,
+          cateName: v.cateName,
+          cateOrder: v.cateOrder
+        }
+      });
+      // 构造右侧的商品数据
+      let index = this.data.currentIndex;
 
-    let rightContent = (cates[index] || []).goods || [];
+      let rightContent = (cates[index] || []).goods || [];
 
-    // 给页面数据赋值
-    this.setData({
-      leftMenuList,
-      rightContent,
-    });
+      // 给页面数据赋值
+      this.setData({
+        leftMenuList,
+        rightContent,
+      });
+    } catch (error) {
+      console.log("error", error);
+      showModal("错误", "请检查网络状态后重试");
+      return false
+    } finally {}
   },
 
   // 左侧菜单的点击事件
@@ -136,7 +156,9 @@ Page({
     2 给data中的currentIndex赋值就可以了
     3 根据不同的索引来渲染右侧的商品内容
      */
-    const { index } = e.currentTarget.dataset;
+    const {
+      index
+    } = e.currentTarget.dataset;
 
     let rightContent = this.cates[index].goods;
     this.setData({
@@ -149,7 +171,9 @@ Page({
 
   // 点击商品图片跳转到商品详情
   handleTapEdit(e) {
-    let { index } = e.currentTarget.dataset;
+    let {
+      index
+    } = e.currentTarget.dataset;
 
     // 准备要传递给商品详情页面的数据
     let goodsInfo = JSON.stringify({
@@ -168,11 +192,15 @@ Page({
 
   // 用户下拉刷新
   async handleRefresh() {
-    this.setData({ refreshFlag: true });
+    this.setData({
+      refreshFlag: true
+    });
     await showLoading();
     await this.getShopDetail();
     await hideLoading();
-    this.setData({ refreshFlag: false });
+    this.setData({
+      refreshFlag: false
+    });
   },
 
   // ======================================================================

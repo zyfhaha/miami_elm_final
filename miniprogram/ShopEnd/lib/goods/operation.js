@@ -161,33 +161,40 @@ async function addGoodsCloud(goodsInfo) {
     return;
   }
 
-  await showLoading("保存中");
+  try {
+    await showLoading("保存中");
 
-  // 给商品信息加上系统属性
-  goodsInfo["isExist"] = true;
-  goodsInfo["goodsId"] = getId();
-  goodsInfo["goodsAvailable"] = goodsInfo.goodsStock !== 0;
-  // 将商品图片上传到云端
-  const res = await uploadGoodsPicCloud(goodsInfo);
-  // 拿到图片的实际云存储地址
-  const goodsPicUrlCloud = res.fileID;
-  console.log("上传图片成功");
+    // 给商品信息加上系统属性
+    goodsInfo["isExist"] = true;
+    goodsInfo["goodsId"] = getId();
+    goodsInfo["goodsAvailable"] = goodsInfo.goodsStock !== 0;
+    // 将商品图片上传到云端
+    const res = await uploadGoodsPicCloud(goodsInfo);
+    // 拿到图片的实际云存储地址
+    const goodsPicUrlCloud = res.fileID;
+    console.log("上传图片成功");
 
-  goodsInfo["goodsPicUrl"] = goodsPicUrlCloud;
+    goodsInfo["goodsPicUrl"] = goodsPicUrlCloud;
 
-  console.log("goodsInfo", goodsInfo);
+    console.log("goodsInfo", goodsInfo);
 
-  // 将商品信息上传到云端
-  console.log("正在上传商品信息");
-  const res2 = await goodsRef.add({
-    data: {
-      ...goodsInfo
-    },
-  });
+    // 将商品信息上传到云端
+    console.log("正在上传商品信息");
+    const res2 = await goodsRef.add({
+      data: {
+        ...goodsInfo
+      },
+    });
 
-  await hideLoading();
-  await showModal("保存成功");
-  return res2;
+    await showModal("保存成功");
+    return res2;
+  } catch (error) {
+    console.log("error", error);
+    showModal("错误", "请检查网络状态后重试");
+    return false
+  } finally {
+    hideLoading();
+  }
 }
 
 // 比较两个商品的商品信息是否相同
@@ -273,54 +280,62 @@ async function updateGoodsCloud(goodsInfoNew, goodsInfoOld) {
     return;
   }
 
-  await showLoading("保存中");
+  try {
+    await showLoading("保存中");
 
-  // 检查是否更换了商品图片。如果是则需要重新上传图片到云端
-  const isGoodsPicChange = goodsInfoNew.goodsPicUrl !== goodsInfoOld.goodsPicUrl;
-  if (isGoodsPicChange) {
-    // TODO 删除和上传新的图片要做成一个事务
-    console.log("检测到商品图片发生改变");
+    // 检查是否更换了商品图片。如果是则需要重新上传图片到云端
+    const isGoodsPicChange = goodsInfoNew.goodsPicUrl !== goodsInfoOld.goodsPicUrl;
+    if (isGoodsPicChange) {
+      // TODO 删除和上传新的图片要做成一个事务
+      console.log("检测到商品图片发生改变");
 
-    // 上传新图片
-    // 遇到一个天坑:这里之所以没有直接对旧图进行覆盖写是因为覆盖写之后重新拉取数据依旧展示的是旧图片
-    // 然而图片其实确实被覆盖了，但是有缓存，要一段时间才能改过来。用自己服务器这样上传的话，也有这问题，所以只好重新上传新图片然后再删掉旧图，才可以做到改了以后马上生效
-    const upLoadGoodsPicRes = await wx.cloud.uploadFile({
-      cloudPath: "shopId_" + goodsInfoOld.shopId + "/" + "cateId_" + goodsInfoOld.cateId + "/" + Date.now().toString() + ".jpg",
-      filePath: goodsInfoNew.goodsPicUrl, // 文件路径
-    });
+      // 上传新图片
+      // 遇到一个天坑:这里之所以没有直接对旧图进行覆盖写是因为覆盖写之后重新拉取数据依旧展示的是旧图片
+      // 然而图片其实确实被覆盖了，但是有缓存，要一段时间才能改过来。用自己服务器这样上传的话，也有这问题，所以只好重新上传新图片然后再删掉旧图，才可以做到改了以后马上生效
+      const upLoadGoodsPicRes = await wx.cloud.uploadFile({
+        cloudPath: "shopId_" + goodsInfoOld.shopId + "/" + "cateId_" + goodsInfoOld.cateId + "/" + Date.now().toString() + ".jpg",
+        filePath: goodsInfoNew.goodsPicUrl, // 文件路径
+      });
 
-    // 拿到图片的实际云存储地址 更新goodsInfoNew中的图片地址为云文件地址
-    console.log("上传新图片成功");
-    const goodsPicUrlCloud = upLoadGoodsPicRes.fileID;
-    goodsInfoNew["goodsPicUrl"] = goodsPicUrlCloud;
+      // 拿到图片的实际云存储地址 更新goodsInfoNew中的图片地址为云文件地址
+      console.log("上传新图片成功");
+      const goodsPicUrlCloud = upLoadGoodsPicRes.fileID;
+      goodsInfoNew["goodsPicUrl"] = goodsPicUrlCloud;
+    }
+
+    // TODO 将商品信息上传到云端  也是需要解决事务问题
+    console.log("正在上传商品信息");
+    goodsInfoNew["goodsAvailable"] = goodsInfoNew.goodsStock !== 0;
+    console.log("goodsInfoNew", goodsInfoNew);
+    const upLoadNewGoodsInfoRes = await goodsRef
+      .where({
+        goodsId: goodsInfoOld.goodsId,
+      })
+      .update({
+        data: {
+          ...goodsInfoNew
+        },
+      });
+
+    // 如果图片改过了 则将原图删除
+    if (isGoodsPicChange) {
+      // 删除原来的商品图片
+      const deleteOldGoodsPicRes = await wx.cloud.deleteFile({
+        fileList: [goodsInfoOld.goodsPicUrl],
+      });
+      console.log("删除并上传结果", deleteOldGoodsPicRes);
+    }
+
+    await showModal("保存成功");
+    return upLoadNewGoodsInfoRes;
+  } catch (error) {
+    console.log("error", error);
+    showModal("错误", "请检查网络状态后重试");
+    return false
+  } finally {
+    hideLoading();
   }
 
-  // TODO 将商品信息上传到云端  也是需要解决事务问题
-  console.log("正在上传商品信息");
-  goodsInfoNew["goodsAvailable"] = goodsInfoNew.goodsStock !== 0;
-  console.log("goodsInfoNew", goodsInfoNew);
-  const upLoadNewGoodsInfoRes = await goodsRef
-    .where({
-      goodsId: goodsInfoOld.goodsId,
-    })
-    .update({
-      data: {
-        ...goodsInfoNew
-      },
-    });
-
-  // 如果图片改过了 则将原图删除
-  if (isGoodsPicChange) {
-    // 删除原来的商品图片
-    const deleteOldGoodsPicRes = await wx.cloud.deleteFile({
-      fileList: [goodsInfoOld.goodsPicUrl],
-    });
-    console.log("删除并上传结果", deleteOldGoodsPicRes);
-  }
-
-  await hideLoading();
-  await showModal("保存成功");
-  return upLoadNewGoodsInfoRes;
 }
 
 // 从云端删除单个商品 这里的删除仅仅是虚拟删除
@@ -457,16 +472,23 @@ async function disableSaleCloud(goodsInfo) {
     console.log("无操作权限");
     return;
   }
-  await showLoading("下架中");
-  const res = await goodsRef.where({
-    goodsId: goodsInfo.goodsId
-  }).update({
-    data: {
-      goodsAvailable: false
-    },
-  });
-  await hideLoading();
-  return res;
+  try {
+    await showLoading("下架中");
+    const res = await goodsRef.where({
+      goodsId: goodsInfo.goodsId
+    }).update({
+      data: {
+        goodsAvailable: false
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log("error", error);
+    showModal("错误", "请检查网络状态后重试");
+    return false
+  } finally {
+    hideLoading();
+  }
 }
 
 /**
@@ -474,20 +496,27 @@ async function disableSaleCloud(goodsInfo) {
  * @param goodsInfoList 一个对象数组，每个对象至少需要含有goodsId和goodsOrder
  */
 async function reSortGoods(goodsInfoList) {
-  await showLoading("保存中");
-  goodsInfoList.forEach((v) => {
-    goodsRef
-      .where({
-        goodsId: v.goodsId,
-      })
-      .update({
-        data: {
-          goodsOrder: v.goodsOrder,
-        },
-      });
-  });
-  await hideLoading();
-  return res;
+  try {
+    await showLoading("保存中");
+    goodsInfoList.forEach((v) => {
+      goodsRef
+        .where({
+          goodsId: v.goodsId,
+        })
+        .update({
+          data: {
+            goodsOrder: v.goodsOrder,
+          },
+        });
+    });
+    return res;
+  } catch (error) {
+    console.log("error", error);
+    showModal("错误", "请检查网络状态后重试");
+    return false
+  } finally {
+    hideLoading();
+  }
 }
 
 /**
@@ -501,23 +530,25 @@ async function updateGoodsOrder(goodsList) {
   }
   console.log("正在更新排序信息");
 
-  await showLoading("正在保存");
-  console.log("更改信息", goodsList);
-  // TODO 更新代码
-  /**
-   * TODO 权限识别 有没有权限更新order
-   *
-   * 对返回结果进行判断 如果修改成功则return updateRes 否则 return （空）
-   */
-  const updateRes = await wx.cloud.callFunction({
-    name: "update_goods_order",
-    data: {
-      goodsList: goodsList,
-    },
-  });
-  await hideLoading();
-  console.log("排序保存完成", updateRes);
-  return updateRes;
+  try {
+    await showLoading("正在保存");
+    console.log("更改信息", goodsList);
+    const updateRes = await wx.cloud.callFunction({
+      name: "update_goods_order",
+      data: {
+        goodsList: goodsList,
+      },
+    });
+    console.log("排序保存完成", updateRes);
+    return updateRes;
+  } catch (error) {
+    console.log("error", error);
+    showModal("错误", "请检查网络状态后重试");
+    return false
+  } finally {
+    hideLoading();
+  }
+
 }
 
 export {

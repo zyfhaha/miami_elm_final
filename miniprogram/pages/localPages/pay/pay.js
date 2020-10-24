@@ -1,6 +1,25 @@
-import { getShopCart, removeShopCart, removeGoods, clearShopCart, changeGoodsNum } from "../../../lib/cart/operation.js";
-import { showLoading, hideLoading, showModal, showToast, requestSubscribeMessage, openSetting, isConnected } from "../../../utils/asyncWX.js";
-import { isReceiveTimeValid, getReceiveTimeGroup, verifyOrderInfo, placeOrderCloud } from "../../../lib/pay/operation.js";
+import {
+  getShopCart,
+  removeShopCart,
+  removeGoods,
+  clearShopCart,
+  changeGoodsNum
+} from "../../../lib/cart/operation.js";
+import {
+  showLoading,
+  hideLoading,
+  showModal,
+  showToast,
+  requestSubscribeMessage,
+  openSetting,
+  isConnected
+} from "../../../utils/asyncWX.js";
+import {
+  isReceiveTimeValid,
+  getReceiveTimeGroup,
+  verifyOrderInfo,
+  placeOrderCloud
+} from "../../../lib/pay/operation.js";
 
 let app = getApp();
 
@@ -17,7 +36,11 @@ Page({
     preOrderInfo: {},
 
     /*******  选择预定送达时间用到的页面数据  *******/
-    tabs: [{ title: "今天" }, { title: "明天" }], // 可以选择的tab
+    tabs: [{
+      title: "今天"
+    }, {
+      title: "明天"
+    }], // 可以选择的tab
     activeTab: 0, // 默认的被选中的tab索引
     // 预定收货时间
     receiveTimeGroup: [],
@@ -39,7 +62,10 @@ Page({
 
   // 生成预定收货时间选项
   setReceiveTimeGroup(shopInfo) {
-    let { cutOrderTime, deliverTimeList } = shopInfo;
+    let {
+      cutOrderTime,
+      deliverTimeList
+    } = shopInfo;
 
     let nowTimeStamp = new Date().getTime();
     let tomorrTimeStamp = nowTimeStamp + 1 * 24 * 60 * 60 * 1000;
@@ -54,9 +80,16 @@ Page({
     let tomorrMonth = tomorrow.getMonth() + 1;
     let tomorrDay = tomorrow.getDate();
 
-    let tabs = [{ title: ["今天 ", nowMonth, "月", nowDay, "日"].join("") }, { title: ["明天 ", tomorrMonth, "月", tomorrDay, "日"].join("") }];
+    let tabs = [{
+      title: ["今天 ", nowMonth, "月", nowDay, "日"].join("")
+    }, {
+      title: ["明天 ", tomorrMonth, "月", tomorrDay, "日"].join("")
+    }];
     let receiveTimeGroup = getReceiveTimeGroup(deliverTimeList, cutOrderTime);
-    this.setData({ tabs, receiveTimeGroup });
+    this.setData({
+      tabs,
+      receiveTimeGroup
+    });
   },
 
   // 点击展开选择送到时间actionsheet
@@ -68,19 +101,25 @@ Page({
   // 点击选择 “今天”或者“明天”的tab
   onTabCLick(e) {
     const index = e.detail.index;
-    this.setData({ activeTab: index });
+    this.setData({
+      activeTab: index
+    });
   },
 
   // 滑动选择 “今天”或者“明天”的tab
   onChange(e) {
     const index = e.detail.index;
-    this.setData({ activeTab: index });
+    this.setData({
+      activeTab: index
+    });
   },
 
   // 用户要选择收货时间
   handleSelReceiveTime(e) {
     const receiveTime = e.currentTarget.dataset.timestamp;
-    this.setData({ receiveTime });
+    this.setData({
+      receiveTime
+    });
     this.closeReceiveTimePicker();
   },
 
@@ -93,7 +132,12 @@ Page({
   // 打扫购物车--将购物车中的invalid unAvailable goods删掉 并将缺货商品的购买量改为当前库存量
   cleanShopCart(preOrderInfo) {
     console.log("开始清理");
-    let { inValidGoods, unAvailableGoods, shortOfStockGoods, shopId } = preOrderInfo;
+    let {
+      inValidGoods,
+      unAvailableGoods,
+      shortOfStockGoods,
+      shopId
+    } = preOrderInfo;
     let shopCart = getShopCart(shopId);
 
     console.log("inValidGoods", inValidGoods);
@@ -200,45 +244,58 @@ Page({
     }
 
     // 下预订单
-    await showLoading();
-    const res = await wx.cloud.callFunction({
-      name: "make_pre_order",
-      data: { shopCart: shopCart },
-    });
-    await hideLoading();
-
-    console.log("res", res);
-    const errCode = res.result.errCode;
-    console.log("errCode", errCode);
-
-    // 商店已经不在平台
-    if (errCode === 100) {
-      await showModal("该商店已不存在");
-      removeShopCart(shopId);
-      wx.navigateBack({
-        delta: 1,
+    try {
+      await showLoading();
+      const res = await wx.cloud.callFunction({
+        name: "make_pre_order",
+        data: {
+          shopCart: shopCart
+        },
       });
-      return;
-    }
+      console.log("res", res);
+      const errCode = res.result.errCode;
+      console.log("errCode", errCode);
 
-    // 说明商店在平台 但是现在不营业
-    if (errCode === 101) {
-      await showModal("商店暂停接单");
-      wx.navigateBack({
-        delta: 1,
-      });
-      return;
-    }
+      // 商店已经不在平台
+      if (errCode === 100) {
+        await showModal("该商店已不存在");
+        removeShopCart(shopId);
+        wx.navigateBack({
+          delta: 1,
+        });
+        return;
+      }
 
-    // 商店在平台 现在也营业 可以接单
-    if (errCode === 200) {
-      const { preOrderInfo, shopInfo } = res.result;
-      this.shopInfo = shopInfo;
-      this.preOrderInfo = preOrderInfo;
-      console.log("preOrderInfo", preOrderInfo);
-      this.setData({ preOrderInfo });
-      // 清理购物车
-      this.cleanShopCart(preOrderInfo);
+      // 说明商店在平台 但是现在不营业
+      if (errCode === 101) {
+        await showModal("商店暂停接单");
+        wx.navigateBack({
+          delta: 1,
+        });
+        return;
+      }
+
+      // 商店在平台 现在也营业 可以接单
+      if (errCode === 200) {
+        const {
+          preOrderInfo,
+          shopInfo
+        } = res.result;
+        this.shopInfo = shopInfo;
+        this.preOrderInfo = preOrderInfo;
+        console.log("preOrderInfo", preOrderInfo);
+        this.setData({
+          preOrderInfo
+        });
+        // 清理购物车
+        this.cleanShopCart(preOrderInfo);
+      }
+    } catch (error) {
+      console.log("error", error);
+      showModal("错误", "请检查网络状态后重试");
+      return false
+    } finally {
+      hideLoading();
     }
   },
 
