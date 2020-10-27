@@ -120,7 +120,7 @@ Page({
     // 构造左侧的大菜单数据
     let leftMenuList = cates.map((v) => v.cateName);
     // 构造右侧的商品数据
-    let rightContent = cates[0].goods;
+    let rightContent = cates[this.data.currentIndex].goods;
     // 给页面数据赋值
     this.setData({
       leftMenuList,
