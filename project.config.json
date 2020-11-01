@@ -202,6 +202,12 @@
           "pathName": "adminEnd/pages/localPages/adminPage/adminPage",
           "query": "",
           "scene": null
+        },
+        {
+          "id": -1,
+          "name": "获取用户昵称",
+          "pathName": "ShopEnd/pages/localPages/getUserInfo/getUserInfo",
+          "scene": null
         }
       ]
     }
