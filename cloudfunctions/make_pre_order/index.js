@@ -41,7 +41,7 @@ exports.main = async (event, context) => {
   }
 
   // 2 确认商家现在可以接单
-console.log("Shopstatus:",shopInfo.shopStatus);
+  console.log("Shopstatus:", shopInfo.shopStatus);
 
   if (shopInfo.shopStatus === 0) {
     console.log("无法接单");
@@ -49,8 +49,6 @@ console.log("Shopstatus:",shopInfo.shopStatus);
     return {
       errCode: 101, // 100分为1和00 1只是一个前缀表示错误 01表示商店暂停接单
     };
-    
-    
   }
 
   // 3 从数据库重新获取一遍用户所购买的所有商品
@@ -89,27 +87,40 @@ console.log("Shopstatus:",shopInfo.shopStatus);
   console.log("goodsFromDataBase", goodsFromDataBase);
 
   // 3.1 将有效的商品挑出来
-  /** 注意：用户购买的无效商品一共有以下几种情况
-   *  1 商品已经被删除
-   *  2 商品没有删除但已经下架
-   *  3 商品正上架但是商品购买量大于库存量
+  /** 注意：用户购买的商品一共有以下几种情况 完全无法买的算作无效商品
+   *  1 商品已经被删除 (无效商品)
+   *  2 商品没有删除但已经下架 （无效商品）
+   *  3 商品正上架但是商品购买量大于库存量 (有效商品)
+   *  4 没问题 （有效商品）
+   *
+   * 另外 这里并没有对goodsBuyLeastLimit 和 goodsBuyLimit做检查 后面有空再改
    */
-  let validGoods = []; // 有效的商品
+  let validGoods = []; // 有效商品
   let unAvailableGoods = []; // 已经下架的商品
   let inValidGoods = []; // 已经被删除的商品
   let shortOfStockGoods = []; // 购买量大于库存的商品
 
   for (let i = 0, len = goodsFromDataBase.length; i < len; i++) {
     if (!goodsFromDataBase[i].isExist) {
+      // 已经被删除的商品
       inValidGoods.push(goodsFromDataBase[i]);
       continue;
     }
     if (!goodsFromDataBase[i].goodsAvailable) {
+      // 已经下架的商品
       unAvailableGoods.push(goodsFromDataBase[i]);
       continue;
     }
     if (goodsFromDataBase[i].num > goodsFromDataBase[i].goodsStock) {
+      // 用户欲购买量大于库存量的商品
       shortOfStockGoods.push(goodsFromDataBase[i]);
+
+      // 记录用户欲购买量
+      goodsFromDataBase[i].oldNum = goodsFromDataBase[i].num;
+      // 修改用户欲购买量为最大库存量
+      goodsFromDataBase[i].num = goodsFromDataBase[i].goodsStock;
+      // 存入validGoods数组
+      validGoods.push(goodsFromDataBase[i]);
       continue;
     }
     validGoods.push(goodsFromDataBase[i]);
@@ -128,16 +139,11 @@ console.log("Shopstatus:",shopInfo.shopStatus);
     totalPrice = NP.plus(totalPrice, NP.times(v.goodsPrice, v.num));
     totalNum = NP.plus(totalNum, v.num);
   });
-  // 计算购买量大于库存的商品的总价Stock 商品数量以现有库存量来计算
-  shortOfStockGoods.forEach((v) => {
-    totalPrice = NP.plus(totalPrice, NP.times(v.goodsPrice, v.goodsStock));
-    totalNum = NP.plus(totalNum, v.goodsStock);
-  });
 
   // TODO 总价还要加上配送费
 
   // 计算是否可以下单
-  const isCheckOutActive = totalPrice > shopInfo.minConsumption;
+  const isCheckOutActive = totalPrice >= shopInfo.minConsumption;
 
   // 如果有效商品的价格大于最低起送 则向数据库插入一条预订单
   // 否则直接将核验后订单返回
@@ -146,18 +152,17 @@ console.log("Shopstatus:",shopInfo.shopStatus);
   // 在数据库中生成预订单
   // 现在默认用户点击一次结算就下一个预订单并写入数据库
   // 但假如用户没有买到最低消费 退出结算界面新买东西后再产生预订单 则之前没有买满的订单将永远无法得到修改 成为垃圾记录占据空间
-  const orderId = "520" + (new Date()).getTime().toString() + parseInt(Math.random() * 10000).toString();
-
+  const orderId = "520" + new Date().getTime().toString() + parseInt(Math.random() * 10000).toString();
 
   // 生成订单creatTime
   const createTime = new Date().getTime();
 
   // 4 重新打包购物车数据并返回给前端交由顾客确认
   let preOrderInfo = {
-    _openid:openid,
+    _openid: openid,
     shopId: shopInfo.shopId,
     shopName: shopInfo.shopName,
-    shopPhoneNumber:shopInfo.shopPhoneNumber,
+    shopPhoneNumber: shopInfo.shopPhoneNumber,
     minConsumption: shopInfo.minConsumption,
     isCheckOutActive: isCheckOutActive,
     totalPrice: totalPrice,
@@ -169,23 +174,28 @@ console.log("Shopstatus:",shopInfo.shopStatus);
     orderId: orderId,
     createTime: createTime,
     status: -2,
-    isExist:true
+    isExist: true,
   };
 
   // 如果消费金额大于起送金额则将当前核验单插入数据库成为预订单
-  if(isCheckOutActive){
+  if (isCheckOutActive) {
     console.log("加入预订单");
-    
+
     const resOrder = await orderRef.add({
       data: { ...preOrderInfo },
     });
-    return{
+    return {
       preOrderInfo,
       resOrder,
       shopInfo: shopInfo,
       errCode: 200, // 表示成功
-    }
+    };
+  } else {
+    return {
+      preOrderInfo,
+      resOrder: {},
+      shopInfo: shopInfo,
+      errCode: 102, // 表示检查库存后实际可成交金额小于最小消费额
+    };
   }
-
-  return
 };

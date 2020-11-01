@@ -167,7 +167,7 @@ async function addGoodsCloud(goodsInfo) {
     // 给商品信息加上系统属性
     goodsInfo["isExist"] = true;
     goodsInfo["goodsId"] = getId();
-    goodsInfo["goodsAvailable"] = goodsInfo.goodsStock !== 0;
+    goodsInfo["goodsAvailable"] = goodsInfo.goodsStock >= goodsInfo.goodsBuyLeastLimit;
     // 将商品图片上传到云端
     const res = await uploadGoodsPicCloud(goodsInfo);
     // 拿到图片的实际云存储地址
@@ -305,7 +305,7 @@ async function updateGoodsCloud(goodsInfoNew, goodsInfoOld) {
 
     // TODO 将商品信息上传到云端  也是需要解决事务问题
     console.log("正在上传商品信息");
-    goodsInfoNew["goodsAvailable"] = goodsInfoNew.goodsStock !== 0;
+    goodsInfoNew["goodsAvailable"] = goodsInfoNew.goodsStock >= goodsInfoNew.goodsBuyLeastLimit;
     console.log("goodsInfoNew", goodsInfoNew);
     const upLoadNewGoodsInfoRes = await goodsRef
       .where({

@@ -22,7 +22,6 @@ let app=getApp();
  * @param {*object} cateInfo 类别信息 至少需要包含cateName以及cateOrder
  */
 async function addGoodsCateCloud(shopInfo, cateInfo) {
-  // TODO 判断请求是否成功需要有一个健壮的方法
 
   // 每个商店最多可以建100个类 这里需要检查当前的商店是否有100个类
   await showLoading("保存中");
@@ -32,7 +31,7 @@ async function addGoodsCateCloud(shopInfo, cateInfo) {
   }).count()
 
   const cateNum = cateNumRes.total
-  console.log(cateNum);
+  // console.log(cateNum);
   if(cateNum >= 100){
     await hideLoading()
     await showModal("分类数量不能超过100个")
@@ -46,12 +45,12 @@ async function addGoodsCateCloud(shopInfo, cateInfo) {
     cateId: getId(),
   };
 
-  console.log("新建分类中");
+  // console.log("新建分类中");
   const res = await ugGoodsCateRef.add({
     data: { ...newCate },
   });
   await hideLoading();
-  console.log("新建分类结束", res);
+  // console.log("新建分类结束", res);
   return res;
 }
 
@@ -80,9 +79,9 @@ async function updateGoodsCateInfoCloud(shopInfo, cateInfo){
  * @param catesList 一个对象数组，包含需要修改的所有分类排序信息
  */
 async function updateGoodsCateOrder(catesList){
-  console.log("正在更新排序信息");
+  // console.log("正在更新排序信息");
   
-  console.log("更改信息",catesList);
+  // console.log("更改信息",catesList);
 
   const tasks = []//记录所有的promise到一个数组
   for(let i=0;i<catesList.length;i++){
@@ -99,10 +98,10 @@ async function updateGoodsCateOrder(catesList){
   try {
     await showLoading("正在保存")
     const updateRes = await Promise.all(tasks)
-    console.log("排序保存完成",updateRes);
+    // console.log("排序保存完成",updateRes);
     return updateRes
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return false
   }finally{
     await hideLoading()

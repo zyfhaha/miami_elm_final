@@ -18,12 +18,10 @@ exports.main = async (event, context) => {
   switch (type) {
     case "uncomplete":
       return getUncompleteOrder(openid);
-    default:
     case "complete":
       return getCompleteOrder(openid, pageNum);
     case "any":
       return getAnyOrder(orderId);
-      break;
   }
 };
 
@@ -34,8 +32,7 @@ async function getUncompleteOrder(openid) {
       status: _.or([_.eq(0), _.eq(1), _.eq(2)]),
       isExist: true,
     })
-    .orderBy("selDeliverTime", "desc")
-    .orderBy("payTime", "desc")
+    .orderBy("createTime", "desc")
     .field({
       _id: false,
       _openid: false,

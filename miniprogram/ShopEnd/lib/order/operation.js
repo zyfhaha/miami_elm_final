@@ -19,8 +19,9 @@ export async function getRecentOrderCloud(shopId, pageNum) {
   } catch (error) {
     console.log("error", error);
     showModal("错误", "请检查网络状态后重试");
-    return false
-  } finally {}
+    return false;
+  } finally {
+  }
 }
 
 // 获取一周前的订单
@@ -38,8 +39,9 @@ export async function getOldOrderCloud(shopId, pageNum) {
   } catch (error) {
     console.log("error", error);
     showModal("错误", "请检查网络状态后重试");
-    return false
-  } finally {}
+    return false;
+  } finally {
+  }
 }
 
 // 获取未完成的订单
@@ -56,8 +58,9 @@ export async function getUncompleteOrderCloud(shopId) {
   } catch (error) {
     console.log("error", error);
     showModal("错误", "请检查网络状态后重试");
-    return false
-  } finally {}
+    return false;
+  } finally {
+  }
 }
 
 //取消订单
@@ -69,7 +72,7 @@ export async function cancelOrderCloud(orderId, cancelReason) {
   let updateInfo = {
     orderId: orderId,
     updateType: -1,
-    cancelReason: cancelReason
+    cancelReason: cancelReason,
   };
   try {
     const res = await wx.cloud.callFunction({
@@ -78,12 +81,13 @@ export async function cancelOrderCloud(orderId, cancelReason) {
         updateInfo: updateInfo,
       },
     });
-    return res
+    return res;
   } catch (error) {
     console.log("error", error);
     showModal("错误", "请检查网络状态后重试");
-    return false
-  } finally {}
+    return false;
+  } finally {
+  }
 }
 
 //商家接单
@@ -111,7 +115,6 @@ export async function acceptOrderCloud(orderId, openid) {
     if (res.result) {
       console.log("accept res", res);
 
-
       await wx.cloud.callFunction({
         name: "send_user_message",
         data: {
@@ -124,14 +127,15 @@ export async function acceptOrderCloud(orderId, openid) {
         },
       });
     } else {
-      showModal("操作失败", "该订单已被顾客取消")
+      showModal("操作失败", "该订单已被顾客取消");
     }
-    return res
+    return res;
   } catch (error) {
     console.log("error", error);
     showModal("错误", "请检查网络状态后重试");
-    return false
-  } finally {}
+    return false;
+  } finally {
+  }
 }
 
 //商家完成捡货并开始配送
@@ -163,12 +167,13 @@ export async function deliverOrderCloud(orderId, openid) {
         },
       });
     }
-    return res
+    return res;
   } catch (error) {
     console.log("error", error);
     showModal("错误", "请检查网络状态后重试");
-    return false
-  } finally {}
+    return false;
+  } finally {
+  }
 }
 
 //订单已送达
@@ -199,17 +204,17 @@ export async function completeOrderCloud(orderId, openid) {
         },
       });
     }
-    return res
+    return res;
   } catch (error) {
     console.log("error", error);
     showModal("错误", "请检查网络状态后重试");
-    return false
-  } finally {}
+    return false;
+  } finally {
+  }
 }
 
 //开始监听新订单
 export async function startWatchOrder(user2shop) {
-  console.log("startWatchOrder(user2shop)");
 
   let accessInfo = {
     access: user2shop.access, // 用户的权限
@@ -249,7 +254,6 @@ export async function startWatchOrder(user2shop) {
             curPage.setData({ newOrder: newOrder });
           } else {
             // 用户当前不在orderProcess页面
-            app.globalData.refreshFlag.orderProcess = true;
             app.globalData.refreshFlag.showDot = true;
           }
         }
@@ -262,12 +266,11 @@ export async function startWatchOrder(user2shop) {
         if (curPage.data.newOrder) {
           // 用户当前在orderProcess页面
           curPage.refreshOrder();
-        } else {
-          // 用户当前不在orderProcess页面
-          app.globalData.refreshFlag.orderProcess = true;
-        }
+        } 
       },
     });
+  // 将当前的订单监听器绑定为全局变量以备在其他地方取消监听
+  app.globalData.watcher.orderWatcher = watcher;
 }
 
 function toTimeStr(timestamp) {

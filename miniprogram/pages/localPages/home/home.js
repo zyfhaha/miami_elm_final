@@ -17,7 +17,7 @@ Page({
   async refreshHomePage() {
     const res = await Promise.all([getSwiperListCloud(), getSelfRunShopListCloud(), getRecommendShopListCloud()]);
     const swiperList = res[0];
-    console.log("swiperList", swiperList);
+    // console.log("swiperList", swiperList);
 
     const selfRunShopList = res[1];
     const recommendShopList = res[2];
@@ -29,7 +29,6 @@ Page({
   handleTapSwiper(e) {
     const index = e.currentTarget.dataset.index;
     const swiper = this.data.swiperList[index];
-    console.log("用户点击轮播图", index);
 
     wx.navigateTo({
       url: swiper.navigatorUrl,

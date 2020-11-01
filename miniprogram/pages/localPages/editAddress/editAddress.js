@@ -47,17 +47,17 @@ Page({
     let newAddressInfo = e.detail.value;
     // 删去stateIndex并换成具体的state
     let state = this.data.selStateItems[parseInt(newAddressInfo.stateIndex)];
-    console.log("state", state);
+    // console.log("state", state);
     delete newAddressInfo.stateIndex;
     newAddressInfo.state = state || "";
     // 校验addressInfo
     const verifyRes = await verifyAddressInfo(newAddressInfo);
-    console.log("verifyRes", verifyRes);
+    // console.log("verifyRes", verifyRes);
     if (!verifyRes) {
       return;
     }
     // 保存到本地缓存
-    console.log("保存地址信息到本地缓存");
+    // console.log("保存地址信息到本地缓存");
 
     // 通过this.data.addressInfo的Id是否为空来判断是增加一个地址还是修改已有的地址
     const addressId = this.data.addressInfo.addressId || "";
@@ -83,7 +83,7 @@ Page({
 
   // 所在州份变动
   handleChangeState(e) {
-    console.log("检测到State变化");
+    // console.log("检测到State变化");
     const state = this.data.selStateItems[e.detail.value];
     this.setData({
       state: state,

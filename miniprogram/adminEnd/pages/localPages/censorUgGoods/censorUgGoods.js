@@ -210,7 +210,7 @@ Page({
     }
   },
   async onLoad() {
-    console.log("onload");
+    // console.log("onload");
     this.refreshFlag = true;
   },
 

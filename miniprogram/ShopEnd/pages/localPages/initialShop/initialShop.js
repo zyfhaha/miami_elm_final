@@ -79,7 +79,7 @@ Page({
   // 处理所有的输入框输入值变动事件
   handleInputChange(e) {
     const { field } = e.currentTarget.dataset;
-    console.log("检测到", field, "发生变化: ", e.detail.value);
+    // console.log("检测到", field, "发生变化: ", e.detail.value);
     this.setData({
       [`formData.${field}`]: e.detail.value,
     });
@@ -101,7 +101,7 @@ Page({
 
   // 所在州份变动
   handleChangeState(e) {
-    console.log("检测到State变化");
+    // console.log("检测到State变化");
     const state = this.data.selStateItems[e.detail.value];
     this.setData({
       state: state,
@@ -111,7 +111,7 @@ Page({
 
   // 点击打开选择营业日对话框
   handleChangeOpenDay(e) {
-    console.log("点击修改营业日");
+    // console.log("点击修改营业日");
     this.setData({ openSelectOpenDayDialog: true });
   },
   // 用户更改营业日
@@ -171,7 +171,7 @@ Page({
   // 开门时间变动
   handleChangeOpenTime(e) {
     const openTime = e.detail.value;
-    console.log("检测到开门时间变化", openTime);
+    // console.log("检测到开门时间变化", openTime);
     this.setData({
       openTime: openTime,
       [`formData.openTime`]: openTime,
@@ -181,7 +181,7 @@ Page({
   // 关门时间变动
   handleChangeCloseTime(e) {
     const closeTime = e.detail.value;
-    console.log("检测到关门时间变化", closeTime);
+    // console.log("检测到关门时间变化", closeTime);
     this.setData({
       closeTime: closeTime,
       [`formData.closeTime`]: closeTime,
@@ -257,7 +257,7 @@ Page({
     formData.shopId = this.data.shopId;
     formData.deliverTimeList = this.getSortedDeliverTime(this.data.deliverTimeList)
     const validateRes = validateInitShopSetting(formData, "商店初始信息");
-    console.log("validateRes",validateRes);
+    // console.log("validateRes",validateRes);
     if (!validateRes.isValid) {
       await showToast(validateRes.message);
       return;
@@ -265,11 +265,11 @@ Page({
     // 校验通过
     const initRes = await initialiShop(formData);
     const initResData = initRes.result;
-    console.log("initRes", initRes);
+    // console.log("initRes", initRes);
 
-    console.log("initResData.data", initResData.data);
+    // console.log("initResData.data", initResData.data);
 
-    console.log("initResData.errCode", initResData.errCode);
+    // console.log("initResData.errCode", initResData.errCode);
 
     // const initRes = true;
     if (initResData.errCode === 200) {

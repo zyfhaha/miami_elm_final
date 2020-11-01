@@ -56,7 +56,7 @@ Page({
     this.userType = userType;
     // 获取商店信息
     const loginRes = await loginCloud(userType);
-    console.log("登录返回结果 loginRes", loginRes);
+    // console.log("登录返回结果 loginRes", loginRes);
     // errCode 103 没有注册的店主信息
     // errCode: 201 店主登录信息拉取成功
     // errCode:1103 没有注册的店员信息
@@ -127,7 +127,7 @@ Page({
       } else {
         const selShop = this.user2shop[this.loginShopIndex];
         const shopInfo = selShop.shopInfo;
-        console.log("shopInfo", shopInfo);
+        // console.log("shopInfo", shopInfo);
 
         // 判断商店是否已经被激活
         if (!shopInfo.isActivated && this.userType === "owner") {
@@ -136,10 +136,6 @@ Page({
           if (modal.confirm) {
             wx.navigateTo({
               url: "../initialShop/initialShop?shopId=" + shopInfo.shopId,
-              success: () => {},
-              fail: (res) => {
-                console.log(res);
-              },
             });
             return;
           } else {
@@ -154,12 +150,26 @@ Page({
         }
 
         // 运行到这说明没啥问题可以登录了
+
         // 1 获取操作权限并绑定到全局
         let accessInfo = getAccessControlFromLogin(selShop);
         app.globalData.accessInfo = accessInfo;
-        //开启监听器监听数据库内该记录的权限变化
+
+        // 开启权限监听器
+        let lastAccessWatcher = app.globalData.watcher.accessWatcher || {};
+        if (Object.keys(lastAccessWatcher).length !== 0) {
+          // 每次开启一个监听器时先确保上一个同样的监听器被关闭
+          await lastAccessWatcher.close();
+        }
         startAccessWatcher(selShop);
+
         //开启监听器监听新订单
+        //开启监听器监听数据库内该记录的权限变化
+        let lastOrderWatcher = app.globalData.watcher.orderWatcher || {};
+        if (Object.keys(lastOrderWatcher).length !== 0) {
+          // 每次开启一个监听器时先确保上一个同样的监听器被关闭
+          await lastOrderWatcher.close();
+        }
         startWatchOrder(selShop);
         // 2 记录当前的登录状态方便下一次登录
         const shopInfoForLogin = {
@@ -203,7 +213,7 @@ Page({
 
   // 用户改变对话框内输入框的内容
   handleChangeDialogInput(e) {
-    console.log("改变输入框内容", e.detail.value);
+    // console.log("改变输入框内容", e.detail.value);
     this.setData({ dialogInputText: e.detail.value });
   },
 
@@ -256,7 +266,7 @@ Page({
 
   async register(code, type, userInfo) {
     const registerRes = await registerCloud(code, type, userInfo);
-    console.log("registerRes", registerRes);
+    // console.log("registerRes", registerRes);
     const { data, errCode } = registerRes.result;
     // errCode 100 表示注册码不存在
     // errCode 101 表示注册码已经被用过

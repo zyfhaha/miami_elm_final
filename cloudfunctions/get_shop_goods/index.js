@@ -13,7 +13,6 @@ const goodsCateRef = db.collection("goodsCate");
 // 云函数入口函数
 exports.main = async (event, context) => {
   const { shopId } = event;
-  console.log("shopId", shopId);
   // 从数据库返回指定商店的商品分类和各类下的商品数据
   // 商品分类和商品都已经按照cateOrder和goodsOrder排好序
   // cateOrder越小越靠前

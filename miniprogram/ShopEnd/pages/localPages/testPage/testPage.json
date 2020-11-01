@@ -1,8 +1,0 @@
-{
-  "usingComponents": {
-    "InputDialog":"../../../components/InputDialog/InputDialog"
-  },
-  "navigationBarTitleText": "订单处理",
-  "backgroundColor": "#e2e2e2",
-  "backgroundTextStyle": "light"
-}

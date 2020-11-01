@@ -44,8 +44,7 @@ export async function getCompleteOrderCloud(pageNum) {
 
 // 取消订单
 export async function cancelOrderCloud(orderId, cancelReason) {
-  //
-  console.log("用户取消订单");
+  // console.log("用户取消订单");
   try {
     await showLoading();
     let updateInfo = {
@@ -59,7 +58,7 @@ export async function cancelOrderCloud(orderId, cancelReason) {
         updateInfo: updateInfo,
       },
     });
-    console.log(res);
+    // console.log(res);
     return res.result;
   } catch (error) {
     console.log("error", error);

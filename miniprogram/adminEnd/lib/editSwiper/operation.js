@@ -103,7 +103,7 @@ function constructNavigatorUrl(swiper) {
 
 // 向swiper中添加相关的ID 并修改图片地址为云端ID
 async function addRelevantInfo(swiper) {
-  console.log("addRelevantInfo", swiper);
+  // console.log("addRelevantInfo", swiper);
 
   const shopRes = await shopRef.where({ shopId: swiper.shopId }).get();
   const ugShopRes = await ugShopRef.where({ shopId: swiper.shopId }).get();

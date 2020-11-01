@@ -55,7 +55,7 @@ Page({
           requireType: "my",
         },
       });
-      console.log("res2", res2);
+      // console.log("res2", res2);
       this.setData({
         allGoods: res2.result.allGoods,
       });
@@ -91,9 +91,8 @@ Page({
   // ==========================================================
   async onShow() {
     // 根据全局变量判断当前页面是否需要刷新
-    console.log("app.globalData.refreshFlag.myGoods", app.globalData.refreshFlag.myGoods);
     if (app.globalData.refreshFlag.myGoods) {
-      console.log("刷新页面");
+      // console.log("刷新页面");
       await this.getMyGoods(this.shopId);
       app.globalData.refreshFlag.myGoods = false;
     }

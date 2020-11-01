@@ -96,7 +96,6 @@ Page({
 
   // 用户在对话框中输入店员的备注名
   handleChangeDialogInput(e) {
-    console.log("输入了名称", e.detail.value);
 
     this.setData({
       dialogInputText: e.detail.value
@@ -105,7 +104,6 @@ Page({
 
   // 用户点击编辑店员名称对话框的按钮
   async handleTapEditNoteNameButton(e) {
-    console.log("用户点击编辑店员名称对话框的按钮");
     const tapButtonIndex = e.detail.index;
     // 用户点击的是取消
     if (tapButtonIndex === 0) {
@@ -145,13 +143,11 @@ Page({
 
   // 店员权限改变
   handleAuthChange(e) {
-    console.log("权限改变", e);
     this.currcentAccess = e.detail.value
   },
 
   // 用户点击选择店员权限对话框的按钮
   async handleTapEditAssistAuthButton(e) {
-    console.log("用户点击选择店员权限对话框的按钮");
     const tapButtonIndex = e.detail.index;
     // 用户点击的是取消
     if (tapButtonIndex === 0) {
@@ -162,13 +158,13 @@ Page({
 
     if (tapButtonIndex === 1) {
       let assistInfo = this.assistList[this.actionOnAssistIdx];
-      console.log("修改的哪个店员的权限：", assistInfo);
+      // console.log("修改的哪个店员的权限：", assistInfo);
       let accessList = this.currcentAccess
       let access = 0
       for (let i = 0; i < accessList.length; i++) {
         access = access + parseInt(accessList[i])
       }
-      console.log("access:", access);
+      // console.log("access:", access);
       const editAssistRes = await editAssistAuth(this.shopInfo, assistInfo, access);
       if (editAssistRes) {
         this.assistList[this.actionOnAssistIdx].access = access;
@@ -193,7 +189,7 @@ Page({
     const {
       index
     } = e.currentTarget.dataset;
-    console.log("点击了店员", index);
+    // console.log("点击了店员", index);
 
     this.actionOnAssistIdx = index;
     this.setData({
@@ -249,7 +245,8 @@ Page({
         this.setData({
           checkList
         });
-        console.log(this.data.checkList);
+        // console.log(this.data.checkList);
+        break;
       default:
         break;
     }
@@ -264,8 +261,6 @@ Page({
 
   // 用户点击添加店员
   async handleAddAssist() {
-    console.log("检测到用户点击添加店员");
-
     const codeRes = await generateAssistCode(this.shopInfo, this.assistList);
     if (!codeRes) {
       return;
@@ -330,7 +325,6 @@ Page({
     } = e.currentTarget.dataset;
     // 获取要删除的店员的名字
     const assistName = e.detail.data;
-    console.log("检测到删除店员", e.detail.data);
     const modal = await showModal("确认删除「" + assistName + "」吗？");
     if (modal.cancel) {
       return;
@@ -364,7 +358,7 @@ Page({
     }
     // 获取店员数组
     const assistData = await getAssistData(this.shopInfo);
-    console.log("assistData", assistData);
+    // console.log("assistData", assistData);
     const assistList = assistData.data;
 
     // 获取到的数据样例

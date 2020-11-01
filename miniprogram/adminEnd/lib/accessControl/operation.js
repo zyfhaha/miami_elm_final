@@ -35,16 +35,16 @@ async function startAccessWatcher(user2shop) {
   if (accessInfo.role === "owner"){
     const watcher = db.collection('owner').doc(accessInfo._id).watch({
       onChange: async function(snapshot) {
-        console.log('snapshot_accessControl_owner', snapshot)
+        // console.log('snapshot_accessControl_owner', snapshot)
         let res=await db.collection('owner').doc(accessInfo._id).get()
-        console.log(res);
+        // console.log(res);
         
         let newaccessInfo={
           access: res.data.access,
           role: "owner",
           shopId: res.data.shopId,
         }
-        console.log(newaccessInfo);
+        // console.log(newaccessInfo);
         
         app.globalData.accessInfo = newaccessInfo
       },
@@ -56,16 +56,16 @@ async function startAccessWatcher(user2shop) {
   else if (accessInfo.role === "assistant"){
     const watcher = db.collection('assistant').doc(accessInfo._id).watch({
       onChange: async function(snapshot) {
-        console.log('snapshot_accessControl_assistant', snapshot)
+        // console.log('snapshot_accessControl_assistant', snapshot)
         let res=await db.collection('assistant').doc(accessInfo._id).get()
-        console.log(res);
+        // console.log(res);
         
         let newaccessInfo={
           access: res.data.access,
           role: "assistant",
           shopId: res.data.shopId,
         }
-        console.log(newaccessInfo);
+        // console.log(newaccessInfo);
         
         app.globalData.accessInfo = newaccessInfo
       },
@@ -83,7 +83,7 @@ export async function CanI(operationType) {
   let accessInfo = app.globalData.accessInfo
   let access = accessInfo.access
   let role =accessInfo.role
-  console.log("access:", access);
+  // console.log("access:", access);
 
   if(operationType === "order"){
     let bitValue = (access & 4) / 4

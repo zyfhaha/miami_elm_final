@@ -25,7 +25,7 @@
                     <text class="user_phone">{{addressInfo.phoneNumber}}</text>
                 </view>
             </navigator>
-        </view> 
+        </view>
         <view class="receive_time_row">
             <view class="sel_time_title">配送时间</view>
             <view class="sel_time_btn" hover-class="view_hover" hover-stay-time="100" bindtap="handleShowReceiveTimePicker">
@@ -49,31 +49,22 @@
                         <view class="goods_pic_warp">
                             <image class="goods_pic" src="{{item.goodsPicUrl}}" mode="widthFix"></image>
                         </view>
-                        <view class="goods_name_num">
+                        <!-- 如果商品不缺货 -->
+                        <view wx:if="{{!item.oldNum}}" class="goods_name_num">
                             <view class="goods_name">{{item.goodsName}}</view>
                             <view class="goods_num">x{{item.num}}</view>
                         </view>
-                        <view class="goods_price">
-                            ${{filters.toFix(item.num * item.goodsPrice)}}
-                        </view>
-                    </view>
-                </block>
-                <!-- 缺货商品 -->
-                <block wx:if="{{preOrderInfo.shortOfStockGoods.length>0}}">
-                    <view wx:for="{{preOrderInfo.shortOfStockGoods}}" wx:key="goodsId" class="goods_item_warp">
-                        <view class="goods_pic_warp">
-                            <image class="goods_pic" src="{{item.goodsPicUrl}}" mode="widthFix"></image>
-                        </view>
-                        <view class="goods_name_num">
+                        <!-- 如果商品缺货 -->
+                        <view wx:else class="goods_name_num">
                             <view class="goods_name">{{item.goodsName}}</view>
-                            <view class="short_of_stock_title">缺货 - 最多购买 {{item.goodsStock}}</view>
+                            <view class="short_of_stock_title">缺货 - 最多购买 {{item.num}}</view>
                             <view class="delete_num_warp">
-                                <text class="goods_num delete_num">x{{item.num}}</text>
-                                <text class="goods_stock">x{{item.goodsStock}}</text>
+                                <text class="goods_num delete_num">x{{item.oldNum}}</text>
+                                <text class="goods_stock">x{{item.num}}</text>
                             </view>
                         </view>
                         <view class="goods_price">
-                            ${{filters.toFix(item.goodsStock * item.goodsPrice)}}
+                            ${{filters.toFix(item.num * item.goodsPrice)}}
                         </view>
                     </view>
                 </block>
@@ -113,7 +104,7 @@
         </view>
         <!-- 购物详情结束 -->
         <!-- 订单备注 -->
-        <view  class="note" bind:tap="handleTapNote" hover-class="view_hover" hover-stay-time="100">
+        <view class="note" bind:tap="handleTapNote" hover-class="view_hover" hover-stay-time="100">
             <view class="note_title">订单备注</view>
             <view class="note_text">{{note||"点击填写备注内容 >"}}</view>
         </view>
@@ -122,7 +113,6 @@
         <view class="total_pay_warp">
             <view class="warn_msg_warp">
                 <view class="warn_msg_text">
-                    <icon class="icon-box-img" type="info" size="30rpx" color="red"></icon>
                     订单支付采用货到付款的形式。成功下单后您可以在商家接单前随时取消订单，商家成功接单后您将无法主动取消订单，需要电话联系商家才能取消订单
                 </view>
             </view>
@@ -144,7 +134,6 @@
         </view>
     </view>
 </block>
-
 <!-- 选择配送时间actionsheet -->
 <actionsheet class="receive_time_picker" id="popupActionsheet" tops="60%" title="商家将在配送时间统一派送订单">
     <mp-tabs tabs="{{tabs}}" activeTab="{{activeTab}}" swiperClass="weui-tabs-swiper" bindtabclick="onTabCLick" bindchange="onChange" activeClass="tab-bar-title__selected">
@@ -165,4 +154,3 @@
         </block>
     </mp-tabs>
 </actionsheet>
-

@@ -187,7 +187,8 @@ export const requestSubscribeMessage = (action) => {
             showModal("错误", "小程序退出后台");
             return;
           default:
-            showModal("错误", err.errMsg);
+            console.log("调用订阅消息函数发生未知错误",err.errMsg);
+            showModal("错误","遇到未知错误");
             return;
         }
       },

@@ -20,7 +20,7 @@ Page({
         code: code,
       },
     });
-    console.log("res", res);
+    // console.log("res", res);
     hideLoading();
     if (res) {
       wx.setClipboardData({

@@ -11,9 +11,9 @@ Component({
     let _this = this;
     app.watch((showDot) => {
       let tabbarList = _this.data.tabbarList;
-      console.log("tabbarList",tabbarList);
+      // console.log("tabbarList",tabbarList);
       tabbarList[0].dot = showDot;
-      console.log("组件修改红点为",showDot);
+      // console.log("组件修改红点为",showDot);
       _this.setData({ tabbarList });
     });
   },
@@ -70,12 +70,10 @@ Component({
         setting: "../setting/setting",
       };
       let curPages = getCurrentPages();
-      console.log("curPages", curPages);
       let curPagesList = curPages.map((v) => {
         let routeComponent = v.route.split("/");
         return routeComponent[routeComponent.length - 1];
       });
-      console.log("curPagesList", curPagesList);
       // let curPageName = curPagesList[curPagesList.length - 1];
       const targetPageName = idx2PageName[e.detail.index];
 

@@ -34,7 +34,7 @@ Page({
 
   // 刷新订单
   async refreshOrder() {
-    console.log("触发刷新订单");
+    // console.log("触发刷新订单");
     await showLoading();
     const res = await getUncompleteOrderCloud(this.shopInfo.shopId);
     await hideLoading();
@@ -50,7 +50,7 @@ Page({
     if (uncompleteOrder.length === 0) {
       showToast("没有未处理订单");
     }
-    console.log("res", res);
+    // console.log("res", res);
     this.order = uncompleteOrder;
 
     // 将获取到到未处理订单分类
@@ -69,18 +69,20 @@ Page({
             break;
           case 2:
             deliverOrder.push(v);
+            break;
           default:
             break;
         }
       });
     }
-    this.setData({ 
-      newOrder, 
-      handleOrder, 
-      deliverOrder, 
-      refreshNewOrderFlag: false, 
-      refreshHandlingOrderFlag: false, 
-      refreshDeliverOrderFlag: false });
+    this.setData({
+      newOrder,
+      handleOrder,
+      deliverOrder,
+      refreshNewOrderFlag: false,
+      refreshHandlingOrderFlag: false,
+      refreshDeliverOrderFlag: false,
+    });
 
     app.globalData.refreshFlag.showDot = newOrder.length !== 0;
   },
@@ -129,22 +131,15 @@ Page({
 
   // 用户点击取消理由对话框的结果
   async handleCancelReasonResult(e) {
-    console.log("event", e);
-
     const dialogRes = e.detail;
-    console.log("dialogRes", dialogRes);
 
     if (dialogRes.cancel) {
-      console.log("dialogRes.cancel");
-
       this.setData({ showCancelReasonDialog: false });
       return;
     }
 
     if (dialogRes.confirm) {
-      console.log("dialogRes.confirm");
       const orderId = this.orderId_temp;
-      console.log("***dialogRes", dialogRes);
 
       const cancelReason = dialogRes.dialogInput.trim();
       if (!cancelReason) {
@@ -170,8 +165,8 @@ Page({
   async handleAcceptOrder(e) {
     const openid = e.currentTarget.dataset.openid;
     const orderId = e.currentTarget.dataset.orderid;
-    console.log("检测到接单", orderId);
-    console.log("订单openid", openid);
+    // console.log("检测到接单", orderId);
+    // console.log("订单openid", openid);
     try {
       await showLoading();
       const res = await acceptOrderCloud(orderId, openid);
@@ -189,8 +184,8 @@ Page({
   async handleDeliverOrder(e) {
     const openid = e.currentTarget.dataset.openid;
     const orderId = e.currentTarget.dataset.orderid;
-    console.log("检测到派送订单", orderId);
-    console.log("订单openid", openid);
+    // console.log("检测到派送订单", orderId);
+    // console.log("订单openid", openid);
     try {
       await showLoading();
       const res = await deliverOrderCloud(orderId, openid);
@@ -208,14 +203,14 @@ Page({
   async handleCompleteOrder(e) {
     const orderId = e.currentTarget.dataset.orderid;
     const openid = e.currentTarget.dataset.openid;
-    console.log("检测到已送达订单", orderId);
-    console.log("订单openid", openid);
+    // console.log("检测到已送达订单", orderId);
+    // console.log("订单openid", openid);
 
     const allowNotifyOrderComplete = e.currentTarget.dataset.notify;
-    console.log("allowNotifyOrderComplete", allowNotifyOrderComplete);
+    // console.log("allowNotifyOrderComplete", allowNotifyOrderComplete);
 
     if (!allowNotifyOrderComplete) {
-      const modalRes = showModal("提示", "当前顾客并未开启订单送达通知服务 请电话联系顾客取单", "去联系", "已送达");
+      const modalRes = showModal("提示", "当前顾客并未开启订单送达通知服务 请务必电话联系顾客取单", "去联系", "已送达");
       if (modalRes.cancel) {
         return;
       }
@@ -238,15 +233,12 @@ Page({
   //options(Object)
   async onLoad(options) {
     this.shopInfo = app.globalData.shopInfo;
-    console.log("orderprocess shopinfo",this.shopInfo );
-    
+    // console.log("orderprocess shopinfo", this.shopInfo);
+
     //await this.refreshOrder();
   },
 
   async onShow() {
-    if (app.globalData.refreshFlag.orderProcess) {
-      await this.refreshOrder();
-      app.globalData.refreshFlag.orderProcess = false;
-    }
+    await this.refreshOrder();
   },
 });

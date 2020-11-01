@@ -86,7 +86,7 @@ Page({
 
   // 用户点击放弃修改
   handleTapDiscard() {
-    console.log("用户点击放弃修改");
+    // console.log("用户点击放弃修改");
     this.refreshEditDeliver(this.shopInfo);
     this.setData({
       editable: false,
@@ -95,7 +95,7 @@ Page({
 
   // 用户点击修改
   handleTapEdit() {
-    console.log("用户点击修改");
+    // console.log("用户点击修改");
     this.setData({
       editable: true,
     });

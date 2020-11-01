@@ -37,7 +37,7 @@ Page({
 
   // 保存商品数据
   async handleSaveGoods(e) {
-    console.log("e.detail.value", e.detail.value);
+    // console.log("e.detail.value", e.detail.value);
     /*
     通过e.detail.value拿到的数据只有
       goodsName
@@ -62,7 +62,7 @@ Page({
       cateId: this.cateIndex === -1 ? "" : this.cateInfo[this.cateIndex].cateId,
     };
     const res = await addGoodsCloud(goodsInfo);
-    console.log("res", res);
+    // console.log("res", res);
 
     // 如果上传成功则云端返回的数据是含有_id属性的，这时再跳转回上一页否则停留在当前页
     if (res) {
@@ -136,8 +136,8 @@ Page({
   onLoad(options) {
     const { shopId, cateInfoURI } = options;
     const cateInfo = JSON.parse(decodeURIComponent(cateInfoURI));
-    console.log("shopId", shopId);
-    console.log("cateInfo", cateInfo);
+    // console.log("shopId", shopId);
+    // console.log("cateInfo", cateInfo);
     this.shopId = shopId;
     this.cateInfo = cateInfo;
 

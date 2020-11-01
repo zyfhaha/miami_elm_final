@@ -14,7 +14,7 @@ Page({
 
   // 用户点击放弃修改
   handleTapDiscard(){
-    console.log("用户点击放弃修改");
+    // console.log("用户点击放弃修改");
     this.setData({
       editable:false,
       shopAnnounce:this.shopInfo.shopAnnounce
@@ -23,7 +23,7 @@ Page({
 
   // 用户点击修改公告
   handleTapEdit(){
-    console.log("用户点击修改公告");
+    // console.log("用户点击修改公告");
     this.setData({
       editable:true
     })
@@ -37,7 +37,7 @@ Page({
 
   // 用户点击保存
   async handleTapSave() {
-    console.log("用户点击保存");
+    // console.log("用户点击保存");
     const shopAnnounce = this.data.shopAnnounce
     if(shopAnnounce === this.shopInfo.shopAnnounce){
       showToast("公告内容未改变")

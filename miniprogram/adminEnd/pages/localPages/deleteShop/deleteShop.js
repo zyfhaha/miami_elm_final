@@ -38,7 +38,7 @@ Page({
         })
         .get();
       await hideLoading();
-      console.log("shopInfoRes", shopInfoRes);
+      // console.log("shopInfoRes", shopInfoRes);
       const shopInfo = shopInfoRes.data[0];
       if (!shopInfo) {
         showModal("错误", "未找到商店");
@@ -70,7 +70,7 @@ Page({
         },
       });
       await hideLoading();
-      console.log("res", res);
+      // console.log("res", res);
       JSON.stringify(res)
       showModal("提示", "虚拟删除成功");
     } catch (error) {

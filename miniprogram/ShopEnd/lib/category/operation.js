@@ -27,7 +27,7 @@ let app = getApp();
  */
 async function addGoodsCateCloud(shopInfo, cateInfo) {
   if (!await CanI("goods")) {
-    console.log("无操作权限");
+    // console.log("无操作权限");
     return
   }
   // TODO 判断请求是否成功需要有一个健壮的方法
@@ -79,7 +79,7 @@ async function addGoodsCateCloud(shopInfo, cateInfo) {
  */
 async function updateGoodsCateInfoCloud(shopInfo, cateInfo) {
   if (!await CanI("goods")) {
-    console.log("无操作权限");
+    // console.log("无操作权限");
     return
   }
   try {
@@ -110,7 +110,7 @@ async function updateGoodsCateInfoCloud(shopInfo, cateInfo) {
  */
 async function updateGoodsCateOrder(catesList) {
   if (!await CanI("goods")) {
-    console.log("无操作权限");
+    // console.log("无操作权限");
     return
   }
 
@@ -145,7 +145,7 @@ async function updateGoodsCateOrder(catesList) {
  */
 async function removeGoodsCateCloud(shopInfo, cateInfo) {
   if (!await CanI("goods")) {
-    console.log("无操作权限");
+    // console.log("无操作权限");
     return
   }
   console.log(cateInfo);

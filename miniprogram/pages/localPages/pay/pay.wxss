@@ -173,9 +173,6 @@
   display: flex;
   align-items: center;
 }
-.pay_page .total_pay_warp .warn_msg_warp .warn_msg_text {
-  color: red;
-}
 .pay_page .total_pay_warp .pay_info_warp {
   padding: 30rpx;
   display: flex;

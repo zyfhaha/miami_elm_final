@@ -160,7 +160,7 @@ Page({
     let index = e.detail.key;
     let listData = this.data.listData;
     if (!(await CanI("goods"))) {
-      console.log("无操作权限");
+      // console.log("无操作权限");
       return;
     }
     const modal = await showModal("确定删除？");
@@ -187,7 +187,7 @@ Page({
 
   async sortGoods() {
     if (!(await CanI("goods"))) {
-      console.log("无操作权限");
+      // console.log("无操作权限");
       return;
 	}
 	
@@ -278,7 +278,7 @@ Page({
   },
   async deleteGoods() {
     if (!(await CanI("goods"))) {
-      console.log("无操作权限");
+      // console.log("无操作权限");
       return;
     }
     this.setData({

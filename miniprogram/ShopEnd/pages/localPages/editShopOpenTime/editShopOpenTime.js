@@ -43,7 +43,7 @@ Page({
 
   // 点击打开选择营业日对话框
   handleChangeOpenDay(e) {
-    console.log("点击修改营业日");
+    // console.log("点击修改营业日");
     if (!this.data.editable) {
       return;
     }
@@ -76,7 +76,7 @@ Page({
       !openDayIndex.includes(0) &&
       !openDayIndex.includes(6)
     ) {
-      console.log("openDayIndex***", openDayIndex);
+      // console.log("openDayIndex***", openDayIndex);
       return "工作日";
     } else {
       const tempDic = {
@@ -118,7 +118,7 @@ Page({
   // 开门时间变动
   handleChangeOpenTime(e) {
     const openTime = e.detail.value;
-    console.log("检测到开门时间变化", openTime);
+    // console.log("检测到开门时间变化", openTime);
     this.setData({
       openTime: openTime,
     });
@@ -127,7 +127,7 @@ Page({
   // 关门时间变动
   handleChangeCloseTime(e) {
     const closeTime = e.detail.value;
-    console.log("检测到关门时间变化", closeTime);
+    // console.log("检测到关门时间变化", closeTime);
     this.setData({
       closeTime: closeTime,
     });
@@ -135,7 +135,7 @@ Page({
 
   // 用户点击保存
   async handleTapSave() {
-    console.log("用户点击保存");
+    // console.log("用户点击保存");
 
     // 先比较一下用户有没有进行修改
     const newOpenTime = this.data.openTime;
@@ -189,7 +189,7 @@ Page({
 
   // 用户点击放弃修改
   handleTapDiscard() {
-    console.log("用户点击放弃修改");
+    // console.log("用户点击放弃修改");
     this.refreshEditShopOpenTime(this.shopInfo);
     this.setData({
       editable: false,
@@ -198,7 +198,7 @@ Page({
 
   // 用户点击修改
   handleTapEdit() {
-    console.log("用户点击修改");
+    // console.log("用户点击修改");
     this.setData({
       editable: true,
     });

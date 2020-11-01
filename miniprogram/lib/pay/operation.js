@@ -62,7 +62,7 @@ export function getReceiveTimeGroup(deliverTimeList, cutOrderTime) {
 
 // 核验订单信息
 export function verifyOrderInfo(orderInfo) {
-  console.log("orderInfo", orderInfo);
+  // console.log("orderInfo", orderInfo);
   // 验证收货地址
   if (!orderInfo.addressId) {
     return {
@@ -86,7 +86,7 @@ export function verifyOrderInfo(orderInfo) {
 }
 
 export async function placeOrderCloud(orderInfo) {
-  console.log("orderInfo", orderInfo);
+  // console.log("orderInfo", orderInfo);
   try {
     await showLoading();
     let orderId = orderInfo.orderId;
@@ -101,7 +101,7 @@ export async function placeOrderCloud(orderInfo) {
         updateInfo: updateInfo,
       },
     });
-    console.log(res);
+    // console.log(res);
     return res.result;
   } catch (error) {
     console.log("error", error);

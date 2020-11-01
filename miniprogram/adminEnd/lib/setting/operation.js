@@ -41,7 +41,7 @@ export async function updateAppShopInfo(shopId=app.globalData.shopInfo.shopId){
 export async function updateShopStatusCloud(shopInfo, newStatus) {
   //console.log(app.globalData.accessInfo);
   if (!(await CanI("setting"))) {
-    console.log("无操作权限");
+    // console.log("无操作权限");
     return;
   }
   await showLoading("更改中");
@@ -60,7 +60,7 @@ export async function updateShopStatusCloud(shopInfo, newStatus) {
 
 export async function updateShopAnnounceCloud(shopInfo, newAnnounce) {
   if (!(await CanI("setting"))) {
-    console.log("无操作权限");
+    // console.log("无操作权限");
     return;
   }
   await showLoading("保存中");
@@ -79,7 +79,7 @@ export async function updateShopAnnounceCloud(shopInfo, newAnnounce) {
 
 export async function updateOpenTime(shopInfo, timeInfo) {
   if (!(await CanI("setting"))) {
-    console.log("无操作权限");
+    // console.log("无操作权限");
     return;
   }
   await showLoading("保存中");
@@ -98,7 +98,7 @@ export async function updateOpenTime(shopInfo, timeInfo) {
 
 export async function updateDeliverSetting(shopInfo, setting){
   if (!(await CanI("setting"))) {
-    console.log("无操作权限");
+    // console.log("无操作权限");
     return;
   }
   await showLoading("保存中");

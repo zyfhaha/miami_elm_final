@@ -332,7 +332,6 @@ Page({
   // 点击某一个类别打开action sheet
   itemClick(e) {
     const index = e.detail.key;
-    console.log("点击了类别", index);
     this.actionOnCateIdx = index;
     this.setData({ showActionsheet: true });
   },
@@ -358,13 +357,11 @@ Page({
 
   // 用户在对话框中输入类别的备注名
   handleChangeDialogInput(e) {
-    console.log("输入了类别名称", e.detail.value);
     this.setData({ dialogInputText: e.detail.value });
   },
 
   // 用户点击编辑类别名称对话框的按钮
   async handleTapInputDialogButton(e) {
-    console.log("用户点击编辑类别名称对话框的按钮");
     const tapButtonIndex = e.detail.index;
     let listData = this.data.listData;
     let tabCateIndex = this.actionOnCateIdx;
@@ -409,7 +406,6 @@ Page({
   // ===================================================
   onLoad(option) {
     this.drag = this.selectComponent("#drag");
-    console.log(option);
     this.shopInfo.shopId = option.shopId;
 
 
@@ -417,11 +413,9 @@ Page({
     let pages = getCurrentPages(); // 获取页面栈
     let prevPage = pages[pages.length - 2]; //上一个页面
     let listData = prevPage.data.leftMenuList;
-    console.log("listData前",listData);
     
     
     listData = listData.map(v=>{return {...v, fixed:true}})
-    console.log("listData后",listData); 
     
     this.iniListData = JSON.parse(JSON.stringify(listData)); //记录初始数据，方便排序完成后比较
 

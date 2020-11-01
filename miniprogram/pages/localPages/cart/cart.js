@@ -27,7 +27,6 @@ Page({
 
   // TODO 用户点击下单 检查用户是否可以下单 如是否达到最低限购 
   handlePay(e) {
-    console.log(e);
     // 获取用户点击的是那个商店的索引
     const { index } = e.currentTarget.dataset;
     const shopId = this.data.allShopCart[index].shopId;

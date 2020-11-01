@@ -209,11 +209,7 @@ Page({
     }
   },
   async onLoad() {
-    console.log("onload");
     this.shopId = app.globalData.shopInfo.shopId;
-    // await showLoading();
-    // await this.getShopDetail();
-    // await hideLoading();
     this.refreshFlag = true;
   },
 });

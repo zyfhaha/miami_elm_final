@@ -31,7 +31,7 @@ Page({
 
   // 点击基本信息
   handleTapBasicInfo() {
-    console.log("用户点击基本信息");
+    // console.log("用户点击基本信息");
     wx.navigateTo({
       url: "../editShopBasicInfo/editShopBasicInfo",
       success: (result) => {},
@@ -41,7 +41,7 @@ Page({
   },
   // 点击营业状态
   async handleTapShopStatus() {
-    console.log("用户点击营业状态");
+    // console.log("用户点击营业状态");
     const actionSheetRes = await showActionSheet(["暂停接单", "开始接单"]);
     const { tapIndex } = actionSheetRes;
 
@@ -92,7 +92,7 @@ Page({
   // ==========================================================
 
   async onLoad(options) {
-    console.log("app.globalData.shopInfo", app.globalData.shopInfo);
+    // console.log("app.globalData.shopInfo", app.globalData.shopInfo);
     // const shopInfo = app.globalData.shopInfo;
     const shopInfo = await getShopInfoCloud(app.globalData.shopInfo.shopId);
     app.globalData.shopInfo = shopInfo

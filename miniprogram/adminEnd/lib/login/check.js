@@ -148,7 +148,7 @@ export function validateCutOrderTime(form, field) {
 // =================================================
 
 export function validateInitShopSetting(formData, formText) {
-  console.log("formData", formData);
+  // console.log("formData", formData);
   //校验商店头像("formData",formData);
   let valislogoUrl = validateExist(formData, "logoUrl", "商店头像");
   if (!valislogoUrl.isValid) {

@@ -36,7 +36,7 @@ async function getAssistData(shopInfo) {
 // 生成店员邀请码来添加店员
 async function generateAssistCode(shopInfo, assistList) {
   if(!await CanI("assistant")){
-    console.log("无操作权限assist");
+    // console.log("无操作权限assist");
     return
   }
   // TODO 还原本段
@@ -60,7 +60,7 @@ async function generateAssistCode(shopInfo, assistList) {
       watermark: new Date().getTime(),
     },
   });
-  console.log("codeRes", codeRes);
+  // console.log("codeRes", codeRes);
   await hideLoading();
   if (!codeRes._id) {
     return;
@@ -71,7 +71,7 @@ async function generateAssistCode(shopInfo, assistList) {
 // 修改店员备注名
 async function editAssistNoteName(shopInfo, assistInfo, noteName) {
   if(!await CanI("assistant")){
-    console.log("无操作权限");
+    // console.log("无操作权限");
     return
   }
   const shopId = shopInfo.shopId;
@@ -94,7 +94,7 @@ async function editAssistNoteName(shopInfo, assistInfo, noteName) {
 // 删除店员
 async function deleteAssist(shopInfo, assistInfo) {
   if(!await CanI("assistant")){
-    console.log("无操作权限");
+    // console.log("无操作权限");
     return
   }
   const shopId = shopInfo.shopId;
@@ -119,7 +119,7 @@ async function deleteAssist(shopInfo, assistInfo) {
 // 修改店员权限
 async function editAssistAuth(shopInfo, assistInfo, accessInfo){
   if(!await CanI("assistant")){
-    console.log("无操作权限");
+    // console.log("无操作权限");
     return
   }
   const shopId = shopInfo.shopId;

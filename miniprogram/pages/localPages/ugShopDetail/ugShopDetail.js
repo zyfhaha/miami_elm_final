@@ -111,7 +111,7 @@ Page({
       },
     });
     const { allGoods } = res2.result;
-    console.log("allGoods", allGoods);
+    // console.log("allGoods", allGoods);
 
     let cates = allGoods;
     this.cates = cates;

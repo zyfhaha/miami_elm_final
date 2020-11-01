@@ -30,7 +30,6 @@ Page({
       swiperList[index].picUrl = this.data.img;
       this.setData({ swiperList });
     });
-    console.log("index", index);
     wx.navigateTo({
       url: "../editGoodsPic/editGoodsPic",
     });
@@ -38,7 +37,6 @@ Page({
   // 点击删除图片
   handleRemoveImg(e) {
     const index = e.currentTarget.dataset.index;
-    console.log("index", index);
     let swiperList = this.data.swiperList;
     swiperList[index].picUrl = "";
     this.setData({ swiperList });
@@ -46,7 +44,6 @@ Page({
   // 输入商店ID
   handleInputShopId(e) {
     const index = e.currentTarget.dataset.index;
-    console.log("index", index);
     let swiperList = this.data.swiperList;
     swiperList[index].shopId = e.detail.value;
     this.setData({ swiperList });
@@ -54,7 +51,6 @@ Page({
   // 输入商店名
   handleInputShopName(e) {
     const index = e.currentTarget.dataset.index;
-    console.log("index", index);
     let swiperList = this.data.swiperList;
     swiperList[index].shopName = e.detail.value;
     this.setData({ swiperList });
@@ -62,7 +58,6 @@ Page({
   // 改变轮播顺序
   async handleChangeOrder(e) {
     const index = e.currentTarget.dataset.index;
-    console.log("index", index);
     let swiperList = this.data.swiperList;
 
     let itemList = [];
@@ -74,23 +69,19 @@ Page({
 
     let tapIndex = await showActionSheet(itemList);
     tapIndex = tapIndex === 0 ? 0 : "";
-    console.log("tapIndex", tapIndex);
 
     if (tapIndex === "") {
       return;
     }
     const newOrder = Number(itemList[tapIndex]) - 1;
-    console.log("newOrder", newOrder);
     swiperList[index].order = newOrder;
 
     if (index < newOrder) {
-      console.log("下");
 
       for (let i = index + 1; i < newOrder + 1; i++) {
         swiperList[i].order -= 1;
       }
     } else {
-      console.log("上");
       for (let i = newOrder; i < index; i++) {
         swiperList[i].order += 1;
       }
@@ -103,7 +94,6 @@ Page({
   // 输入商品类别名称
   handleInputGoodsCate(e) {
     const index = e.currentTarget.dataset.index;
-    console.log("index", index);
     let swiperList = this.data.swiperList;
     swiperList[index].cateName = e.detail.value;
     this.setData({ swiperList });
@@ -111,7 +101,6 @@ Page({
   // 输入商品名字
   handleInputGoodsName(e) {
     const index = e.currentTarget.dataset.index;
-    console.log("index", index);
     let swiperList = this.data.swiperList;
     swiperList[index].goodsName = e.detail.value;
     this.setData({ swiperList });
@@ -119,7 +108,6 @@ Page({
   // 输入轮播图简要介绍
   handleInputDetail(e) {
     const index = e.currentTarget.dataset.index;
-    console.log("index", index);
     let swiperList = this.data.swiperList;
     swiperList[index].detail = e.detail.value;
     this.setData({ swiperList });
@@ -128,7 +116,6 @@ Page({
   // 增加轮播图
   handleAddSwiper(e) {
     const index = e.currentTarget.dataset.index;
-    console.log("index", index);
 
     let swiperList = this.data.swiperList;
     for (let i = index + 1; i < swiperList.length; i++) {
@@ -141,7 +128,6 @@ Page({
   // 删除轮播图
   handleDeleteSwiper(e) {
     const index = e.currentTarget.dataset.index;
-    console.log("index", index);
 
     let swiperList = this.data.swiperList;
     for (let i = index + 1; i < swiperList.length; i++) {

@@ -7,6 +7,7 @@ App({
       orderProcess: true,
       _showDot: false,  //不要直接访问或修改这个属性而是通过globalData.refreshFlag.showDot来访问或赋值这个属性，否则下面写的watch函数不会被触发
     },
+    watcher:{}, // 监听器 在商家端会用到。 目前有订单监听器和店员权限监听器
     accessInfo:{},
     shopInfo: {},
   },

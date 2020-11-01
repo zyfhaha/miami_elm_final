@@ -168,7 +168,7 @@ async function addGoodsCloud(goodsInfo) {
 
   // 如果存在不合法商品信息则直接return
   if (!goodsInfo) {
-    console.log("商品含有非法数据");
+    // console.log("商品含有非法数据");
     return;
   }
 
@@ -191,20 +191,20 @@ async function addGoodsCloud(goodsInfo) {
     goodsInfo["goodsOrder"] = now;
     goodsInfo["watermark"] = now;
     goodsInfo["status"] = UNDER_CENSOR; // 商品状态为审核中
-    console.log("goodsInfo", goodsInfo);
+    // console.log("goodsInfo", goodsInfo);
 
     // 将商品图片上传到云端
     const res = await uploadGoodsPicCloud(goodsInfo);
     // 拿到图片的实际云存储地址
     const goodsPicUrlCloud = res.fileID;
-    console.log("上传图片成功");
+    // console.log("上传图片成功");
 
     goodsInfo["goodsPicUrl"] = goodsPicUrlCloud;
 
-    console.log("goodsInfo", goodsInfo);
+    // console.log("goodsInfo", goodsInfo);
 
     // 将商品信息上传到云端
-    console.log("正在上传商品信息");
+    // console.log("正在上传商品信息");
     const res2 = await ugGoodsRef.add({
       data: {
         ...goodsInfo
@@ -276,11 +276,9 @@ async function updateGoodsCloud(goodsInfoNew, goodsInfoOld) {
 
   // 如果存在不合法商品信息则直接return
   if (!goodsInfoNew) {
-    console.log("商品含有非法数据");
     return;
   }
 
-  console.log("updateGoods-isGoodsEqual");
   // 检查新旧商品信息是否相同
   const isEqual = isGoodsEqual(goodsInfoNew, goodsInfoOld);
   if (isEqual) {
@@ -301,7 +299,7 @@ async function updateGoodsCloud(goodsInfoNew, goodsInfoOld) {
     const isGoodsPicChange = goodsInfoNew.goodsPicUrl !== goodsInfoOld.goodsPicUrl;
     if (isGoodsPicChange) {
       // TODO 删除和上传新的图片要做成一个事务
-      console.log("检测到商品图片发生改变");
+      // console.log("检测到商品图片发生改变");
 
       // 上传新图片
       // 遇到一个天坑:这里之所以没有直接对旧图进行覆盖写是因为覆盖写之后重新拉取数据依旧展示的是旧图片
@@ -312,16 +310,16 @@ async function updateGoodsCloud(goodsInfoNew, goodsInfoOld) {
       });
 
       // 拿到图片的实际云存储地址 更新goodsInfoNew中的图片地址为云文件地址
-      console.log("上传新图片成功");
+      // console.log("上传新图片成功");
       const goodsPicUrlCloud = upLoadGoodsPicRes.fileID;
       goodsInfoNew["goodsPicUrl"] = goodsPicUrlCloud;
     }
 
     // TODO 将商品信息上传到云端  也是需要解决事务问题
-    console.log("正在上传商品信息");
+    // console.log("正在上传商品信息");
     goodsInfoNew["status"] = 0;
     goodsInfoNew["watermark"] = new Date().getTime();
-    console.log("goodsInfoNew", goodsInfoNew);
+    // console.log("goodsInfoNew", goodsInfoNew);
     const upLoadNewGoodsInfoRes = await ugGoodsRef
       .where({
         goodsId: goodsInfoOld.goodsId,
@@ -338,13 +336,13 @@ async function updateGoodsCloud(goodsInfoNew, goodsInfoOld) {
       const deleteOldGoodsPicRes = await wx.cloud.deleteFile({
         fileList: [goodsInfoOld.goodsPicUrl],
       });
-      console.log("删除并上传结果", deleteOldGoodsPicRes);
+      // console.log("删除并上传结果", deleteOldGoodsPicRes);
     }
 
     await showModal("保存成功");
     return upLoadNewGoodsInfoRes;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
     showModal("错误", "请检查网络状态后重试");
     return false
   } finally {
@@ -354,7 +352,7 @@ async function updateGoodsCloud(goodsInfoNew, goodsInfoOld) {
 
 // 从云端删除单个商品 这里的删除仅仅是虚拟删除
 async function removeGoodsCloud(goodsInfo) {
-  console.log("正在删除商品信息");
+  // console.log("正在删除商品信息");
   try {
     await showLoading("删除中");
     const res = await ugGoodsRef.where({
@@ -364,7 +362,7 @@ async function removeGoodsCloud(goodsInfo) {
         isExist: false
       },
     });
-    console.log("删除完成", res);
+    // console.log("删除完成", res);
     return res;
   } catch (error) {
     console.log("error", error);
@@ -384,7 +382,7 @@ async function removeManyGoodsCloud(goodsInfoList) {
     let goodsIdList = goodsInfoList.map((v) => {
       return v.goodsId;
     });
-    console.log("正在批量删除商品信息");
+    // console.log("正在批量删除商品信息");
     try {
       await showLoading("删除中");
       const res = await ugGoodsRef
@@ -396,10 +394,10 @@ async function removeManyGoodsCloud(goodsInfoList) {
             isExist: false
           },
         });
-      console.log("删除完成", res);
+      // console.log("删除完成", res);
       return res;
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       showModal("错误", "请检查网络状态后重试");
       return false
     } finally {

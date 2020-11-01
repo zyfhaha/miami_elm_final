@@ -65,10 +65,10 @@ async function initialiShop(form) {
   // 在此处将本地图片文件转换为base64编码 因为转为base64到用了wx.下的方法 而云端是无法调用wx.的函数的 所以只能在本地将图片转为base64
   let logoUrl = form.logoUrl;
   const fileBase64 = await toBase64(logoUrl);
-  console.log("fileBase64", fileBase64);
+  // console.log("fileBase64", fileBase64);
   // 计算base64字节流大小 大于100K提示用户换一张小点的图
   const streamByteSize = byteof(fileBase64.data);
-  console.log("图片字节流大小", Math.ceil(streamByteSize / 1000), "KB");
+  // console.log("图片字节流大小", Math.ceil(streamByteSize / 1000), "KB");
   if (streamByteSize > 100000) {
     await showModal( "图片过大无法上传");
     return;

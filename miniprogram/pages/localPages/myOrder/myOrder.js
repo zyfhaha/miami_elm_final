@@ -33,7 +33,7 @@ Page({
 
   // =================   刷新所有订单函数 =============================
   async refreshAllOrder() {
-    console.log("刷新所有订单");
+    // console.log("刷新所有订单");
     
     
     let pageNum = 0;
@@ -55,11 +55,11 @@ Page({
   },
   // 用户点击取消理由对话框的结果
   async handleCancelReasonResult(e) {
-    console.log("event", e);
+    // console.log("event", e);
     const dialogRes = e.detail;
-    console.log("dialogRes", dialogRes);
+    // console.log("dialogRes", dialogRes);
     if (dialogRes.cancel) {
-      console.log("dialogRes.cancel");
+      // console.log("dialogRes.cancel");
       this.setData({ showCancelReasonDialog: false });
       return;
     }
@@ -104,7 +104,7 @@ Page({
 
   // 获取更多已完成订单
   async handleGetMoreCompleteOrder() {
-    console.log("获取更多已完成订单");
+    // console.log("获取更多已完成订单");
     if (this.noMoreCompleteOrderFlag) {
       showToast("没有更多数据");
       return;

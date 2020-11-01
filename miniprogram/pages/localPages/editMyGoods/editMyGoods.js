@@ -64,11 +64,11 @@ Page({
 
     // 旧的商品信息
     const goodsInfoOld = this.data.goodsInfo;
-    console.log("goodsInfoNew", goodsInfoNew);
-    console.log("goodsInfoOld", goodsInfoOld);
+    // console.log("goodsInfoNew", goodsInfoNew);
+    // console.log("goodsInfoOld", goodsInfoOld);
     // 更新商品信息
     const res = await updateGoodsCloud(goodsInfoNew, goodsInfoOld);
-    console.log("res", res);
+    // console.log("res", res);
 
     // 如果上传成功则云端返回的数据是含有_id属性的，这时再跳转回上一页否则停留在当前页
     if (res) {
@@ -209,7 +209,7 @@ Page({
 
   async onLoad(option) {
     let goodsInfo = JSON.parse(option.goodsInfo);
-    console.log(goodsInfo);
+    // console.log(goodsInfo);
     this.setData({
       goodsInfo,
       img: goodsInfo.goodsPicUrl,

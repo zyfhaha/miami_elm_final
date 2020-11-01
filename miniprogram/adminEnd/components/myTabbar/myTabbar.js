@@ -70,13 +70,10 @@ Component({
         setting: "../setting/setting",
       };
       let curPages = getCurrentPages();
-      console.log("curPages", curPages);
       let curPagesList = curPages.map((v) => {
         let routeComponent = v.route.split("/");
         return routeComponent[routeComponent.length - 1];
       });
-      console.log("curPagesList", curPagesList);
-      // let curPageName = curPagesList[curPagesList.length - 1];
       const targetPageName = idx2PageName[e.detail.index];
 
       let targetPageIdx = curPagesList.findIndex((v) => v === targetPageName);

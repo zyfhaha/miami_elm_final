@@ -216,8 +216,8 @@ Page({
 
     // =========计算还差多少钱允许结算  ======
     let minConsumption = this.shopInfo.minConsumption;
-    console.log("minConsumption", minConsumption);
-    console.log("totalPrice", totalPrice);
+    // console.log("minConsumption", minConsumption);
+    // console.log("totalPrice", totalPrice);
 
     let checkOutConsumption = subtract(minConsumption, totalPrice);
 
