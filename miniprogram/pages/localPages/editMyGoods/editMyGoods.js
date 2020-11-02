@@ -1,7 +1,4 @@
-import {
-  removeManyGoodsCloud,
-  updateGoodsCloud,
-} from "../../../lib/goods/operation.js";
+import { removeManyGoodsCloud, updateGoodsCloud } from "../../../lib/goods/operation.js";
 import { showModal, showLoading, hideLoading } from "../../../utils/asyncWX.js";
 
 // 初始化云环境
@@ -14,7 +11,6 @@ const ugGoodsCateRef = db.collection("ugGoodsCate");
 const refreshFlag = false;
 
 let app = getApp();
-
 
 Page({
   data: {
@@ -33,10 +29,10 @@ Page({
     contactTypesIndex: 0,
 
     // 商品类别的索引
-    cateIndex:-1,
+    cateIndex: -1,
 
     // 可供选择的商品类别
-    catePickRng:{},
+    catePickRng: {},
 
     // 具体的联系方式
     contactType: ["微信号", "手机号", "邮箱", "QQ号"],
@@ -58,7 +54,7 @@ Page({
     // 新的商品信息
     const goodsInfoNew = {
       ...e.detail.value,
-      cateId:this.cateInfo[ this.data.cateIndex].cateId,
+      cateId: this.cateInfo[this.data.cateIndex].cateId,
       goodsPicUrl: this.data.img,
     };
 
@@ -77,7 +73,6 @@ Page({
         delta: 1,
       });
     }
-    
   },
 
   async handleDeleteGoods() {
@@ -141,25 +136,31 @@ Page({
 
   // 用户更改商品类别
   handleChangeGoodsCate(e) {
-    this.setData({cateIndex:e.detail.value});
+    this.setData({ cateIndex: e.detail.value });
   },
 
   // 获得商店的分类数据
   async getShopCateInfo(shopId) {
-    await showLoading("加载中");
-    const cateRes = await ugGoodsCateRef
-      .where({
-        shopId: shopId,
-        isExist: true,
-      })
-      .field({
-        _id: false,
-        cateId: true,
-        cateName: true,
-      })
-      .get();
-    await hideLoading();
-    return cateRes.data;
+    try {
+      await showLoading("加载中");
+      const cateRes = await ugGoodsCateRef
+        .where({
+          shopId: shopId,
+          isExist: true,
+        })
+        .field({
+          _id: false,
+          cateId: true,
+          cateName: true,
+        })
+        .get();
+      return cateRes.data;
+    } catch (error) {
+      showModal("错误", "请检查网络状态后重试");
+      return;
+    } finally {
+      await hideLoading();
+    }
   },
 
   // ==============================================================
@@ -192,6 +193,9 @@ Page({
 
     // 准备可供选择的cate项目
     const cateInfo = await this.getShopCateInfo(this.shopId);
+    if (!cateInfo) {
+      return;
+    }
     this.cateInfo = cateInfo;
 
     // 从goodsInfo中获取cateId
@@ -201,7 +205,7 @@ Page({
     // set cateName
     this.setData({
       cateIndex,
-      catePickRng:cateInfo
+      catePickRng: cateInfo,
     });
   },
 

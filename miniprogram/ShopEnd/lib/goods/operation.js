@@ -127,7 +127,7 @@ async function verifyGoodsInfo(goodsInfo) {
   // 商品详情检查
   // 要求:可以为空
   if (!goodsInfo.goodsDetail.trim()) {
-    const res = await showModal("确定不填写商品详情?");
+    const res = await showModal("提示","未填写商品详情");
     if (res.cancel) {
       return;
     }

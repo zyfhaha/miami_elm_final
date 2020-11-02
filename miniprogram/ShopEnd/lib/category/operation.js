@@ -30,8 +30,6 @@ async function addGoodsCateCloud(shopInfo, cateInfo) {
     // console.log("无操作权限");
     return
   }
-  // TODO 判断请求是否成功需要有一个健壮的方法
-
   // 每个商店最多可以建100个类 这里需要检查当前的商店是否有100个类
   try {
     await showLoading("保存中");

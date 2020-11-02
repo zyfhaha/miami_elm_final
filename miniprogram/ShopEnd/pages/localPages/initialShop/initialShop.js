@@ -264,12 +264,10 @@ Page({
     }
     // 校验通过
     const initRes = await initialiShop(formData);
+    if(!initRes){
+      return;
+    }
     const initResData = initRes.result;
-    // console.log("initRes", initRes);
-
-    // console.log("initResData.data", initResData.data);
-
-    // console.log("initResData.errCode", initResData.errCode);
 
     // const initRes = true;
     if (initResData.errCode === 200) {

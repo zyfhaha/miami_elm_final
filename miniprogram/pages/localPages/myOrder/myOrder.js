@@ -34,11 +34,10 @@ Page({
   // =================   刷新所有订单函数 =============================
   async refreshAllOrder() {
     // console.log("刷新所有订单");
-    
-    
+
     let pageNum = 0;
     await showLoading();
-    const res = await Promise.all([getUncompleteOrderCloud(pageNum), getCompleteOrderCloud(pageNum)])
+    const res = await Promise.all([getUncompleteOrderCloud(pageNum), getCompleteOrderCloud(pageNum)]);
     const uncompleteOrder = res[0].result.data;
     const completeOrder = res[1].result.data;
 
@@ -64,7 +63,6 @@ Page({
       return;
     }
     if (dialogRes.confirm) {
-      
       const orderId = this.orderId_temp;
       const cancelReason = dialogRes.dialogInput.trim();
       if (!cancelReason) {
@@ -74,6 +72,9 @@ Page({
 
       const cancelRes = await cancelOrderCloud(orderId, cancelReason);
       this.setData({ showCancelReasonDialog: false });
+      if (!cancelRes) {
+        return;
+      }
       await this.refreshAllOrder();
       wx.showToast({ title: "已取消" });
     }
@@ -86,7 +87,6 @@ Page({
     await this.refreshAllOrder();
     this.setData({ refreshUncompleteOrderFlag: false });
     wx.showToast({ title: "已刷新" });
-
   },
 
   // ========================  已完成订单函数 ====================
@@ -99,7 +99,6 @@ Page({
     this.completeOrderPageNum = 0;
     this.noMoreCompleteOrderFlag = false;
     wx.showToast({ title: "已刷新" });
-
   },
 
   // 获取更多已完成订单
@@ -109,10 +108,13 @@ Page({
       showToast("没有更多数据");
       return;
     }
-    
+
     await showLoading();
     const res = await getCompleteOrderCloud(this.completeOrderPageNum + 1);
     await hideLoading();
+    if (!res) {
+      return;
+    }
     const moreCompleteOrder = res.result.data;
     if (moreCompleteOrder.length === 0) {
       showToast("没有更多数据");

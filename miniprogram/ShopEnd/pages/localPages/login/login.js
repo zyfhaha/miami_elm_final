@@ -56,6 +56,9 @@ Page({
     this.userType = userType;
     // 获取商店信息
     const loginRes = await loginCloud(userType);
+    if (!initRes) {
+      return;
+    }
     // console.log("登录返回结果 loginRes", loginRes);
     // errCode 103 没有注册的店主信息
     // errCode: 201 店主登录信息拉取成功
@@ -266,7 +269,9 @@ Page({
 
   async register(code, type, userInfo) {
     const registerRes = await registerCloud(code, type, userInfo);
-    // console.log("registerRes", registerRes);
+    if (!registerRes) {
+      return;
+    }
     const { data, errCode } = registerRes.result;
     // errCode 100 表示注册码不存在
     // errCode 101 表示注册码已经被用过

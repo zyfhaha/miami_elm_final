@@ -40,14 +40,13 @@ Page({
   //  ============================== 刷新所有订单的函数 =========================
 
   async refreshAllOrder() {
-    console.log("刷新所有订单");
     let pageNum = 0;
     const shopId = this.shopInfo.shopId;
     await showLoading();
-    console.log("开始刷新");
     const res = await Promise.all([getRecentOrderCloud(shopId, pageNum), getOldOrderCloud(shopId, pageNum)]);
-    console.log("refreshAllOrder--->res",res);
-    
+    if (!res[0] && !res[1]) {
+      return;
+    }
     const recentOrder = res[0].result.data;
     const oldOrder = res[1].result.data;
 
@@ -74,6 +73,9 @@ Page({
       return;
     }
     const res = await getRecentOrderCloud(this.shopInfo.shopId, this.recentOrderPageNum + 1);
+    if (!res) {
+      return;
+    }
     const moreRecentOrder = res.result.data;
     if (moreRecentOrder.length === 0) {
       showToast("没有更多数据");
@@ -107,6 +109,9 @@ Page({
     }
 
     const res = await getOldOrderCloud(this.shopInfo.shopId, this.oldOrderPageNum + 1);
+    if (!res) {
+      return;
+    }
     const moreOldOrder = res.result.data;
     if (moreOldOrder.length === 0) {
       showToast("没有更多数据");

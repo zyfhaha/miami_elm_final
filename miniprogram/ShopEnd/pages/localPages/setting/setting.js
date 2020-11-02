@@ -1,7 +1,4 @@
-import {
-  updateShopStatusCloud,
-  getShopInfoCloud,
-} from "../../../lib/setting/operation.js";
+import { updateShopStatusCloud, getShopInfoCloud } from "../../../lib/setting/operation.js";
 import { showActionSheet } from "../../../utils/asyncWX.js";
 let app = getApp();
 
@@ -50,10 +47,7 @@ Page({
       return;
     }
     // 更新云端的商店状态
-    const updateStatusRes = await updateShopStatusCloud(
-      this.shopIndo,
-      tapIndex
-    );
+    const updateStatusRes = await updateShopStatusCloud(this.shopIndo, tapIndex);
     if (updateStatusRes) {
       this.setData({
         shopStatus: tapIndex,
@@ -78,12 +72,12 @@ Page({
     });
   },
 
-    // 用户点击登出商家端
-    handleLogOut(){
-      wx.reLaunch({
-        url: '../../../../pages/localPages/selAppEnd/selAppEnd',
-      })
-    },
+  // 用户点击登出商家端
+  handleLogOut() {
+    wx.reLaunch({
+      url: "../../../../pages/localPages/selAppEnd/selAppEnd",
+    });
+  },
 
   // ==========================================================
   // ==========================================================
@@ -95,11 +89,14 @@ Page({
     // console.log("app.globalData.shopInfo", app.globalData.shopInfo);
     // const shopInfo = app.globalData.shopInfo;
     const shopInfo = await getShopInfoCloud(app.globalData.shopInfo.shopId);
-    app.globalData.shopInfo = shopInfo
+    if (!shopInfo) {
+      return;
+    }
+    app.globalData.shopInfo = shopInfo;
     const accessInfo = app.globalData.accessInfo;
 
     this.shopInfo = shopInfo;
-    this.accessInfo = accessInfo
+    this.accessInfo = accessInfo;
 
     this.refreshSetting(shopInfo, accessInfo);
   },

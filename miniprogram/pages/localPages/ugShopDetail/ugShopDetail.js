@@ -208,7 +208,7 @@ Page({
       });
     } catch (error) {
       console.log(error);
-      showModal("网络错误");
+      showModal("错误","请检查网络状态后重试");
     } finally {
       await hideLoading();
     }

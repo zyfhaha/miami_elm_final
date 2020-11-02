@@ -17,8 +17,6 @@ Page({
   async refreshHomePage() {
     const res = await Promise.all([getSwiperListCloud(), getSelfRunShopListCloud(), getRecommendShopListCloud()]);
     const swiperList = res[0];
-    // console.log("swiperList", swiperList);
-
     const selfRunShopList = res[1];
     const recommendShopList = res[2];
 
