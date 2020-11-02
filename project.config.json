@@ -40,12 +40,6 @@
   "simulatorPluginLibVersion": {},
   "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
   "condition": {
-    "search": {
-      "list": []
-    },
-    "conversation": {
-      "list": []
-    },
     "plugin": {
       "list": []
     },
@@ -57,12 +51,6 @@
     },
     "miniprogram": {
       "list": [
-        {
-          "id": -1,
-          "name": "db guide",
-          "pathName": "pages/databaseGuide/databaseGuide",
-          "query": ""
-        },
         {
           "id": 1,
           "name": "购物车",
@@ -207,6 +195,7 @@
           "id": -1,
           "name": "获取用户昵称",
           "pathName": "ShopEnd/pages/localPages/getUserInfo/getUserInfo",
+          "query": "",
           "scene": null
         }
       ]
