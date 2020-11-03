@@ -12,19 +12,22 @@ Page({
     // 商店头像
     img: "",
     // 可供选择的营业类型
-    selShopCateItems: ["超市", "餐厅"],
-    // 展示营业类型选择结果
-    shopCateText: "请选择营业类型",
+    shopCateRng: [
+      { cateName: "超市", cateIdx: 0 },
+      { cateName: "餐厅", cateIdx: 1 },
+    ],
+    // 实际选择的商店类型
+    shopCate: -1,
 
     // 可供选择的州份
-    selStateItems: ["FL"],
-    // 展示选择的州份
-    state: "请选择State",
+    stateRng: [{ stateName: "FL", stateIdx: 0 }],
+    // 实际选择的州份
+    state: "",
 
     // 开门时间
-    openTime: "请选择开门时间",
+    openTime: "",
     // 关门时间
-    closeTime: "请选择关门时间",
+    closeTime: "",
 
     // 门店公告 主要用这个属性来实时显示输入的字数
     shopAnnounce: "",
@@ -43,14 +46,32 @@ Page({
     ],
     // 用于展示用户选择了哪些天作为营业天
     selOpenDayText: "请选择营业日",
+
+    // 营业日
+    openDay: [0,0,0,0,0,0,0],
+
     // 选择营业日对话框按钮
     buttons: [{ text: "取消" }, { text: "确定" }],
 
     // 配送时段数组
     deliverTimeList: [""],
 
-    // 最终提交的表单数据
-    formData: {},
+    // 可供选择的截单时间
+    cutOrderTimeRng: [...Array(59).keys()],
+    // 截单时间
+    cutOrderTime: -1,
+
+    // 可供选择的服务费百分比
+    serviceFeePercentRng: [...Array(100).keys()],
+
+    // 实际选择的服务费百分比
+    serviceFeePercent: -1,
+
+    // 可供选择的运费百分比
+    deliverFeePercentRng: [...Array(100).keys()],
+
+    // 实际选择的运费百分比
+    deliverFeePercent: -1,
   },
 
   // 删除上传的商店头像
@@ -76,42 +97,25 @@ Page({
     });
   },
 
-  // 处理所有的输入框输入值变动事件
-  handleInputChange(e) {
-    const { field } = e.currentTarget.dataset;
-    // console.log("检测到", field, "发生变化: ", e.detail.value);
-    this.setData({
-      [`formData.${field}`]: e.detail.value,
-    });
-  },
   // 商店公告输入框变动事件
   handleShopAnnounceChange(e) {
     const shopAnnounce = e.detail.value;
-    this.setData({ shopAnnounce, [`formData.shopAnnounce`]: shopAnnounce });
+    this.setData({ shopAnnounce });
   },
 
   // 营业类型输入值变动
   handleChangeShopCate(e) {
-    this.setData({
-      shopCate: e.detail.value,
-      [`formData.shopCate`]: e.detail.value,
-      shopCateText: this.data.selShopCateItems[e.detail.value],
-    });
+    this.setData({ shopCate: Number(e.detail.value) });
   },
 
   // 所在州份变动
   handleChangeState(e) {
-    // console.log("检测到State变化");
-    const state = this.data.selStateItems[e.detail.value];
-    this.setData({
-      state: state,
-      [`formData.state`]: state,
-    });
+    const state = this.data.stateRng[e.detail.value].stateName;
+    this.setData({ state: state });
   },
 
   // 点击打开选择营业日对话框
   handleChangeOpenDay(e) {
-    // console.log("点击修改营业日");
     this.setData({ openSelectOpenDayDialog: true });
   },
   // 用户更改营业日
@@ -126,18 +130,12 @@ Page({
       })
       .sort();
 
-    this.setData({
-      [`formData.openDay`]: openDay,
-    });
+    this.setData({ openDay });
 
     // 准备展示文本
     if (openDayIndex.length === 7) {
       this.setData({ selOpenDayText: "每天" });
-    } else if (
-      openDayIndex.length === 5 &&
-      !openDayIndex.includes(0) &&
-      !openDayIndex.includes(6)
-    ) {
+    } else if (openDayIndex.length === 5 && !openDayIndex.includes(0) && !openDayIndex.includes(6)) {
       this.setData({ selOpenDayText: "工作日" });
     } else {
       const tempDic = {
@@ -171,29 +169,21 @@ Page({
   // 开门时间变动
   handleChangeOpenTime(e) {
     const openTime = e.detail.value;
-    // console.log("检测到开门时间变化", openTime);
-    this.setData({
-      openTime: openTime,
-      [`formData.openTime`]: openTime,
-    });
+    this.setData({ openTime: openTime });
   },
 
   // 关门时间变动
   handleChangeCloseTime(e) {
     const closeTime = e.detail.value;
-    // console.log("检测到关门时间变化", closeTime);
-    this.setData({
-      closeTime: closeTime,
-      [`formData.closeTime`]: closeTime,
-    });
+    this.setData({ closeTime: closeTime });
   },
 
   // 用户点击增加配送时间
   async handleTapAddDeliverTIme() {
     let deliverTimeList = this.data.deliverTimeList;
-    if(deliverTimeList.length === 12){
-      await showToast("配送时间不能超过12个")
-      return
+    if (deliverTimeList.length === 12) {
+      await showToast("配送时间不能超过12个");
+      return;
     }
     deliverTimeList.push("");
     this.setData({ deliverTimeList });
@@ -212,59 +202,63 @@ Page({
     const time = e.detail.value;
     const index = e.currentTarget.dataset.index;
     let deliverTimeList = this.data.deliverTimeList;
-    if((deliverTimeList.findIndex((v)=>v === time)) !== -1){
-      await showToast("该配送时间已存在")
-      return
+    if (deliverTimeList.findIndex((v) => v === time) !== -1) {
+      await showToast("该配送时间已存在");
+      return;
     }
     deliverTimeList[index] = time;
-    this.setData({deliverTimeList})
+    this.setData({ deliverTimeList });
   },
 
   // 对配送时间按照从早到晚排序并只返回时间
-  getSortedDeliverTime(deliverTimeList){
-    let sortedDeliverTimeList = deliverTimeList.sort(function(v1,v2){
-      return parseInt(v1.slice(0,2)) * 60 + parseInt(v1.slice(-2)) - parseInt(v2.slice(0,2)) * 60 - parseInt(v2.slice(-2))
-    })
-    return sortedDeliverTimeList
+  getSortedDeliverTime(deliverTimeList) {
+    let sortedDeliverTimeList = deliverTimeList.sort(function (v1, v2) {
+      return parseInt(v1.slice(0, 2)) * 60 + parseInt(v1.slice(-2)) - parseInt(v2.slice(0, 2)) * 60 - parseInt(v2.slice(-2));
+    });
+    return sortedDeliverTimeList;
+  },
+
+  // 用户改变截单时间
+  handleChangeCutOrderTime(e) {
+    this.setData({ cutOrderTime: Number(e.detail.value) });
+  },
+
+  // 用户改变服务费百分比
+  handleChangeServiceFeePercent(e) {
+    this.setData({ serviceFeePercent: Number(e.detail.value) });
+  },
+  // 用户改变运费百分比
+  handleChangeDeliverFeePercent(e) {
+    this.setData({ deliverFeePercent: Number(e.detail.value) });
   },
 
   // 此处对表单各个单项进行单个校验
-  // TODO 太不优美了 到时候考虑使用专门的表单校验插件
-  // 2020-8-26 官方提供的表单校验bug太严重并且功能较为局限
 
-  async submitForm() {
-    let formData = this.data.formData;
+  async handleSaveForm(e) {
+    const formData = {
+      ...e.detail.value,
+      shopId: this.data.shopId,
+      logoUrl: this.data.img,
+      state: this.data.state,
+      openDay: this.data.openDay,
+      deliverTimeList: this.getSortedDeliverTime(this.data.deliverTimeList),
+      openTime: this.data.openTime,
+      closeTime: this.data.closeTime,
+      cutOrderTime: this.data.cutOrderTime,
+      serviceFeePercent: this.data.serviceFeePercent,
+      deliverFeePercent: this.data.deliverFeePercent,
+    };
+    console.log(formData);
 
-    // =========== 测试用 ==============
-      // formData.city= "LA";
-      // formData.shopName= "yysh测试商店";
-      // formData.closeTime= "16:00";
-      // formData.geoPoint= [];
-      // formData.isExist= true;
-      // formData.logoUrl= "";
-      // formData.minConsumption= "29.99";
-      // formData.openDay= [1, 1, 1, 1, 0, 0, 1];
-      // formData.openTime= "07:00";
-      // formData.shopAddress= "6234 SW 78TH ST";
-      // formData.shopAnnounce= "每天08:00-20:00营业 ↵每天12:00 14:00 18:00送货";
-      // formData.shopCate= "0";
-      // formData.shopPhoneNumber= "7863204598";
-      // formData.state= "FL";
-      // formData.zipcode= "33888";
-    //  =================================
-
-    formData.logoUrl = this.data.img;
-    formData.shopId = this.data.shopId;
-    formData.deliverTimeList = this.getSortedDeliverTime(this.data.deliverTimeList)
     const validateRes = validateInitShopSetting(formData, "商店初始信息");
-    // console.log("validateRes",validateRes);
+    console.log("validateRes", validateRes);
     if (!validateRes.isValid) {
-      await showToast(validateRes.message);
+      showToast(validateRes.message);
       return;
     }
     // 校验通过
     const initRes = await initialiShop(formData);
-    if(!initRes){
+    if (!initRes) {
       return;
     }
     const initResData = initRes.result;
@@ -289,8 +283,7 @@ Page({
         success: (result) => {
           wx.showModal({
             title: "商店初始化成功",
-            content:
-              "恭喜！您的商店已经初始化成功。即将跳转到商品管理页面。当您的商品数量为0时，顾客端将无法正常显示您的商店详情数据，请尽快添加商品吧~",
+            content: "恭喜！您的商店已经初始化成功。即将跳转到商品管理页面。当您的商品数量为0时，顾客端将无法正常显示您的商店详情数据，请尽快添加商品吧~",
           });
           // 在此设置用户的类型为店主
           const loginInfo = {
@@ -310,9 +303,6 @@ Page({
   },
   onLoad: function (options) {
     const shopId = options.shopId;
-    this.setData({
-      shopId: shopId,
-      [`formData.shopId`]: shopId,
-    });
+    this.setData({ shopId: shopId });
   },
 });

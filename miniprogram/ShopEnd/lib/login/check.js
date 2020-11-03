@@ -50,16 +50,6 @@ export function validatePhone(form, field, fieldText) {
 export function validateZipcode(form, field, fieldText) {
   // 检验是否存在
   const isExistRes = validateExist(form, field, fieldText);
-  if (!isExistRes.isValid) {
-    return isExistRes;
-  }
-
-  // 检验是否是纯数字
-  const isNumberRes = validatePureIntNumber(form, field, fieldText);
-  if (!isNumberRes.isValid) {
-    return isNumberRes;
-  }
-
   // 检验zip code是否是5位
   if (form[field].length !== 5) {
     return { isValid: false, message: fieldText + "格式错误" };

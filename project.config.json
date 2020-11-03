@@ -197,6 +197,12 @@
           "pathName": "ShopEnd/pages/localPages/getUserInfo/getUserInfo",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "初始化商店",
+          "pathName": "ShopEnd/pages/localPages/initialShop/initialShop",
+          "query": "",
+          "scene": null
         }
       ]
     }
