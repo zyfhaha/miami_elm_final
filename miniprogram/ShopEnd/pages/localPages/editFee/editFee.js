@@ -15,10 +15,10 @@ Page({
     // 实际选择的服务费比例
     serviceFeePercent: -1,
 
-    // 可供选择的运费比例
+    // 可供选择的配送费比例
     deliverFeePercentRng: [...Array(101).keys()],
 
-    // 实际选择的运费比例
+    // 实际选择的配送费比例
     deliverFeePercent: -1,
 
     editable: false,
@@ -50,7 +50,7 @@ Page({
     }
 
     // 检验输入合法性
-    // 检验运费比例
+    // 检验配送费比例
     validateRes = validateDeliverFeePercent(newDeliverFeePercent);
     if (!validateRes.isValid) {
       return validateRes;
@@ -81,7 +81,7 @@ Page({
   handleChangeServiceFeePercent(e) {
     this.setData({ serviceFeePercent: Number(e.detail.value) });
   },
-  // 用户改变运费比例
+  // 用户改变配送费比例
   handleChangeDeliverFeePercent(e) {
     this.setData({ deliverFeePercent: Number(e.detail.value) });
   },

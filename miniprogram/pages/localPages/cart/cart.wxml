@@ -31,10 +31,10 @@
                     合计:
                     <text class="total_price_text">${{shop.totalPrice}}</text>
                 </view>
-                <view class="deliver_fee">含商品配送费: $10</view>
+                <view class="deliver_fee">不含配送费、服务费等</view>
             </view>
-            <view wx:if="{{shop.totalPrice > shop.minConsumption}}" class="pay_btn_active" bindtap="handlePay" data-index="{{index1}}">结算</view>
-            <view wx:else class="pay_btn_inactive">未达起送消费</view>
+            <view wx:if="{{shop.totalPrice > shop.minConsumption}}" class="pay_btn active" bindtap="handlePay" data-index="{{index1}}">结算</view>
+            <view wx:else class="pay_btn inactive">未达起送消费</view>
         </view>
     </view>
 </block>

@@ -69,26 +69,19 @@
   font-weight: bold;
   color: var(--themeColor);
 }
-.cart_content .total_pay_warp .pay_info .deliver_fee {
-  font-size: 30rpx;
-}
-.cart_content .total_pay_warp .pay_btn_active {
+.cart_content .total_pay_warp .pay_btn {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 40rpx;
+  padding: 15rpx 40rpx;
   border-radius: 20rpx;
   font-size: 38rpx;
+}
+.cart_content .total_pay_warp .active {
   color: white;
   background-color: var(--themeColor);
 }
-.cart_content .total_pay_warp .pay_btn_inactive {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0 35rpx;
-  border-radius: 20rpx;
-  font-size: 33rpx;
+.cart_content .total_pay_warp .inactive {
   color: #ffffff;
   background-color: #a2d9da;
 }

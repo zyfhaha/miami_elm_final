@@ -121,8 +121,8 @@
   font-weight: bold;
   text-align: end;
 }
-.order_content .goods .deliver_fee {
-  padding: 10rpx;
+.order_content .goods .fee {
+  padding: 5rpx;
 }
 .order_content .goods .total_price {
   padding: 10rpx;

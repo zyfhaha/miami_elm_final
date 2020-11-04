@@ -98,9 +98,11 @@
   font-weight: bold;
   border-bottom: 1rpx solid #f0eef4;
 }
-.order_content .goods .deliver_fee {
+.order_content .goods .fee_warp {
   margin-top: 20rpx;
-  padding: 10rpx;
+}
+.order_content .goods .fee_warp .fee {
+  padding: 5rpx;
 }
 .order_content .order_operate_warp {
   border-bottom: 1rpx solid #f0eef4;

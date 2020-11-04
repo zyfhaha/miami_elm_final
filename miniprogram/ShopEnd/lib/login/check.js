@@ -65,7 +65,7 @@ export function validateServiceFeePercent(serviceFeePercent) {
 }
 export function validateDeliverFeePercent(deliverFeePercent) {
   let res = deliverFeePercent !== -1;
-  return { isValid: res, message: res ? "有效运费比例" : "无效运费比例" };
+  return { isValid: res, message: res ? "有效配送费比例" : "无效配送费比例" };
 }
 
 export function validateShopAnnounce(shopAnnounce) {
@@ -151,7 +151,7 @@ export function validateInitShopSetting(formData, formText) {
     return validateRes;
   }
 
-  // 检验运费比例
+  // 检验配送费比例
   validateRes = validateDeliverFeePercent(formData.deliverFeePercent);
   if (!validateRes.isValid) {
     return validateRes;

@@ -130,13 +130,6 @@
         },
         {
           "id": -1,
-          "name": "云开发测试(购物车)",
-          "pathName": "pages/localPages/testPageCart/testPageCart",
-          "query": "",
-          "scene": null
-        },
-        {
-          "id": -1,
           "name": "地图",
           "pathName": "pages/localPages/map/map",
           "query": "",

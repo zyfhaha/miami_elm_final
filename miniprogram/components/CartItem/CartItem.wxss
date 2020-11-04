@@ -70,7 +70,7 @@
   font-weight: bold;
   color: var(--themeColor);
 }
-.cart_content .total_pay_warp .pay_info .deliver_fee {
+.cart_content .total_pay_warp .pay_info .fee {
   font-size: 30rpx;
 }
 .cart_content .total_pay_warp .pay_btn {

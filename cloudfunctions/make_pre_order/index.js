@@ -140,7 +140,15 @@ exports.main = async (event, context) => {
     totalNum = NP.plus(totalNum, v.num);
   });
 
-  // TODO 总价还要加上配送费
+  // 计算服务费 配送费 
+  let serviceFee = NP.times(totalPrice, shopInfo.serviceFeePercent / 100);
+  let deliverFee = NP.times(totalPrice, shopInfo.deliverFeePercent / 100);
+
+  // 四舍五入到第二位小数
+  serviceFee = NP.round(serviceFee,2)
+  deliverFee = NP.round(deliverFee,2)
+
+  totalPrice = NP.plus(totalPrice,serviceFee,deliverFee)
 
   // 计算是否可以下单
   const isCheckOutActive = totalPrice >= shopInfo.minConsumption;
@@ -172,6 +180,8 @@ exports.main = async (event, context) => {
     inValidGoods: inValidGoods,
     shortOfStockGoods: shortOfStockGoods,
     orderId: orderId,
+    serviceFee:serviceFee,
+    deliverFee:deliverFee,
     createTime: createTime,
     status: -2,
     isExist: true,

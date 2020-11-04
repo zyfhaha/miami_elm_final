@@ -118,16 +118,17 @@
             </view>
             <view class="pay_info_warp">
                 <view class="pay_info">
+                    <view class="fee">服务费: ${{filters.toFix(preOrderInfo.serviceFee)}}</view>
+                    <view class="fee">配送费: ${{filters.toFix(preOrderInfo.deliverFee)}}</view>
                     <view class="total_price">
                         合计:
-                        <text class="total_price_text">${{preOrderInfo.totalPrice}}</text>
+                        <text class="total_price_text">${{filters.toFix(preOrderInfo.totalPrice)}}</text>
                     </view>
-                    <view class="deliver_fee">商品配送费: $10</view>
                 </view>
-                <view wx:if="{{preOrderInfo.isCheckOutActive}}" class="pay_btn_active" bindtap="handlePay">
+                <view wx:if="{{preOrderInfo.isCheckOutActive}}" class="pay_btn active" bindtap="handlePay">
                     下单
                 </view>
-                <view wx:else class="pay_btn_inactive">
+                <view wx:else class="pay_btn inactive">
                     还差 ${{filters.toFix(preOrderInfo.minConsumption-preOrderInfo.totalPrice)}} 起送
                 </view>
             </view>

@@ -1,4 +1,4 @@
-<mp-cells title="服务费与运费">
+<mp-cells title="服务费与配送费">
     <mp-cell prop="serviceFeePercent" title="服务费比例" footer="%">
         <picker disabled="{{!editable}}" mode="selector" bindchange="handleChangeServiceFeePercent" range="{{serviceFeePercentRng}}">
             <view class="weui-input" style="color:#808080; text-align:center">
@@ -9,15 +9,15 @@
     <view class="weui-cells__title" style="color:#9b9b9b; padding-top: 0; margin-top:0">
         服务费 = 顾客消费 x 服务费比例
     </view>
-    <mp-cell prop="deliverFeePercent" title="运费比例" footer="%">
+    <mp-cell prop="deliverFeePercent" title="配送费比例" footer="%">
         <picker disabled="{{!editable}}" mode="selector" bindchange="handleChangeDeliverFeePercent" range="{{deliverFeePercentRng}}">
             <view class="weui-input" style="color:#808080;  text-align:center">
-                {{deliverFeePercent === -1?"请选择运费比例":deliverFeePercent}}
+                {{deliverFeePercent === -1?"请选择配送费比例":deliverFeePercent}}
             </view>
         </picker>
     </mp-cell>
     <view class="weui-cells__title" style="color:#9b9b9b; padding-top: 0; margin-top:0">
-        运费 = 顾客消费 x 运费比例
+        配送费 = 顾客消费 x 配送费比例
     </view>
 </mp-cells>
 

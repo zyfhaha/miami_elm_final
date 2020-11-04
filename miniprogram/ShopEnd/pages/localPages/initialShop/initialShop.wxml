@@ -136,7 +136,7 @@
                             说明：截单时间表示在每个配送时间前接受的最晚下单时间。假设您设置了2个配送时间如：12:00, 18:00, 并且您设置截单时间为30分钟，则在11:30后下单的顾客将无法选择12:00作为收货时间而只能选择当日18:00。同理17:30后下单的顾客将无法选择当日18:00作为收货时间而只能选择次日12:00或18:00
                         </view>
                     </mp-cells>
-                    <mp-cells title="服务费与运费">
+                    <mp-cells title="服务费与配送费">
                         <mp-cell prop="serviceFeePercent" title="服务费比例" footer="%">
                             <picker mode="selector" bindchange="handleChangeServiceFeePercent" range="{{serviceFeePercentRng}}">
                                 <view class="weui-input" style="color:#808080; text-align:center">
@@ -147,15 +147,15 @@
                         <view class="weui-cells__title" style="color:#9b9b9b; padding-top: 0; margin-top:0">
                             服务费 = 顾客消费 x 服务费比例
                         </view>
-                        <mp-cell prop="deliverFeePercent" title="运费比例" footer="%">
+                        <mp-cell prop="deliverFeePercent" title="配送费比例" footer="%">
                             <picker mode="selector" bindchange="handleChangeDeliverFeePercent" range="{{deliverFeePercentRng}}">
                                 <view class="weui-input" style="color:#808080;  text-align:center">
-                                    {{deliverFeePercent === -1?"请选择运费比例":deliverFeePercent}}
+                                    {{deliverFeePercent === -1?"请选择配送费比例":deliverFeePercent}}
                                 </view>
                             </picker>
                         </mp-cell>
                         <view class="weui-cells__title" style="color:#9b9b9b; padding-top: 0; margin-top:0">
-                            运费 = 顾客消费 x 运费比例
+                            配送费 = 顾客消费 x 配送费比例
                         </view>
                     </mp-cells>
                     <mp-cells title="商店公告">

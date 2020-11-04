@@ -41,7 +41,10 @@
                 <text class="note_title">备注:</text>
                 <text class="note_content">{{orderDetail.note}}</text>
             </view>
-            <view class="deliver_fee">运费: $ {{orderDetail.deliverFee}}</view>
+            <view hidden="{{!isShowGoodsDetail}}" class="fee_warp">
+                <view class="fee">服务费: $ {{orderDetail.serviceFee}}</view>
+                <view class="fee">配送费: $ {{orderDetail.deliverFee}}</view>
+            </view>
         </view>
         <view class="total_price">总计: $ {{orderDetail.totalPrice}}</view>
     </view>

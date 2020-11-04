@@ -165,11 +165,15 @@ Page({
       return;
     }
 
-    const reqSubMsgRes = await requestSubscribeMessage("order");
-    if (!reqSubMsgRes) {
-      return;
-    }
-    orderInfo.allowNotifyOrderComplete = reqSubMsgRes.COMPLETE_ORDER;
+    // // TODO 测试完后恢复
+    // const reqSubMsgRes = await requestSubscribeMessage("order");
+    // if (!reqSubMsgRes) {
+    //   return;
+    // }
+    // orderInfo.allowNotifyOrderComplete = reqSubMsgRes.COMPLETE_ORDER;
+
+    const reqSubMsgRes = {}// TODO 测试完后删除
+    orderInfo.allowNotifyOrderComplete = false// TODO 测试完后删除
 
     // 下单时再次检测选择的配送时间是否合法来避免用户提前选择一个配送时间后长时间挂机直到截单后再下单
     if (!isReceiveTimeValid(new Date().getTime(), orderInfo.selDeliverTime, this.shopInfo.cutOrderTime)) {
@@ -267,7 +271,7 @@ Page({
         this.preOrderInfo = preOrderInfo;
         // console.log("preOrderInfo", preOrderInfo);
         this.setData({
-          preOrderInfo,
+          preOrderInfo, 
         });
         // 清理购物车
         this.cleanShopCart(preOrderInfo);

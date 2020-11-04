@@ -12,7 +12,9 @@
             <text user-select>{{orderDetail.street}}, {{orderDetail.city}}</text>
         </view>
         <view class="order_time_info">顾客下单时间: {{filters.toTimeStr(orderDetail.payTime)}}</view>
-        <view class="order_time_info">预定配送时间: {{filters.toTimeStr(orderDetail.selDeliverTime)}}</view>
+        <view class="order_time_info">
+            预定配送时间: {{filters.toTimeStr(orderDetail.selDeliverTime)}}
+        </view>
     </view>
     <!-- 商品详情 -->
     <view class="goods">
@@ -38,8 +40,9 @@
                 <text class="note_content">{{orderDetail.note}}</text>
             </view>
         </view>
-        <view hidden="{{!isShowGoodsDetail}}" class="deliver_fee">
-            运费: $ {{orderDetail.deliverFee}}
+        <view hidden="{{!isShowGoodsDetail}}" class="fee_warp">
+            <view class="fee">服务费: $ {{orderDetail.serviceFee}}</view>
+            <view class="fee">配送费: $ {{orderDetail.deliverFee}}</view>
         </view>
         <view class="total_price">总计: $ {{orderDetail.totalPrice}}</view>
     </view>

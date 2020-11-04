@@ -46,9 +46,8 @@
                 <view class="goods_price">${{filters.toFix(item.num * item.goodsPrice)}}</view>
             </view>
         </view>
-        <view hidden="{{!isShowGoodsDetail}}" class="deliver_fee">
-            运费: $ {{orderDetail.deliverFee}}
-        </view>
+        <view hidden="{{!isShowGoodsDetail}}" class="fee">服务费: $ {{orderDetail.serviceFee}}</view>
+        <view hidden="{{!isShowGoodsDetail}}" class="fee">配送费: $ {{orderDetail.deliverFee}}</view>
         <view class="total_price">总计: $ {{orderDetail.totalPrice}}</view>
     </view>
     <!-- 订单其他信息：下单时间，订单编号 -->

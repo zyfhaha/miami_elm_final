@@ -181,7 +181,7 @@
       top: 25%;
       right: 2%;
       width: 40%;
-      color:#7f7f7f;
+      color: #7f7f7f;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -207,37 +207,37 @@
         display: flex;
         flex-direction: column;
         .total_price {
-          font-size: 35rpx;
+          font-size: 30rpx;
           padding: 5rpx;
+          text-align: right;
           .total_price_text {
             font-weight: bold;
             color: var(--themeColor);
           }
         }
 
-        .deliver_fee {
+        .fee {
           font-size: 30rpx;
+          text-align: right;
         }
       }
     }
 
-    .pay_btn_active {
+    .pay_btn {
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 0 40rpx;
       border-radius: 20rpx;
       font-size: 38rpx;
+      flex: none;
+      margin: auto 0;
+      padding: 25rpx 35rpx;
+    }
+    .active {
       color: white;
       background-color: var(--themeColor);
     }
-    .pay_btn_inactive {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0 35rpx;
-      border-radius: 20rpx;
-      font-size: 33rpx;
+    .inactive {
       color: #ffffff;
       background-color: #a2d9da;
     }

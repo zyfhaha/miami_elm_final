@@ -99,9 +99,11 @@
   font-weight: normal;
   padding: 10rpx;
 }
-.order_content .goods .deliver_fee {
+.order_content .goods .fee_warp {
   margin-top: 20rpx;
-  padding: 10rpx;
+}
+.order_content .goods .fee_warp .fee {
+  padding: 5rpx;
 }
 .order_content .goods .total_price {
   padding: 10rpx;

@@ -183,33 +183,33 @@
   flex-direction: column;
 }
 .pay_page .total_pay_warp .pay_info_warp .pay_info .total_price {
-  font-size: 35rpx;
+  font-size: 30rpx;
   padding: 5rpx;
+  text-align: right;
 }
 .pay_page .total_pay_warp .pay_info_warp .pay_info .total_price .total_price_text {
   font-weight: bold;
   color: var(--themeColor);
 }
-.pay_page .total_pay_warp .pay_info_warp .pay_info .deliver_fee {
+.pay_page .total_pay_warp .pay_info_warp .pay_info .fee {
   font-size: 30rpx;
+  text-align: right;
 }
-.pay_page .total_pay_warp .pay_btn_active {
+.pay_page .total_pay_warp .pay_btn {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 40rpx;
   border-radius: 20rpx;
   font-size: 38rpx;
+  flex: none;
+  margin: auto 0;
+  padding: 25rpx 35rpx;
+}
+.pay_page .total_pay_warp .active {
   color: white;
   background-color: var(--themeColor);
 }
-.pay_page .total_pay_warp .pay_btn_inactive {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0 35rpx;
-  border-radius: 20rpx;
-  font-size: 33rpx;
+.pay_page .total_pay_warp .inactive {
   color: #ffffff;
   background-color: #a2d9da;
 }
