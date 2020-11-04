@@ -1,5 +1,22 @@
-// 验证开门关门时间是否合法
-export function validateOpenCloseTime(openTime, closeTime, message = "") {
+export function validateOpenDay(openDay) {
+  let sum = 0;
+  openDay.forEach((v) => {
+    sum += v;
+  });
+  if (sum === 0) {
+    return { isValid: false, message: "未选择营业日" };
+  }
+  return { isValid: true, message: "营业日验证通过" };
+}
+
+export function validateOpenCloseTime(openTime, closeTime) {
+  if (!openTime) {
+    return { isValid: false, message: "未填写开门时间" };
+  }
+  if (!closeTime) {
+    return { isValid: false, message: "未填写关门时间" };
+  }
+
   let openTimeHour = Number(openTime.slice(0, 2));
   let openTimeMinute = Number(openTime.slice(-2));
   let closeTimeHour = Number(closeTime.slice(0, 2));
@@ -11,9 +28,15 @@ export function validateOpenCloseTime(openTime, closeTime, message = "") {
   return { isValid: true, message: "开关门时间校验无误" };
 }
 
-// 检验配送时间
-export function validateDeliverTimeList(form, field) {
-  const deliverTimeList = form[field];
+// 对配送时间按照从早到晚排序并只返回时间
+export function getSortedDeliverTime(deliverTimeList) {
+  let sortedDeliverTimeList = deliverTimeList.sort(function (v1, v2) {
+    return parseInt(v1.slice(0, 2)) * 60 + parseInt(v1.slice(-2)) - parseInt(v2.slice(0, 2)) * 60 - parseInt(v2.slice(-2));
+  });
+  return sortedDeliverTimeList;
+}
+
+export function validateDeliverTimeList(deliverTimeList) {
   for (let i = 0; i < deliverTimeList.length; i++) {
     // 如果用户漏填了某个配送时间则报错
     if (!deliverTimeList[i]) {
@@ -21,6 +44,33 @@ export function validateDeliverTimeList(form, field) {
     }
   }
   return { isValid: true, message: "配送时间校验无误" };
+}
+
+export function validateCutOrderTime(cutOrderTime) {
+  let res = cutOrderTime !== -1;
+  return { isValid: res, message: res ? "有效截单时间" : "无效截单时间" };
+}
+
+export function validateMinConsumption(minConsumption) {
+  let validNum = /(^[1-9]\d*(\.\d{1,2})?$)|(^0(\.\d{1,2})?$)/.test(minConsumption);
+  if (!validNum || Number(minConsumption) > 9999 || Number(minConsumption) === 0) {
+    return { isValid: false, message: "无效起送消费" };
+  }
+  return { isValid: true, message: "有效起送消费" };
+}
+
+export function validateServiceFeePercent(serviceFeePercent) {
+  let res = serviceFeePercent !== -1;
+  return { isValid: res, message: res ? "有效服务费比例" : "无效服务费比例" };
+}
+export function validateDeliverFeePercent(deliverFeePercent) {
+  let res = deliverFeePercent !== -1;
+  return { isValid: res, message: res ? "有效运费比例" : "无效运费比例" };
+}
+
+export function validateShopAnnounce(shopAnnounce) {
+  let res = shopAnnounce !== "";
+  return { isValid: res, message: res ? "有效商店公告" : "无效商店公告" };
 }
 
 // =================================================
@@ -31,6 +81,7 @@ export function validateDeliverTimeList(form, field) {
 
 export function validateInitShopSetting(formData, formText) {
   console.log("formData", formData);
+  let validateRes = {};
   //校验商店头像
   if (!formData.logoUrl) {
     return { isValid: false, message: "未上传商店logo" };
@@ -65,57 +116,51 @@ export function validateInitShopSetting(formData, formText) {
     return { isValid: false, message: "无效Postal" };
   }
   // 校验营业日
-  const openDay = formData.openDay;
-  let sum = 0;
-  openDay.forEach((v) => {
-    sum += v;
-  });
-  if (sum === 0) {
-    return { isValid: false, message: "未选择营业日" };
+  validateRes = validateOpenDay(formData.openDay);
+  if (!validateRes.isValid) {
+    return validateRes;
   }
-  // 校验开门时间
-  if (!formData.openTime) {
-    return { isValid: false, message: "未填写开门时间" };
-  }
-  // 校验开门时间
-  if (!formData.closeTime) {
-    return { isValid: false, message: "未填写关门时间" };
-  }
-  // 联合检验开关门时间
-  let valiOpenCloseTime = validateOpenCloseTime(formData.openTime, formData.closeTime);
-  if (!valiOpenCloseTime.isValid) {
-    return valiOpenCloseTime;
+
+  // 校验开关门时间
+  validateRes = validateOpenCloseTime(formData.openTime, formData.closeTime);
+  if (!validateRes.isValid) {
+    return validateRes;
   }
 
   // 检验起送消费
-  if (!/(^[1-9]\d*(\.\d{1,2})?$)|(^0(\.\d{1,2})?$)/.test(formData.minConsumption)) {
-    return { isValid: false, message: "无效的起送消费" };
+  validateRes = validateMinConsumption(formData.minConsumption);
+  if (!validateRes.isValid) {
+    return validateRes;
   }
   // 检验配送时间
-  let valideliverTimeList = validateDeliverTimeList(formData, "deliverTimeList");
-  if (!valideliverTimeList.isValid) {
-    return valideliverTimeList;
+  validateRes = validateDeliverTimeList(formData.deliverTimeList);
+  if (!validateRes.isValid) {
+    return validateRes;
   }
-
+  formData.deliverTimeList = getSortedDeliverTime(formData.deliverTimeList);
 
   // 检验截单时间
-  if (formData.cutOrderTime === -1) {
-    return { isValid: false, message: "未填写截单时间" };
+  validateRes = validateCutOrderTime(formData.cutOrderTime);
+  if (!validateRes.isValid) {
+    return validateRes;
   }
 
-  // 检验服务费百分比
-  if (formData.serviceFeePercent === -1) {
-    return { isValid: false, message: "未填写服务费百分比" };
+  // 检验服务费比例
+  validateRes = validateServiceFeePercent(formData.serviceFeePercent);
+  if (!validateRes.isValid) {
+    return validateRes;
   }
 
-  // 检验运费百分比
-  if (formData.deliverFeePercent === -1) {
-    return { isValid: false, message: "未填写运费百分比" };
+  // 检验运费比例
+  validateRes = validateDeliverFeePercent(formData.deliverFeePercent);
+  if (!validateRes.isValid) {
+    return validateRes;
   }
 
   // 校验商店公告
-  if (!formData.shopAnnounce) {
-    return { isValid: false, message: "未填写商店公告" };
+  validateRes = validateShopAnnounce(formData.shopAnnounce);
+  if (!validateRes.isValid) {
+    return validateRes;
   }
 
   return { isValid: true, message: formText + "校验通过" };

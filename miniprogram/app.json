@@ -81,7 +81,8 @@
         "pages/localPages/editAssistant/editAssistant",
         "pages/localPages/getUserInfo/getUserInfo",
         "pages/localPages/editDeliver/editDeliver",
-        "pages/localPages/checkOrder/checkOrder"
+        "pages/localPages/checkOrder/checkOrder",
+        "pages/localPages/editFee/editFee"
       ]
     },
     {

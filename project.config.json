@@ -203,6 +203,12 @@
           "pathName": "ShopEnd/pages/localPages/initialShop/initialShop",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "选择端",
+          "pathName": "pages/localPages/selAppEnd/selAppEnd",
+          "query": "",
+          "scene": null
         }
       ]
     }

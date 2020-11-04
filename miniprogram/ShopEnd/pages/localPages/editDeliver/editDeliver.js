@@ -1,13 +1,6 @@
 import { showToast, showModal } from "../../../utils/asyncWX.js";
-import {
-  updateAppShopInfo,
-  updateDeliverSetting,
-} from "../../../lib/setting/operation.js";
-import {
-  validateDeliverTimeList,
-  validatePrice,
-  validateCutOrderTime,
-} from "../../../lib/login/check.js";
+import { updateAppShopInfo, updateDeliverSetting } from "../../../lib/setting/operation.js";
+import { validateDeliverTimeList, validateMinConsumption, validateCutOrderTime, getSortedDeliverTime } from "../../../lib/login/check.js";
 
 let app = getApp();
 
@@ -22,8 +15,11 @@ Page({
     // 起送起送消费
     minConsumption: 0,
 
+    // 可供选择的截单时间
+    cutOrderTimeRng: [...Array(60).keys()],
+
     // 截单时间
-    cutOrderTime: 0,
+    cutOrderTime: -1,
 
     // 配送时段数组
     deliverTimeList: [""],
@@ -63,25 +59,9 @@ Page({
     this.setData({ deliverTimeList });
   },
 
-  // 对配送时间按照从早到晚排序并只返回时间
-  getSortedDeliverTime(deliverTimeList) {
-    let sortedDeliverTimeList = deliverTimeList.sort(function (v1, v2) {
-      return (
-        parseInt(v1.slice(0, 2)) * 60 + parseInt(v1.slice(-2)) - parseInt(v2.slice(0, 2)) * 60 - parseInt(v2.slice(-2))
-      );
-    });
-    return sortedDeliverTimeList;
-  },
-
-  // 用户对input输入框进行了修改
-  handleInputChange(e) {
-    const field = e.currentTarget.dataset.field;
-    let temp = {};
-    const value = e.detail.value;
-    temp[field] = value;
-    this.setData({
-      ...temp,
-    });
+  // 用户改变截单时间
+  handleChangeCutOrderTime(e) {
+    this.setData({ cutOrderTime: Number(e.detail.value) });
   },
 
   // 用户点击放弃修改
@@ -103,20 +83,17 @@ Page({
 
   // 用户点击保存
   async handleTapSave(e) {
-    let newDeliverSetting = e.detail.value;
-    newDeliverSetting.deliverTimeList = this.getSortedDeliverTime(this.data.deliverTimeList.slice()); //.slice()也是为了浅拷贝
-
     // 先比较一下用户有没有真的修改内容
-    const newMinConsumption = newDeliverSetting.minConsumption;
-    const newCutOrderTime = newDeliverSetting.cutOrderTime;
-    const newDeliverTimeList = newDeliverSetting.deliverTimeList;
+    const newMinConsumption = e.detail.value.minConsumption;
+    const newCutOrderTime = this.data.cutOrderTime;
+    const newDeliverTimeList = getSortedDeliverTime(this.data.deliverTimeList.slice()); //.slice()也是为了浅拷贝
 
-    const oldMinConsumption = String(this.shopInfo.minConsumption);
-    const oldCutOrderTime = String(this.shopInfo.cutOrderTime);
+    const oldMinConsumption = this.shopInfo.minConsumption;
+    const oldCutOrderTime = this.shopInfo.cutOrderTime;
     const oldDeliverTimeList = this.shopInfo.deliverTimeList;
 
     if (
-      newMinConsumption === oldMinConsumption &&
+      Number(newMinConsumption) === Number(oldMinConsumption) &&
       newCutOrderTime === oldCutOrderTime &&
       newDeliverTimeList.every((v, i) => v === oldDeliverTimeList[i])
     ) {
@@ -125,31 +102,21 @@ Page({
     }
 
     // 检验输入合法性
-    const valiMinconsupmtionRes = validatePrice(
-      newDeliverSetting,
-      "minConsumption",
-      "起送消费"
-    );
-    if (!valiMinconsupmtionRes.isValid) {
-      showToast(valiMinconsupmtionRes.message);
+    const validateMinConsumptionRes = validateMinConsumption(String(newMinConsumption));
+    if (!validateMinConsumptionRes.isValid) {
+      showToast(validateMinConsumptionRes.message);
       return;
     }
 
-    const valiDeliverTimeListRes = validateDeliverTimeList(
-      newDeliverSetting,
-      "deliverTimeList"
-    );
+    const valiDeliverTimeListRes = validateDeliverTimeList(newDeliverTimeList);
     if (!valiDeliverTimeListRes.isValid) {
       showToast(valiDeliverTimeListRes.message);
       return;
     }
 
-    const valiCutOrderTime = validateCutOrderTime(
-      newDeliverSetting,
-      "cutOrderTime"
-    );
-    if (!valiCutOrderTime.isValid) {
-      showToast(valiCutOrderTime.message);
+    const valiCutOrderTimeRes = validateCutOrderTime(newCutOrderTime);
+    if (!valiCutOrderTimeRes.isValid) {
+      showToast(valiCutOrderTimeRes.message);
       return;
     }
 
@@ -159,14 +126,14 @@ Page({
     }
 
     // 运行到此说明输入数据无误 先做一下数据转换
-    newDeliverSetting.minConsumption = Number(newDeliverSetting.minConsumption);
-    newDeliverSetting.cutOrderTime = parseInt(newDeliverSetting.cutOrderTime);
+    let newDeliverSetting = {
+      minConsumption: Number(newMinConsumption),
+      cutOrderTime: newCutOrderTime,
+      deliverTimeList: newDeliverTimeList,
+    };
 
     // 开始上传修改
-    const updateRes = await updateDeliverSetting(
-      this.shopInfo,
-      newDeliverSetting
-    );
+    const updateRes = await updateDeliverSetting(this.shopInfo, newDeliverSetting);
     if (updateRes) {
       // 重新从云端拉取一遍shopInfo
       await updateAppShopInfo(this.shopInfo.shopId);
@@ -182,10 +149,10 @@ Page({
     const { cutOrderTime, deliverTimeList, minConsumption } = shopInfo;
     // 注意这里需要对数组进行一个浅拷贝 不然this.data中的deliverTimeList与shopInfo中的deliverTimeList是同一个引用
     let deliverTimeListCopy = deliverTimeList.slice();
-    
+
     this.setData({
       cutOrderTime,
-      deliverTimeList:deliverTimeListCopy,
+      deliverTimeList: deliverTimeListCopy,
       minConsumption,
     });
   },

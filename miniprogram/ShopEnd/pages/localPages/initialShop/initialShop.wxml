@@ -95,14 +95,14 @@
                             <input class="weui-input" disabled="{{true}}" placeholder="{{selOpenDayText}}" bind:tap="handleChangeOpenDay" />
                         </mp-cell>
                         <mp-cell prop="openTime" title="开门时间" ext-class="">
-                            <picker mode="time" bindchange="handleChangeOpenTime">
+                            <picker mode="time" start="05:00" bindchange="handleChangeOpenTime">
                                 <view class="weui-input" style="color:#808080">
                                     {{openTime || "请选择开门时间"}}
                                 </view>
                             </picker>
                         </mp-cell>
                         <mp-cell prop="closeTime" title="关门时间" ext-class="">
-                            <picker mode="time" bindchange="handleChangeCloseTime">
+                            <picker mode="time" end="23:59" bindchange="handleChangeCloseTime">
                                 <view class="weui-input" style="color:#808080">
                                     {{closeTime || "请选择关门时间"}}
                                 </view>
@@ -137,25 +137,25 @@
                         </view>
                     </mp-cells>
                     <mp-cells title="服务费与运费">
-                        <mp-cell prop="serviceFeePercent" title="服务费百分比" footer="%">
+                        <mp-cell prop="serviceFeePercent" title="服务费比例" footer="%">
                             <picker mode="selector" bindchange="handleChangeServiceFeePercent" range="{{serviceFeePercentRng}}">
                                 <view class="weui-input" style="color:#808080; text-align:center">
-                                    {{serviceFeePercent === -1?"请选择服务费百分比":serviceFeePercent}}
+                                    {{serviceFeePercent === -1?"请选择服务费比例":serviceFeePercent}}
                                 </view>
                             </picker>
                         </mp-cell>
                         <view class="weui-cells__title" style="color:#9b9b9b; padding-top: 0; margin-top:0">
-                            服务费 = 顾客消费 x 服务费百分比
+                            服务费 = 顾客消费 x 服务费比例
                         </view>
-                        <mp-cell prop="deliverFeePercent" title="运费百分比" footer="%">
+                        <mp-cell prop="deliverFeePercent" title="运费比例" footer="%">
                             <picker mode="selector" bindchange="handleChangeDeliverFeePercent" range="{{deliverFeePercentRng}}">
                                 <view class="weui-input" style="color:#808080;  text-align:center">
-                                    {{deliverFeePercent === -1?"请选择运费百分比":deliverFeePercent}}
+                                    {{deliverFeePercent === -1?"请选择运费比例":deliverFeePercent}}
                                 </view>
                             </picker>
                         </mp-cell>
                         <view class="weui-cells__title" style="color:#9b9b9b; padding-top: 0; margin-top:0">
-                            运费 = 顾客消费 x 运费百分比
+                            运费 = 顾客消费 x 运费比例
                         </view>
                     </mp-cells>
                     <mp-cells title="商店公告">

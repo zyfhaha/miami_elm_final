@@ -118,7 +118,7 @@ Page({
   // 开门时间变动
   handleChangeOpenTime(e) {
     const openTime = e.detail.value;
-    // console.log("检测到开门时间变化", openTime);
+    console.log("检测到开门时间变化", openTime);
     this.setData({
       openTime: openTime,
     });

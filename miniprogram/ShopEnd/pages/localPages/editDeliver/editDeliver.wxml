@@ -4,7 +4,7 @@
             <mp-cell prop="minConsumption" title="起送消费">
                 <view class="input" style="display:flex; align-items: center;">
                     $
-                    <input name="minConsumption" value="{{minConsumption}}" disabled="{{!editable}}" bindinput="handleInputChange" class="{{editable?'active':'inactive'}}" type="digit" data-field="minConsumption" placeholder="请输入起送消费" />
+                    <input name="minConsumption" value="{{minConsumption}}" disabled="{{!editable}}" class="{{editable?'active':'inactive'}}" type="digit" data-field="minConsumption" placeholder="请输入起送消费" />
                 </view>
             </mp-cell>
             <mp-cell wx:for="{{deliverTimeList}}" wx:key="*this" prop="deliverTime" title="配送时间 {{index + 1}}" ext-class="">
@@ -17,7 +17,11 @@
                 </block>
             </mp-cell>
             <mp-cell prop="cutOrderTime" title="截单时间" footer="分钟">
-                <input name="cutOrderTime" value="{{cutOrderTime}}" disabled="{{!editable}}" class="weui-input {{editable?'active':'inactive'}}" bindinput="handleInputChange" type="number" data-field="cutOrderTime" placeholder="请输入截单时间" />
+                <picker disabled="{{!editable}}" mode="selector" bindchange="handleChangeCutOrderTime" range="{{cutOrderTimeRng}}">
+                    <view class="weui-input" style="color:#808080">
+                        {{cutOrderTime === -1?"请选择截单时间":cutOrderTime}}
+                    </view>
+                </picker>
             </mp-cell>
             <view class="weui-cells__title" style="color:#9b9b9b; padding-top: 0; margin-top:0">
                 说明：截单时间表示在每个配送时间前接受的最晚下单时间。假设您设置了2个配送时间如：12:00, 18:00, 并且您设置截单时间为30分钟，则在11:30后下单的顾客将无法选择12:00作为收货时间而只能选择当日18:00。同理17:30后下单的顾客将无法选择当日18:00作为收货时间而只能选择次日12:00或18:00

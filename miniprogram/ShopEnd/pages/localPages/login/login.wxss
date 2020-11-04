@@ -61,6 +61,7 @@
 .page_container .login .customer_service_btn_warp .customer_service_btn {
   font-size: 30rpx;
   width: 70%;
+  background-color: transparent;
   color: white;
 }
 .page_container .login .customer_service_btn_warp .customer_service_btn button::after {

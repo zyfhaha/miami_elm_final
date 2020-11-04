@@ -38,11 +38,6 @@ Page({
     });
   },
 
-  // 用户点击登录有问题
-  async handleTapLoginProblem(e) {
-    await showModal("官方邮箱:xxxxxxxx\n请您在邮件中写明来意，我们会在三个工作日内进行回复");
-  },
-
   /*  =============用户点击登录(店主或店员)================= */
   // 用户登陆类型
   userType: "",
@@ -56,7 +51,7 @@ Page({
     this.userType = userType;
     // 获取商店信息
     const loginRes = await loginCloud(userType);
-    if (!initRes) {
+    if (!loginRes) {
       return;
     }
     // console.log("登录返回结果 loginRes", loginRes);

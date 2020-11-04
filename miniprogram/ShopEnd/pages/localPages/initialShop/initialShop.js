@@ -48,7 +48,7 @@ Page({
     selOpenDayText: "请选择营业日",
 
     // 营业日
-    openDay: [0,0,0,0,0,0,0],
+    openDay: [0, 0, 0, 0, 0, 0, 0],
 
     // 选择营业日对话框按钮
     buttons: [{ text: "取消" }, { text: "确定" }],
@@ -57,20 +57,20 @@ Page({
     deliverTimeList: [""],
 
     // 可供选择的截单时间
-    cutOrderTimeRng: [...Array(59).keys()],
+    cutOrderTimeRng: [...Array(60).keys()],
     // 截单时间
     cutOrderTime: -1,
 
-    // 可供选择的服务费百分比
-    serviceFeePercentRng: [...Array(100).keys()],
+    // 可供选择的服务费比例
+    serviceFeePercentRng: [...Array(101).keys()],
 
-    // 实际选择的服务费百分比
+    // 实际选择的服务费比例
     serviceFeePercent: -1,
 
-    // 可供选择的运费百分比
-    deliverFeePercentRng: [...Array(100).keys()],
+    // 可供选择的运费比例
+    deliverFeePercentRng: [...Array(101).keys()],
 
-    // 实际选择的运费百分比
+    // 实际选择的运费比例
     deliverFeePercent: -1,
   },
 
@@ -210,24 +210,16 @@ Page({
     this.setData({ deliverTimeList });
   },
 
-  // 对配送时间按照从早到晚排序并只返回时间
-  getSortedDeliverTime(deliverTimeList) {
-    let sortedDeliverTimeList = deliverTimeList.sort(function (v1, v2) {
-      return parseInt(v1.slice(0, 2)) * 60 + parseInt(v1.slice(-2)) - parseInt(v2.slice(0, 2)) * 60 - parseInt(v2.slice(-2));
-    });
-    return sortedDeliverTimeList;
-  },
-
   // 用户改变截单时间
   handleChangeCutOrderTime(e) {
     this.setData({ cutOrderTime: Number(e.detail.value) });
   },
 
-  // 用户改变服务费百分比
+  // 用户改变服务费比例
   handleChangeServiceFeePercent(e) {
     this.setData({ serviceFeePercent: Number(e.detail.value) });
   },
-  // 用户改变运费百分比
+  // 用户改变运费比例
   handleChangeDeliverFeePercent(e) {
     this.setData({ deliverFeePercent: Number(e.detail.value) });
   },
@@ -241,7 +233,7 @@ Page({
       logoUrl: this.data.img,
       state: this.data.state,
       openDay: this.data.openDay,
-      deliverTimeList: this.getSortedDeliverTime(this.data.deliverTimeList),
+      deliverTimeList: this.data.deliverTimeList,
       openTime: this.data.openTime,
       closeTime: this.data.closeTime,
       cutOrderTime: this.data.cutOrderTime,

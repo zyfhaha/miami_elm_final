@@ -48,6 +48,9 @@ Page({
   },
 
   async getShopDetail(shopId) {
+    if (!shopId) {
+      return false;
+    }
     // 首先获取商店信息详情
     try {
       showLoading();
@@ -96,7 +99,7 @@ Page({
 
       // 同步页面数据
       this.setPageData();
-      return true
+      return true;
     } catch (error) {
       console.log("error", error);
       showModal("错误", "请检查网络状态后重试");
@@ -294,7 +297,7 @@ Page({
       this.setPageData();
     });
 
-    const shopId = options.shopId;
+    const shopId = options.shopId || "";
     const cateId = options.cateId || "";
     const goodsId = options.goodsId || "";
 
@@ -312,7 +315,6 @@ Page({
   },
 
   async onShow() {
-
     if (this.onLoadOver) {
       this.setPageData();
     }

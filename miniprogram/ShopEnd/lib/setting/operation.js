@@ -144,3 +144,27 @@ export async function updateDeliverSetting(shopInfo, setting) {
     await hideLoading();
   }
 }
+
+export async function updateFeeSetting(shopInfo, fee) {
+  if (!(await CanI("setting"))) {
+    console.log("无操作权限");
+    return;
+  }
+  try {
+    await showLoading("保存中");
+    const updateRes = await shopRef
+    .where({ shopId: shopInfo.shopId })
+    .update({
+      data: {
+        ...fee,
+      },
+    });
+    return updateRes;
+  } catch (error) {
+    console.log(error);
+    showModal("错误", "请检查网络状态后重试");
+    return false;
+  } finally {
+    await hideLoading();
+  }
+}
