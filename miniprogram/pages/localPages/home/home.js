@@ -19,6 +19,8 @@ Page({
     const swiperList = res[0];
     const selfRunShopList = res[1];
     const recommendShopList = res[2];
+    console.log(recommendShopList);
+    
 
     this.setData({ swiperList, selfRunShopList, recommendShopList });
   },

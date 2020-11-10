@@ -26,21 +26,8 @@ export async function getSelfRunShopListCloud() {
 
 // 获取推荐商店数据
 export async function getRecommendShopListCloud() {
-  //TODO
-  const recommendShopRes = await shopRef
-    .where({
-      isActivated: true,
-      isExist: true,
-    })
-    .field({
-      // 只返回下列字段
-      shopId: true,
-      shopName: true,
-      logoUrl: true,
-      shopStatus: true,
-      minConsumption: true,
-    })
-    .orderBy("order", "asc")
-    .get();
-  return recommendShopRes.data;
+  const recommendShopRes = await wx.cloud.callFunction({
+    name: "get_advertise_shop",
+  });
+  return recommendShopRes.result.allShops;
 }
