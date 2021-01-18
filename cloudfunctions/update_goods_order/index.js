@@ -1,4 +1,4 @@
-// 更新goodsCate的顺序
+// TODO 写清楚函数用途
 
 const cloud = require("wx-server-sdk");
 // 初始化 cloud
@@ -13,20 +13,21 @@ const db = cloud.database({
 const _ = db.command;
 const shopRef = db.collection("shop");
 const goodsCateRef = db.collection("goodsCate");
+const goodsRef = db.collection("goods");
 // 云函数入口函数
 exports.main = async (event, context) => {
-  const{catesList} = event;
-  console.log("云函数列表",catesList);
+  const{goodsList} = event;
+  console.log("云函数商品列表",goodsList);
   
   const wxContext = cloud.getWXContext();
   const tasks = []//记录所有的promise到一个数组
-  for(let i=0;i<catesList.length;i++){
-    const promise = goodsCateRef.where({
-      cateId:catesList[i].cateId
+  for(let i=0;i<goodsList.length;i++){
+    const promise = goodsRef.where({
+      goodsId:goodsList[i].goodsId
     })
     .update({
       data:{
-        ...catesList[i]
+        ...goodsList[i]
       }
     })
     tasks.push(promise)

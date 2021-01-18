@@ -7,7 +7,7 @@ cloud.init({
 });
 
 const db = cloud.database({
-  env: "env-miamielm-p3buy",
+  env: "env-miamielm-5gliunnq19c0a342",
 });
 const goodsCateRef = db.collection("goodsCate");
 // 云函数入口函数

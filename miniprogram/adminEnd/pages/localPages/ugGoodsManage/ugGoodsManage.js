@@ -5,7 +5,7 @@ import { showLoading, hideLoading, showModal } from "../../../utils/asyncWX.js";
 // } from "../../../lib/goods/operation.js";
 // 初始化云环境
 const db = wx.cloud.database({
-  env: "env-miamielm-p3buy",
+  env: "env-miamielm-5gliunnq19c0a342",
 });
 // 这里只获取shop和goodsCate的索引 goods通过云函数获得
 const ugShopRef = db.collection("ugShop");

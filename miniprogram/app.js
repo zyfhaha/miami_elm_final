@@ -30,7 +30,7 @@ App({
   },
   onLaunch() {
     wx.cloud.init({
-      env: "env-miamielm-p3buy",
+      env: "env-miamielm-5gliunnq19c0a342",
       traceUer: true,
     });
     // 监听网络状态变化

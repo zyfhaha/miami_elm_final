@@ -6,7 +6,7 @@ cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV,
 });
 
-const db = cloud.database({ env: "env-miamielm-p3buy" });
+const db = cloud.database({ env: "env-miamielm-5gliunnq19c0a342" });
 const orderRef = db.collection("order");
 const MAX_LIMIT = 20;
 const _ = db.command;

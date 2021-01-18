@@ -1,5 +1,4 @@
-// 审核用户发布的商品
-
+// 用户点击以店主身份登录或者以店员身份登录时需要拉取的和用户有关的商店数据
 // 云函数入口文件
 const cloud = require("wx-server-sdk");
 cloud.init({
@@ -11,16 +10,17 @@ const db = cloud.database({
 });
 const _ = db.command;
 const $ = db.command.aggregate;
-
-// 获取ugGoods表的引用
+// 获取shop表的引用
 const ugGoodsRef = db.collection("ugGoods");
-
 // 云函数入口函数
 exports.main = async (event, context) => {
-  const { goodsInfo } = event;
-  return await ugGoodsRef
-    .where({
-      goodsId: goodsInfo.goodsId,
-    })
-    .update({ data: { ...goodsInfo } });
-};
+  now = (new Date()).getTime()
+  const clearRes = await ugGoodsRef.where({
+    expireTime: _.lte(now)
+  }).update({data:{
+    isExist:true
+  }})
+
+
+  return clearRes
+}
