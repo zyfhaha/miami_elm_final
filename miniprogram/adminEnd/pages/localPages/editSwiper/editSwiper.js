@@ -162,7 +162,6 @@ Page({
 
   async refreshEditSwiper(){
     const swiperList = await getSwiperCloud()
-    console.log("swiperList",swiperList);
     this.swiperList = JSON.parse(JSON.stringify(swiperList));
     this.setData({swiperList})
     hideLoading()

@@ -69,7 +69,7 @@ exports.main = async (event, context) => {
     shopId: shopId,
     shopName: shopName,
   };
-  const advertiseRes = await advertiseShopRef.add({
+  const advertiseRes = await advdetiseShopRef.add({
     data: {
       shopId:shopId,
       shopName: shopName,
