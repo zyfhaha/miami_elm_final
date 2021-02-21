@@ -13,7 +13,7 @@ const ugGoodsRef = db.collection("ugGoods");
 // 获取轮播图数据
 export async function getSwiperCloud() {
   showLoading("刷新中");
-  const swiperListRef = await advertiseSwiperRef.where({ location: "home",isExist:true }).field({ _id: false, _openid: false }).orderBy("order", "asc").get();
+  const swiperListRef = await advertiseSwiperRef.where({ location: "home", isExist: true }).field({ _id: false, _openid: false }).orderBy("order", "asc").get();
   hideLoading();
   return swiperListRef.data;
 }
@@ -34,7 +34,7 @@ export function getEmptySwiper(index) {
     goodsId: "",
     navigatorUrl: "",
     isUgShop: false,
-    isExist:true,
+    isExist: true,
   };
   return emptySwiper;
 }
@@ -121,10 +121,10 @@ async function addRelevantInfo(swiper) {
   let _goodsRef;
   if (swiper.isUgShop) {
     _goodsCateRef = ugGoodsCateRef;
-    _goodsRef = ugGoodsRef
-  }else{
+    _goodsRef = ugGoodsRef;
+  } else {
     _goodsCateRef = goodsCateRef;
-    _goodsRef = goodsRef
+    _goodsRef = goodsRef;
   }
 
   if (swiper.cateName !== "" && swiper.cateId == "") {
@@ -255,7 +255,7 @@ export async function updateSwiperListCloud(newSwiperList, oldSwiperList) {
   for (let i = 0; i < oldSwiperList.length; i++) {
     let idx = newSwiperList.findIndex((v) => v.swiperId === oldSwiperList[i].swiperId);
     if (idx === -1) {
-      let deleteSwiperTask = advertiseSwiperRef.where({ swiperId: oldSwiperList[i].swiperId }).update({data:{isExist:false}});
+      let deleteSwiperTask = advertiseSwiperRef.where({ swiperId: oldSwiperList[i].swiperId }).update({ data: { isExist: false } });
       taskList.push(deleteSwiperTask);
     }
   }
