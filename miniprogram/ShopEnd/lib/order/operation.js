@@ -2,7 +2,7 @@ import { showLoading, hideLoading, showModal } from "../../utils/asyncWX.js";
 import { CanI } from "../accessControl/operation.js";
 let app = getApp();
 const db = wx.cloud.database({
-  env: "env-miamielm-5gliunnq19c0a342",
+  env: "env-miamielm-p3buy",
 });
 // 获取最近一周的订单
 export async function getRecentOrderCloud(shopId, pageNum) {

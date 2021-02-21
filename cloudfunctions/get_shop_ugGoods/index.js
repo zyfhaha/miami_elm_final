@@ -7,7 +7,7 @@ cloud.init({
 });
 
 const db = cloud.database({
-  env: "env-miamielm-5gliunnq19c0a342",
+  env: "env-miamielm-p3buy",
 });
 const ugGoodsCateRef = db.collection("ugGoodsCate");
 const ugGoodsRef = db.collection("ugGoods");

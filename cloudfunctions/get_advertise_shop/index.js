@@ -6,7 +6,7 @@ cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV,
 });
 
-const db = cloud.database({ env: "env-miamielm-5gliunnq19c0a342" });
+const db = cloud.database({ env: "env-miamielm-p3buy" });
 const advertiseShopRef = db.collection("advertiseShop");
 const MAX_LIMIT = 100; // 单次返回最大量
 const _ = db.command;

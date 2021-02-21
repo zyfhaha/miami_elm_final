@@ -4,11 +4,11 @@ const cloud = require("wx-server-sdk");
 // 必须强调的是cloud.init 必须重新确定下环境id 不然上传的文件或者图片并不在小程序初始化的环境中
 cloud.init({
   // API 调用都保持和云函数当前所在环境一致
-  env: "env-miamielm-5gliunnq19c0a342",
+  env: "env-miamielm-p3buy",
 });
 
 const db = cloud.database({
-  env: "env-miamielm-5gliunnq19c0a342",
+  env: "env-miamielm-p3buy",
 });
 const _ = db.command;
 const shopRef = db.collection("shop");

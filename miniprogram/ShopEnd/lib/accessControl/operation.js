@@ -1,6 +1,6 @@
 let app = getApp();
 const db = wx.cloud.database({
-  env: "env-miamielm-5gliunnq19c0a342",
+  env: "env-miamielm-p3buy",
 });
 import { showLoading, hideLoading, showModal, showToast } from "../../utils/asyncWX.js";
 export function getAccessControlFromLogin(user2shop) {

@@ -7,7 +7,7 @@ import {
 
 let app = getApp();
 const db = wx.cloud.database({
-  env: "env-miamielm-5gliunnq19c0a342",
+  env: "env-miamielm-p3buy",
 });
 const advertiseShopRef = db.collection("advertiseShop");
 

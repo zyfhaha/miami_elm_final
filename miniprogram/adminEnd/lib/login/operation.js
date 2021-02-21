@@ -8,7 +8,7 @@ import {
 import { byteof } from "../../utils/helper.js";
 // 初始化云环境
 const db = wx.cloud.database({
-  env: "env-miamielm-5gliunnq19c0a342",
+  env: "env-miamielm-p3buy",
 });
 const shopRef = db.collection("shop");
 const _ = db.command;

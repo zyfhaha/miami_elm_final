@@ -1,12 +1,12 @@
 <!-- 使用opendata可以在不授权情况下直接展示用户公开信息 -->
 <view class='user_info_warp'>
   <view class="bg_warp">
-    <image wx:if="{{!logoUrl}}" class="bg" src="cloud://env-miamielm-5gliunnq19c0a342.656e-env-miamielm-5gliunnq19c0a342-1304795284/system/noPic.jpg"></image>
+    <image wx:if="{{!logoUrl}}" class="bg" src="cloud://env-miamielm-p3buy.656e-env-miamielm-p3buy-1302562420/system/noPic.jpg"></image>
     <image wx:else class="bg" src="{{logoUrl}}"></image>
   </view>
   <view class="info_warp"> 
     <view class="shop_info">
-      <image wx:if="{{!logoUrl}}" class="shop_logo" src="cloud://env-miamielm-5gliunnq19c0a342.656e-env-miamielm-5gliunnq19c0a342-1304795284/system/noPic.jpg"></image>
+      <image wx:if="{{!logoUrl}}" class="shop_logo" src="cloud://env-miamielm-p3buy.656e-env-miamielm-p3buy-1302562420/system/noPic.jpg"></image>
       <image wx:else class="shop_logo" src="{{logoUrl}}"></image>
       <view wx:if="{{!shopName}}" class="shop_name">网络错误</view>
       <view wx:else class="shop_name">{{shopName}}</view>
