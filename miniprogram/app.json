@@ -20,7 +20,7 @@
     "pages/localPages/addGoods/addGoods",
     "pages/localPages/editNote/editNote",
     "pages/localPages/confirmOrder/confirmOrder"
-  ],
+  ], 
   "permission": {
     "scope.userLocation": {
       "desc": "您的位置信息将用于确定收货地址"

@@ -2,7 +2,7 @@
   "miniprogramRoot": "miniprogram/",
   "cloudfunctionRoot": "cloudfunctions/",
   "setting": {
-    "urlCheck": false,
+    "urlCheck": true,
     "es6": true,
     "enhance": false,
     "postcss": true,
@@ -200,6 +200,12 @@
         {
           "name": "选择端",
           "pathName": "pages/localPages/selAppEnd/selAppEnd",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "管理员界面",
+          "pathName": "adminEnd/pages/localPages/adminPage/adminPage",
           "query": "",
           "scene": null
         }
