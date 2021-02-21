@@ -62,13 +62,15 @@ exports.main = async (event, context) => {
   // 开始注册
   if (type === "owner") {
     const registRes = registerOwner(openid, userInfo);
-    await invalidateCode(code)
+    // TODO 记得恢复无效化注册码
+    // await invalidateCode(code)
     return registRes;
   }
 
   if (type === "assistant") {
     const registRes = registShopAssist(openid, codeDetail.shopId, userInfo);
-    await invalidateCode(code)
+    // TODO 记得恢复无效化注册码
+    // await invalidateCode(code)
     return registRes;
   }
 };
