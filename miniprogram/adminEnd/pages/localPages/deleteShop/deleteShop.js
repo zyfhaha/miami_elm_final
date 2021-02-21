@@ -1,7 +1,7 @@
 import { showModal, showLoading, hideLoading } from "../../../utils/asyncWX.js";
 
 const db = wx.cloud.database({
-  env: "env-miamielm-p3buy",
+  env: "env-miamielm-5gliunnq19c0a342",
 });
 const shopRef = db.collection("shop");
 

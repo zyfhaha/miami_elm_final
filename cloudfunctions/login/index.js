@@ -6,7 +6,7 @@ cloud.init({
   env: cloud.DYNAcMIC_CURRENT_ENV,
 });
 const db = cloud.database({
-  env: "env-miamielm-p3buy",
+  env: "env-miamielm-5gliunnq19c0a342",
 });
 const _ = db.command;
 const $ = db.command.aggregate;

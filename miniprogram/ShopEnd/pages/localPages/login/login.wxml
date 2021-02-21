@@ -1,5 +1,5 @@
 <view class="page_container">
-  <image class="background_img" src="cloud://env-miamielm-p3buy.656e-env-miamielm-p3buy-1302562420/system/login2.jpg" bindload="handleLoadBgpComplete" />
+  <image class="background_img" src="cloud://env-miamielm-5gliunnq19c0a342.656e-env-miamielm-5gliunnq19c0a342-1304795284/system/login2.jpg" bindload="handleLoadBgpComplete" />
   <!-- 店主登录按钮 -->
   <view hidden="{{!showPage}}" class="login">
     <view class="login_btn_warp">
