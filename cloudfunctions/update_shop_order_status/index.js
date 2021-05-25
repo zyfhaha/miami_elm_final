@@ -25,7 +25,7 @@ exports.main = async (event, context) => {
     .get();
   let orderInfo = orderRes.data[0]
   console.log("订单状态：",orderInfo);
-  
+  let currentTime = (new Date()).getTime();
   switch (updateType) {
     case -1://取消订单
       const res = orderRef.where({
@@ -40,7 +40,6 @@ exports.main = async (event, context) => {
       break;
 
     case 1://接单
-      let currentTime = (new Date()).getTime()
       if (orderInfo.status!=0){//如果不是未接单订单无法继续操作
         return
       }
@@ -58,7 +57,6 @@ exports.main = async (event, context) => {
       break;
 
     case 2://完成捡货并开始配送
-      let currentTime = (new Date()).getTime()
       if (orderInfo.status!=1){//如果不是已接单订单无法继续操作
         return
       }
@@ -76,7 +74,6 @@ exports.main = async (event, context) => {
       break;
 
     case 3://配送完成
-      let currentTime = (new Date()).getTime()
       if (orderInfo.status!=2){//如果不是已捡货订单无法继续操作
         return
       }

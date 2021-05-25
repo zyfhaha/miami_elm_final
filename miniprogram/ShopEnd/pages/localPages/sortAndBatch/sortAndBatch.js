@@ -235,6 +235,7 @@ Page({
           listData[i].goodsId == this.iniListData[j].goodsId &&
           listData[i].goodsOrder != this.iniListData[j].goodsOrder
         ) {
+          delete listData[i]._id;
           changeList.push(listData[i]);
         }
       }

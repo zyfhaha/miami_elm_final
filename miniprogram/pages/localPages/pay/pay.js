@@ -165,11 +165,13 @@ Page({
       return;
     }
 
-    const reqSubMsgRes = await requestSubscribeMessage("order");
-    if (!reqSubMsgRes) {
-      return;
-    }
-    orderInfo.allowNotifyOrderComplete = reqSubMsgRes.COMPLETE_ORDER;
+    // 获取订阅信息
+    // const reqSubMsgRes = await requestSubscribeMessage("order");
+    // if (!reqSubMsgRes) {
+    //   return;
+    // }
+    // orderInfo.allowNotifyOrderComplete = reqSubMsgRes.COMPLETE_ORDER;
+    const reqSubMsgRes = {};
 
     // 下单时再次检测选择的配送时间是否合法来避免用户提前选择一个配送时间后长时间挂机直到截单后再下单
     if (!isReceiveTimeValid(new Date().getTime(), orderInfo.selDeliverTime, this.shopInfo.cutOrderTime)) {

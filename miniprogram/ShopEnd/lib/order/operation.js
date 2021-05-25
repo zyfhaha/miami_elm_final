@@ -115,17 +115,17 @@ export async function acceptOrderCloud(orderId, openid) {
     if (res.result) {
       console.log("accept res", res);
 
-      await wx.cloud.callFunction({
-        name: "send_user_message",
-        data: {
-          openid: openid,
-          orderId: orderId,
-          shopName: app.globalData.shopInfo.shopName,
-          phoneNumber: app.globalData.shopInfo.shopPhoneNumber,
-          handleTimeStr: toTimeStr(res.result.handleTime),
-          action: "sendAcceptMessage",
-        },
-      });
+      // await wx.cloud.callFunction({
+      //   name: "send_user_message",
+      //   data: {
+      //     openid: openid,
+      //     orderId: orderId,
+      //     shopName: app.globalData.shopInfo.shopName,
+      //     phoneNumber: app.globalData.shopInfo.shopPhoneNumber,
+      //     handleTimeStr: toTimeStr(res.result.handleTime),
+      //     action: "sendAcceptMessage",
+      //   },
+      // });
     } else {
       showModal("操作失败", "该订单已被顾客取消");
     }
@@ -157,15 +157,15 @@ export async function deliverOrderCloud(orderId, openid) {
       },
     });
     if (res.result) {
-      await wx.cloud.callFunction({
-        name: "send_user_message",
-        data: {
-          openid: openid,
-          orderId: orderId,
-          deliverTimeStr: toTimeStr(res.result.deliverTime),
-          action: "sendFinishPickGoodsMessage",
-        },
-      });
+    //   await wx.cloud.callFunction({
+    //     name: "send_user_message",
+    //     data: {
+    //       openid: openid,
+    //       orderId: orderId,
+    //       deliverTimeStr: toTimeStr(res.result.deliverTime),
+    //       action: "sendFinishPickGoodsMessage",
+    //     },
+    //   });
     }
     return res;
   } catch (error) {
@@ -194,15 +194,15 @@ export async function completeOrderCloud(orderId, openid) {
       },
     });
     if (res.result) {
-      await wx.cloud.callFunction({
-        name: "send_user_message",
-        data: {
-          openid: openid,
-          orderId: orderId,
-          completeTimeStr: toTimeStr(res.result.completeTime),
-          action: "sendArrivedMessage",
-        },
-      });
+      // await wx.cloud.callFunction({
+      //   name: "send_user_message",
+      //   data: {
+      //     openid: openid,
+      //     orderId: orderId,
+      //     completeTimeStr: toTimeStr(res.result.completeTime),
+      //     action: "sendArrivedMessage",
+      //   },
+      // });
     }
     return res;
   } catch (error) {

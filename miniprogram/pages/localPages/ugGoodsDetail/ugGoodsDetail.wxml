@@ -23,8 +23,9 @@
             <view class="title">联系方式</view>
             <view class="contact_type">
                 {{contactTypeText}}:
-                <text class="contact_info"></text>
-                {{goodsInfo.contactInfo}}
+                <text class="contact_info" selectable='true'>
+                    {{goodsInfo.contactInfo}}
+                </text>
             </view>
         </view>
     </view>

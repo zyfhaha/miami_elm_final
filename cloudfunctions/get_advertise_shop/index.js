@@ -29,6 +29,9 @@ exports.main = async (event, context) => {
   .project({
     shopList: 0
   })
+  .sort({
+    shopRank: -1,
+  })
   .end()
   return{
     allShops: res.list,
