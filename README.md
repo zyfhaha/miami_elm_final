@@ -5,7 +5,7 @@
 2020年，新冠病毒的肆虐大幅降低了消费者的出行频率，商家的线下营业因而遭受了重创。不少商家因此将营业重心转向线上，通过无接触配送的方式来缓解病毒带来的影响。在此特殊时期，商家和消费者对线上外卖软件的需求日益增强。
 
 
-In the year of 2020, the breakout of COVID-19 has significantly decreased people's intention of hanging out, which was a disaster to offline business. Therefore, myriad shops has switched their focus of business from offline to online to mitigate the impact of COVID-19 by contactless delivery. During this unusual period of time, the importance of delivery apps kept growing. 
+In the year of 2020, the outbreak of COVID-19 has significantly decreased people's intention of hanging out, which was a disaster to offline business. Therefore, myriad shops has switched their focus of business from offline to online to mitigate the impact of COVID-19 by contactless delivery. During this unusual period of time, the importance of delivery apps kept growing. 
 
 
 基于此，"小鳄鱼跑腿"项目于2020年7月成立，旨在搭建一个平台为美国迈阿密地区华人在疫情期间提供线上下单，线下送达的跑腿服务。
@@ -23,9 +23,11 @@ This project is developed based on the original MINA framework of WeChat Mini-Pr
 项目实现了三个用户终端：顾客端（C端）、商家端（B端）、管理端（A端）。三端全部集成在一个小程序中，用户可在小程序内进行切换。所有小程序用户都可以无条件进入顾客端，而只有在后台注册过商店的店主或店员才能进入商家端。管理端需要通过特殊的方式由在册的管理员输入专属密码才能够进入
 
 
- This project has implemented three user sides—— C-side (C-side), B-side (B-side) and administration side (A-side). They are all integrated within the same mini program, where users can switch from one side to another. Every user can enter C-side without any condition. But only shop owners and shop assistants who have associated with a registered shop in database are able to enter B-side.  The administration side is only accessible to registered administrators with their own password.
+ This project has implemented three user sides—— Customer Side (C-side), Business Side (B-side) and Administration Side (A-side). They are all integrated within the same mini program, where users can switch from one side to another. Every user can enter C-side without any condition. But only shop owners and shop assistants who have associated with a registered shop in database are able to enter B-side.  The administration side is only accessible to registered administrators with their own password.
+
 
 三个终端的主要模块及其主要功能列举如下：
+
 
 The main modules and features of the three sides are listed as follows:
 
@@ -73,7 +75,7 @@ The C-side has two main businesses: delivery service and flea market
 浏览商品->添加商品至购物车->结算->选择收货地址->下单->等待送达。
 
 
-find a product-> add to basket->checkout->select address->order placing->wait
+find a product-> add to basket->checkout->select address->order placing->wait for delivery
 
 ![delivery_service](README_FIG/delivery_service.gif)
 
@@ -87,7 +89,7 @@ click "upload"->provide product info->upload->wait for reviewing->approve->wait 
 如果商品未通过审核，顾客可以修改商品信息后再次提交审核，直至审核通过
 
 
-if the product does not get approved, the customer may revise the product info, wait for the reviewing again and repeat until it gets approved.
+if the product does not get approved, the customer may revise the product info, wait for the reviewing again and repeat this process until it gets approved.
 
 ![upload_second_hand_goods](README_FIG/upload_second_hand_goods.gif)
 
@@ -95,7 +97,7 @@ if the product does not get approved, the customer may revise the product info, 
 商家端的业务包括订单管理和商店管理
 
 
-Business Side includes the management of order and shop
+B-side includes the management of order and shop
 
 ### 订单管理 Order Management
 收到新订单->接单->配货->派送
@@ -104,7 +106,7 @@ Business Side includes the management of order and shop
 
 
 order receiving->order taking->order picking->delivery
-* customers can cancel an order at any time before it is taken
+* customers can cancel an order at any time before it is taken.
 * if the order is taken, only the B-side has access to cancel it. Customers would have to make a phone call for cancellation.
 
 ![order_handling](README_FIG/order_handling.gif)
@@ -113,7 +115,10 @@ order receiving->order taking->order picking->delivery
 
 
 店主对商店的管理主要分为商品管理，店员管理和营业设置。
+
+
 Shop management of shop owners includes management of merchandise, shop assistant and operation setting
+
 
 商品管理即为对商品信息的增加、删减、修改、查询、排序。在此不做演示
 
@@ -123,7 +128,7 @@ Shop owners' management of merchandise is the addition, deletion, modification, 
 同理，店主对店员的管理也可以概括为“增删改查”。其中，“改”指修改店员备注和权限。
 
 
-Similarly, shop owners' management for shop assistants is also summarized as addition,deletion,modification and query 
+Similarly, shop owners' management for shop assistants is also summarized as addition, deletion, modification and query 
 
 
 店员的权限包括
@@ -140,13 +145,13 @@ Shop assistants' access includes
 添加一个新店员的流程为：商店管理tab页->店员管理->点击“+添加店员”获取邀请码->发送邀请码给店员->店员在商家端登录界面点击"成为店员"->输入邀请码->店员注册成功
 
 
-The procedure of adding a shop assistant is: go to shop management tab->assistant management->click "+add assistant"->obtain invitation code->send to the assistant->the assistant clicks "become a assistant" at the login page of B-side->input invitation code->assistant registration successed
+The procedure of adding a shop assistant is: go to shop management tab->assistant management->click "+add assistant"->obtain invitation code->send to the assistant->the assistant clicks "become an assistant" at the login page of B-side->input invitation code->assistant registration successed
 
 
 以下演示店主添加一个新店员的过程以及可以对店员进行的操作。
 
 
-The demo below display the procedure of adding a new assistant and what you can do to him.
+The demo below displays the procedure of adding a new assistant and what you can do to him.
 
 ![add_assistant](README_FIG/add_assistant.gif)
 
@@ -161,7 +166,7 @@ A-side can manage C-side and B-side
 管理端可以设置顾客端的首页轮播图广告，包括广告排序，广告语等。用户点击广告会自动跳转到广告所对应的商品详情页
 
 
-A-side can set the ad at the home page of C-side. The setting includes sorting and ad slogan. When customers click the ad, they will automatically jump to the page with detailed info of the corresponding product. 
+A-side can set the ad at the home page of C-side. The setting includes ad sorting and ad slogan. When customers click the ad, they will automatically jump to the page with detailed info of the corresponding product. 
 
 
 管理端对跳蚤市场的管理为审核用户上传的商品。商品通过审核后即可在跳蚤市场上架，以让所有顾客可见。如商品不能过审，管理员必须写明理由才可拒绝商品发布。
