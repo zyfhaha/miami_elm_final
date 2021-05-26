@@ -88,10 +88,10 @@ exports.main = async (event, context) => {
 
   // 3.1 将有效的商品挑出来
   /** 注意：用户购买的商品一共有以下几种情况 完全无法买的算作无效商品
-   *  1 商品已经被删除 (无效商品)
-   *  2 商品没有删除但已经下架 （无效商品）
-   *  3 商品正上架但是商品购买量大于库存量 (有效商品)
-   *  4 没问题 （有效商品）
+   *  1 商品已经被删除 (inValidGoods)
+   *  2 商品没有删除但已经下架 (unAvailableGoods)
+   *  3 商品正上架但是商品购买量大于库存量 (shortOfStockGoods)
+   *  4 没问题 (validGoods)
    *
    * 另外 这里并没有对goodsBuyLeastLimit 和 goodsBuyLimit做检查 后面有空再改
    */

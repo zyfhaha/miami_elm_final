@@ -14,10 +14,10 @@ In the year of 2020, the outbreak of COVID-19 has significantly decreased people
 Based on that, the project, __Little Crocodile_ Delivery_, was created in the July of 2020 in order to build a platform and provide online ordering, offline delivery service to the Chinese people in Miami, US.
 
 
-本项目基于微信小程序原生MINA框架进行开发，通过微信开发者工具提供的云开发功能实现前后端连接。
+本项目基于微信小程序原生MINA框架进行开发，通过微信开发者工具提供的云开发功能实现前后端连接。后台数据库设计请参考[样例数据](样例数据/README.md)
 
 
-This project is developed based on the original MINA framework of WeChat Mini-Program. The connection of front end and back end is made by Cloud Development provided by WeXin DevTool.
+This project is developed based on the original MINA framework of WeChat Mini-Program. The connection of front end and back end is made by Cloud Development provided by WeXin DevTool. Please refer to [sample data](样例数据/README.md) for the design of database
 
 
 项目实现了三个用户终端：顾客端（C端）、商家端（B端）、管理端（A端）。三端全部集成在一个小程序中，用户可在小程序内进行切换。所有小程序用户都可以无条件进入顾客端，而只有在后台注册过商店的店主或店员才能进入商家端。管理端需要通过特殊的方式由在册的管理员输入专属密码才能够进入
@@ -101,7 +101,7 @@ B-side includes the management of order and shop
 
 ### 订单管理 Order Management
 收到新订单->接单->配货->派送
-* 在商家未未接单前，顾客可以随时取消订单
+* 在商家未接单前，顾客可以随时取消订单
 * 商家接单后，只有商家能取消订单。顾客若想取消订单需与商家电话联系
 
 
