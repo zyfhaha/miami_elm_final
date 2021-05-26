@@ -12,6 +12,7 @@
 * ugGoods	跳蚤市场商品表
 * ugGoodsCate	跳蚤市场商品类别表
 * ugShop	跳蚤市场表
+
 各个数据表的样例数据已在对应的json文件中提供
 
 ## advertiseShop	所有用户可读写
