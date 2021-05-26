@@ -79,7 +79,7 @@ isExist | 虚拟删除标志位
 
 ## goodsCate	所有用户可读写	
 字段名 | 含义 | 
-----|----|-
+----|---
 _id | 云数据库自动生成的id | 
 _openid | 创造这条数据的微信用户openid | 
 shopId | 类别所属的商店id | 
@@ -196,6 +196,7 @@ code | 注册码/邀请码
 type | 类型 <br>"owner": 商店注册码<br> “assistant”: 店员邀请码
 watermark | 数据生成时的时间戳
 isUsed | 是否已被使用
+
 若type为assistant则还将有以下字段 
 * shopName 商店名字
 
