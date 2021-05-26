@@ -113,11 +113,11 @@ openid是每个微信用户在微信小程序内的唯一识别码
 
 4. 打开数据库
 5. 点击ugShop表格
-6. 将logoUrl字段的值改为刚才复制的fleaMarket.png的FileID (win+V可以掉出剪贴板)
+6. 将logoUrl字段的值改为刚才复制的fleaMarket.png的FileID (win+V可以调出剪贴板)
 
 ![editUgShopLogoURL](README_FIG/editUgShopLogoURL.gif)
 
-7. 回到开发者工具编辑器，按ctrl+p，输入selEnd，点击selAppEnd.wxml跳转到对应文件
+7. 回到开发者工具编辑器，按ctrl+p，输入selAppEnd，点击selAppEnd.wxml跳转到对应文件
 8. 将文件第二行image组件的src属性的值改为之前复制的login.jpg的FileID，然后保存
 9. 同样通过ctrl+p输入login，点击miniprogram\ShopEnd\pages\localPages\login 下的login.wxml跳转到对应文件 (注意：动图里的跳转与这里不一致)
 10. 同样修改第二行image组件的src属性值为login2.jpg的FileID
@@ -141,16 +141,16 @@ openid是每个微信用户在微信小程序内的唯一识别码
 #### 设置valencia连锁超市和chef chen中餐馆的商店logo
 
 1. 打开云开发控制台
-2. 新建名为“smBP9uFxmTxRv”和“smBxLqkKS9xxn”的文件夹
-3. 在“smBxLqkKS9xxn”中上传logoValencia.jpg并复制FileID
-4. 在“smBP9uFxmTxRv”中上传chefchen_logo.jpg并复制FileID
+2. 新建名为「smBP9uFxmTxRv」和「smBxLqkKS9xxn」的文件夹
+3. 在「smBxLqkKS9xxn」中上传logoValencia.jpg并复制FileID
+4. 在「smBP9uFxmTxRv」中上传chefchen_logo.jpg并复制FileID
 
 ![findShopLogoURL](README_FIG/findShopLogoURL.gif)
 
 5. 打开数据库
-6. 打开“shop”数据集
-7. 查看第一条数据的shopName，如果是valencia连锁超市，则将该条数据下“logoUrl”字段的值改为logoValencia.jpg的FileID
-8. 同理将另一条数据的“logoUrl”字段的值改为chefchen_logo.jpg的FileID
+6. 打开「shop」数据集
+7. 查看第一条数据的shopName，如果是valencia连锁超市，则将该条数据下「logoUrl」字段的值改为logoValencia.jpg的FileID
+8. 同理将另一条数据的「logoUrl」字段的值改为chefchen_logo.jpg的FileID
 
 ![editShopLogoUrl](README_FIG/editShopLogoUrl.gif)
 
@@ -173,4 +173,4 @@ openid是每个微信用户在微信小程序内的唯一识别码
 
 #### 结束
 
-到此为止，除了各个商品的图片会报“渲染错误”外，整个程序应该能够正常跑通了。希望这个项目对你能有帮助。
+到此为止，除了各个商品的图片会报「渲染错误」外，整个程序应该能够正常跑通了。希望这个项目对你能有帮助。
