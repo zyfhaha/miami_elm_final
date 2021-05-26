@@ -26,10 +26,10 @@ This project is developed based on the original MINA framework of WeChat Mini-Pr
  This project has implemented three user sides—— Customer Side (C-side), Business Side (B-side) and Administration Side (A-side). They are all integrated within the same mini program, where users can switch from one side to another. Every user can enter C-side without any condition. But only shop owners and shop assistants who have associated with a registered shop in database are able to enter B-side.  The administration side is only accessible to registered administrators with their own password.
 
 
-如果您需要在此项目的基础上进行开发，请参考[工程导入教程](/工程导入教程/README.md)
+如果您需要在此项目的基础上进行开发，请参考[工程导入教程](工程导入教程/README.md)
 
 
-if you would like to develope your own program based on this project, please refer to [_Tutorial for importing this project_](/工程导入教程/README.md)
+if you would like to develope your own program based on this project, please refer to [_Tutorial for importing this project_](工程导入教程/README.md)
 
 
 三个终端的主要模块及其主要功能列举如下：
